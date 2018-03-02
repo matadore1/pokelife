@@ -78,7 +78,7 @@ $(document).ready(function() {
             //$("#glowne_okno").html(loadingbar);
             $("#glowne_okno").load($(this).attr('href'), function(){
                if(window.auto){
-                   setTimeout(function(){click();}, 300);
+                   setTimeout(function(){click();}, 150);
                }
             });
 
@@ -123,7 +123,7 @@ $(document).ready(function() {
         $("#glowne_okno").load('gra/'+$(this).attr('href'), {limit: 20},
         function (responseText, textStatus, req) {
             if(window.auto){
-                setTimeout(function(){click();}, 300);
+                setTimeout(function(){click();}, 150);
             }
             if (textStatus == "error") {
                 $("#glowne_okno").html(responseText);
