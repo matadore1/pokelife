@@ -11,6 +11,8 @@ $(document).ready(function() {
 
 $('body').append('<div id="goSettings" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;right: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: rgb(227, 223, 109);z-index: 9999;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></div>');
 
+$('body').append('<div id="settings" style="display: none; width: 600px; height: auto; z-index: 9999; background: white; position: fixed; bottom: 0; right: 0; border: 3px solid #159589; padding: 10px; ">Uzywaj nightballi w nocy <input type="checkbox"><br> Lecz gdy pierwszy pokemon ma mniej zycia niz <input type="number"> </div>');
+
 
     var iconSelect;
 
@@ -38,7 +40,6 @@ $('body').append('<div id="goSettings" style="border-radius: 4px;position: fixed
 if($('#sidebar .stan-pokemon:nth-child(2)').find('.progress-bar').attr('aria-valuenow') < 500){
                     console.log('lecze sie');
                     $('#skrot_leczenie').trigger('click');
-                    setTimeout(function(){click();}, 150);
                 } else {
 
             if($('.dzikipokemon-background-shiny').length == 1){
@@ -140,7 +141,11 @@ if($('#sidebar .stan-pokemon:nth-child(2)').find('.progress-bar').attr('aria-val
     });
 
     $(document).on("click", '#goSettings', function(){
-        click();
+        if($('#settings').css('display') == "none"){
+	$('#settings').css('display', "block");
+} else {
+	$('#settings').css('display', "none");
+}
     });
 
     window.auto = false;
