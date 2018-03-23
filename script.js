@@ -40,6 +40,7 @@ $('body').append('<div id="settings" style="display: none; width: 600px; height:
 if(Number($('#sidebar .stan-pokemon:nth-child(2)').find('.progress-bar').attr('aria-valuenow')) < Number($('#min-health').val())){
                     console.log('lecze sie');
                     $('#skrot_leczenie').trigger('click');
+setTimeout(function(){click();}, 100);
                 } else {
 
             if($('.dzikipokemon-background-shiny').length == 1){
