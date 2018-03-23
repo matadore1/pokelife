@@ -9,6 +9,8 @@ $(document).ready(function() {
     $('body').append('<div id="goButton" style="border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 10px; font-size: 36px; text-align: center; width: 100px; height: 48px; line-height: 48px; background: '+$('.panel-heading').css('background-color')+'; z-index: 9999">GO</div>');
     $('body').append('<div id="goAutoButton" style="border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 122px; font-size: 36px; text-align: center; width: 140px; height: 48px; line-height: 48px; background: '+$('.panel-heading').css('background-color')+'; z-index: 9999">AutoGO</div>');
 
+$('body').append('<div id="goSettings" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;right: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: rgb(227, 223, 109);z-index: 9999;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></div>');
+
 
     var iconSelect;
 
@@ -33,20 +35,20 @@ $(document).ready(function() {
     iconSelect.setSelectedIndex(1);
 
     function click(){
+if($('#sidebar .stan-pokemon:nth-child(2)').find('.progress-bar').attr('aria-valuenow') < 500){
+                    console.log('lecze sie');
+                    $('#skrot_leczenie').trigger('click');
+                    setTimeout(function(){click();}, 150);
+                } else {
+
             if($('.dzikipokemon-background-shiny').length == 1){
                 console.log('spotkalem shiny');
                 $('#goButton').css('background', 'green');
                 window.auto = false;
                 $('#goAutoButton').html('AutoGO');
             } else if($('.dzikipokemon-background-normalny').length == 1){
-                if($('#sidebar .stan-pokemon:nth-child(2)').find('.progress-bar').attr('aria-valuenow') < 500){
-                    console.log('lecze sie');
-                    $('#skrot_leczenie').trigger('click');
-                    $('button[href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&wybierz_pokemona=5"]').trigger('click');
-                } else {
-                    console.log('wybieram pokemona 6');
-                    $('button[href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&wybierz_pokemona=0"]').trigger('click');
-                }
+                console.log('wybieram pokemona 1');
+		$('button[href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&wybierz_pokemona=0"]').trigger('click');
             } else if ($('button[href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&zlap_pokemona=greatballe"]').length == 1){
                 console.log('rzucam greatballa');
                 $('button[href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&zlap_pokemona=greatballe"]').trigger('click');
@@ -60,6 +62,7 @@ $(document).ready(function() {
                     $('#pasek_skrotow a[href="gra/dzicz.php?poluj&miejsce='+iconSelect.getSelectedValue()+'"] img').trigger('click');
                 }
             }
+}
     }
 
     $(document).off("click", "nav a");
@@ -133,6 +136,10 @@ $(document).ready(function() {
     });
 
     $(document).on("click", '#goButton', function(){
+        click();
+    });
+
+    $(document).on("click", '#goSettings', function(){
         click();
     });
 
