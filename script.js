@@ -52,17 +52,20 @@ setTimeout(function(){click();}, 100);
                 console.log('wybieram pokemona 1');
 		$('button[href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&wybierz_pokemona=0"]').trigger('click');
             } else if ($('button[href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&zlap_pokemona=greatballe"]').length == 1){
-                console.log('rzucam greatballa');
+                
 		if($('#use-nightball').val()){
 		  var d = new Date();
     var h = d.getHours();
 if(h > 22 || h < 6){
 		$('button[href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&zlap_pokemona=nightballe"]').trigger('click');
+console.log('rzucam nightballa');
 } else {
 $('button[href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&zlap_pokemona=greatballe"]').trigger('click');
+console.log('rzucam greatballa');
 }
 } else {
                 $('button[href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&zlap_pokemona=greatballe"]').trigger('click');
+console.log('rzucam greatballa');
 }
             } else {
                 if($('.progress-stan2 div').attr('aria-valuenow') < 5){
