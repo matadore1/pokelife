@@ -9,9 +9,9 @@ $(document).ready(function() {
     $('body').append('<div id="goButton" style="border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 10px; font-size: 36px; text-align: center; width: 100px; height: 48px; line-height: 48px; background: '+$('.panel-heading').css('background-color')+'; z-index: 9999">GO</div>');
     $('body').append('<div id="goAutoButton" style="border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 122px; font-size: 36px; text-align: center; width: 140px; height: 48px; line-height: 48px; background: '+$('.panel-heading').css('background-color')+'; z-index: 9999">AutoGO</div>');
 
-$('body').append('<div id="goSettings" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;right: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: rgb(227, 223, 109);z-index: 9999;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></div>');
+$('body').append('<div id="goSettings" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;right: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: rgb(21, 149, 137);z-index: 9999;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></div>');
 
-$('body').append('<div id="settings" style="display: none; width: 600px; height: auto; z-index: 9999; background: white; position: fixed; bottom: 0; right: 0; border: 3px solid #159589; padding: 10px; ">Uzywaj nightballi w nocy <input type="checkbox"><br> Lecz gdy pierwszy pokemon ma mniej zycia niz <input type="number"> </div>');
+$('body').append('<div id="settings" style="display: none; width: 600px; height: auto; min-heignt: 200px; z-index: 9998; background: white; position: fixed; bottom: 0; right: 0; border: 3px solid #159589; padding: 10px; ">Uzywaj nightballi w nocy <input type="checkbox" id="use-nightball"><br> Lecz gdy pierwszy pokemon ma mniej zycia niz <input id="min-health" type="number" value="500"> </div>');
 
 
     var iconSelect;
@@ -37,7 +37,7 @@ $('body').append('<div id="settings" style="display: none; width: 600px; height:
     iconSelect.setSelectedIndex(1);
 
     function click(){
-if($('#sidebar .stan-pokemon:nth-child(2)').find('.progress-bar').attr('aria-valuenow') < 500){
+if($('#sidebar .stan-pokemon:nth-child(2)').find('.progress-bar').attr('aria-valuenow') < $('#min-health').val()){
                     console.log('lecze sie');
                     $('#skrot_leczenie').trigger('click');
                 } else {
@@ -52,7 +52,17 @@ if($('#sidebar .stan-pokemon:nth-child(2)').find('.progress-bar').attr('aria-val
 		$('button[href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&wybierz_pokemona=0"]').trigger('click');
             } else if ($('button[href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&zlap_pokemona=greatballe"]').length == 1){
                 console.log('rzucam greatballa');
+		if($('#use-nightball').val()){
+		  var d = new Date();
+    var h = d.getHours();
+if(h > 22 || h < 6){
+		$('button[href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&zlap_pokemona=nightballe"]').trigger('click');
+} else {
+$('button[href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&zlap_pokemona=greatballe"]').trigger('click');
+}
+} else {
                 $('button[href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&zlap_pokemona=greatballe"]').trigger('click');
+}
             } else {
                 if($('.progress-stan2 div').attr('aria-valuenow') < 5){
                     console.log('przerywam autoGo');
