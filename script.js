@@ -67,6 +67,16 @@ $(document).ready(function () {
         }
     }
 
+    
+    $(window).keypress(function (e) {
+      if (e.key === ' ' || e.key === 'Spacebar') {
+        // ' ' is standard, 'Spacebar' was used by IE9 and Firefox < 37
+        e.preventDefault();
+        console.log('Space pressed');
+        click();
+      }
+    });
+    
     $(document).off("click", "nav a");
     $(document).on("click", "nav a", function (event) {
         if ($(this).attr('href').charAt(0) != '#' && !$(this).hasClass("link")) {
