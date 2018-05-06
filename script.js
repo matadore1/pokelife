@@ -187,7 +187,7 @@ function initPokemonIcons() {
 
     });
     iconPoke.refresh(selectPoke)
-    iconPoke.setSelectedIndex(3);
+    iconPoke.setSelectedIndex(0);
 }
 
 function initLocationIcons() {
@@ -210,7 +210,7 @@ function initLocationIcons() {
     });
 
     iconSelect.refresh(icons);
-    iconSelect.setSelectedIndex(1);
+    iconSelect.setSelectedIndex(2);
 }
 
 function initBallIcons() {
