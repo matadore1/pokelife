@@ -17,7 +17,7 @@ $(document).ready(function () {
     $('body').append('<div id="goAutoButton" style="border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 122px; font-size: 36px; text-align: center; width: 140px; height: 48px; line-height: 48px; background: ' + $('.panel-heading').css('background-color') + '; z-index: 9999">AutoGO</div>');
 
     $('body').append('<div id="goSettings" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;right: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: rgb(21, 149, 137);z-index: 9999;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></div>');
-    $('body').append('<div id="settings" style="display: none; width: 600px; height: auto; min-height: 200px; z-index: 9998; background: white; position: fixed; bottom: 0; right: 0; border: 3px solid #159589; padding: 10px; ">Lecz gdy pierwszy pokemon ma mniej niz <input id="min-health" type="number" value="90">% zycia</div>');
+    $('body').append('<div id="settings" style="display: none; width: 600px; height: auto; min-height: 200px; z-index: 9998; background: white; position: fixed; bottom: 0; right: 0; border: 3px solid #159589; padding: 10px; "><div>Lecz gdy pierwszy pokemon ma mniej niz <input id="min-health" type="number" style="margin-left: 10px" value="90">% zycia</div><div>Space uruchamia przycisk GO <input type="checkbox" id="space-go" checked="" style="margin-left: 10px; width: 20px; height: 20px; "></div></div>');
 
 
     initPokemonIcons();
@@ -57,10 +57,12 @@ $(document).ready(function () {
     
     $(window).keypress(function (e) {
       if (e.key === ' ' || e.key === 'Spacebar') {
-        // ' ' is standard, 'Spacebar' was used by IE9 and Firefox < 37
-        e.preventDefault();
-        console.log('Space pressed');
-        click();
+          if ($('#space-go').is(":checked")){
+            // ' ' is standard, 'Spacebar' was used by IE9 and Firefox < 37
+            e.preventDefault();
+            console.log('Space pressed');
+            click();
+          }
       }
     });
     
