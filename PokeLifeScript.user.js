@@ -5,7 +5,7 @@
 // @downloadURL  https://raw.githubusercontent.com/krozum/pokelife/master/script_v2.js
 // @updateURL    https://raw.githubusercontent.com/krozum/pokelife/master/script_v2.js
 // @description  Auto Attack Script
-// @author       brains
+// @author       brains, metinowy15
 // @match        http://poke-life.net/*
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
@@ -255,3 +255,4 @@ function initBallIcons() {
     iconBall.setSelectedIndex(1);
 
 }
+
