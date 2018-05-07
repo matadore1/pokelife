@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.1.1
-// @downloadURL  https://raw.githubusercontent.com/krozum/pokelife/master/script_v2.js
-// @updateURL    https://raw.githubusercontent.com/krozum/pokelife/master/script_v2.js
+// @version      1.1.2
+// @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
+// @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
 // @author       brains, metinowy15
 // @match        http://poke-life.net/*
