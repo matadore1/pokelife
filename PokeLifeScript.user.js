@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.1.2
+// @version      1.1.3
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -35,7 +35,7 @@ $(document).ready(function () {
     $('body').append('<div id="goAutoButton" style="border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 122px; font-size: 36px; text-align: center; width: 140px; height: 48px; line-height: 48px; background: ' + $('.panel-heading').css('background-color') + '; z-index: 9999">AutoGO</div>');
 
     $('body').append('<div id="goSettings" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;right: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: rgb(21, 149, 137);z-index: 9999;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></div>');
-    $('body').append('<div id="settings" style="display: none; width: 600px; height: auto; min-height: 200px; z-index: 9998; background: white; position: fixed; bottom: 0; right: 0; border: 3px solid #159589; padding: 10px; "><div>Lecz gdy pierwszy pokemon ma mniej niz <input id="min-health" type="number" style="margin-left: 10px" value="90">% zycia</div><div>Space uruchamia przycisk GO <input type="checkbox" id="space-go" checked="" style="margin-left: 10px; width: 20px; height: 20px; "></div></div>');
+    $('body').append('<div id="settings" style="display: none; width: 600px; height: auto; min-height: 200px; z-index: 9998; background: white; position: fixed; bottom: 0; right: 0; border: 3px solid #159589; padding: 10px; "><div>Lecz gdy pierwszy pokemon ma mniej niz <input id="min-health" type="number" min="1" max="100" style="margin-left: 10px" value="' + (window.localStorage.minHealth ?  window.localStorage.minHealth :  "90") + '">% zycia</div><div>Spacja uruchamia przycisk GO <input type="checkbox" id="space-go" '+ (window.localStorage.spaceGo ?  (window.localStorage.spaceGo == "true" ? "checked" : "") :  "checked") +' style="margin-left: 10px; width: 20px; height: 20px; "></div></div>');
 
 
     initPokemonIcons();
@@ -158,6 +158,21 @@ $(document).ready(function () {
         click();
     });
 
+    $(document).on("change", '#space-go', function () {
+        if($('#space-go').is(":checked")){
+            window.localStorage.spaceGo = true;
+        } else {
+            window.localStorage.spaceGo = false;
+        }
+    });
+
+    $(document).on("change", '#min-health', function (){
+        if($(this).val() > 100 ||  $(this).val() < 1){
+           $(this).val(90);
+        }
+        window.localStorage.minHealth = $(this).val();
+    });
+
     $(document).on("click", '#goSettings', function () {
         if ($('#settings').css('display') == "none") {
             $('#settings').css('display', "block");
@@ -203,8 +218,19 @@ function initPokemonIcons() {
         }
 
     });
+
     iconPoke.refresh(selectPoke);
-    iconPoke.setSelectedIndex(0);
+
+    if (window.localStorage.pokemonIconsIndex) {
+        iconPoke.setSelectedIndex(window.localStorage.pokemonIconsIndex);
+    } else {
+        iconPoke.setSelectedIndex(0);
+        window.localStorage.pokemonIconsIndex = 0;
+    }
+
+    document.getElementById('setPok').addEventListener('changed', function(e){
+        window.localStorage.pokemonIconsIndex = iconPoke.getSelectedIndex();
+    });
 }
 
 function initLocationIcons() {
@@ -227,7 +253,17 @@ function initLocationIcons() {
     });
 
     iconSelect.refresh(icons);
-    iconSelect.setSelectedIndex(2);
+
+    if (window.localStorage.locationIconsIndex) {
+        iconSelect.setSelectedIndex(window.localStorage.locationIconsIndex);
+    } else {
+        iconSelect.setSelectedIndex(0);
+        window.localStorage.locationIconsIndex = 0;
+    }
+
+    document.getElementById('goDzicz').addEventListener('changed', function(e){
+        window.localStorage.locationIconsIndex = iconSelect.getSelectedIndex();
+    });
 }
 
 function initBallIcons() {
@@ -252,7 +288,18 @@ function initBallIcons() {
         { 'iconFilePath': "images/pokesklep/lureballe.jpg", 'iconValue': '&zlap_pokemona=lureballe' }];
 
     iconBall.refresh(selectBall);
-    iconBall.setSelectedIndex(1);
+
+    if (window.localStorage.ballIconsIndex) {
+        iconBall.setSelectedIndex(window.localStorage.ballIconsIndex);
+    } else {
+        iconBall.setSelectedIndex(1);
+        window.localStorage.ballIconsIndex = 1;
+    }
+
+    document.getElementById('setBall').addEventListener('changed', function(e){
+        window.localStorage.ballIconsIndex = iconBall.getSelectedIndex();
+    });
 
 }
+
 
