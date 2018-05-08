@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.1.3
+// @version      1.1.4
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -166,6 +166,11 @@ $(document).ready(function () {
         }
     });
 
+    $('body').on('click', ':not(#settings *, #settings)', function(){
+        $('#settings').css('display', "none");
+        $('#goSettings').css('display', "block");
+    });
+
     $(document).on("change", '#min-health', function (){
         if($(this).val() > 100 ||  $(this).val() < 1){
            $(this).val(90);
@@ -176,8 +181,10 @@ $(document).ready(function () {
     $(document).on("click", '#goSettings', function () {
         if ($('#settings').css('display') == "none") {
             $('#settings').css('display', "block");
+            $('#goSettings').css('display', "none");
         } else {
             $('#settings').css('display', "none");
+            $('#goSettings').css('display', "block");
         }
     });
 
@@ -301,5 +308,6 @@ function initBallIcons() {
     });
 
 }
+
 
 
