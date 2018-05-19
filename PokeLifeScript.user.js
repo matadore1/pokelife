@@ -13,10 +13,10 @@
 // @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=6.2
 // ==/UserScript==
 
-var newCSS = GM_getResourceText ("customCSS");
-GM_addStyle (newCSS);
+var newCSS = GM_getResourceText("customCSS");
+GM_addStyle(newCSS);
 
-
+var isExpMode = false;
 var iconSelect;
 var iconPoke;
 var iconBall;
@@ -35,54 +35,103 @@ $(document).ready(function () {
     $('body').append('<div id="goAutoButton" style="border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 122px; font-size: 36px; text-align: center; width: 140px; height: 48px; line-height: 48px; background: ' + $('.panel-heading').css('background-color') + '; z-index: 9999">AutoGO</div>');
 
     $('body').append('<div id="goSettings" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;right: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: rgb(21, 149, 137);z-index: 9999;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></div>');
-    $('body').append('<div id="settings" style="display: none; width: 600px; height: auto; min-height: 200px; z-index: 9998; background: white; position: fixed; bottom: 0; right: 0; border: 3px solid #159589; padding: 10px; "><div>Lecz gdy pierwszy pokemon ma mniej niz <input id="min-health" type="number" min="1" max="100" style="margin-left: 10px" value="' + (window.localStorage.minHealth ?  window.localStorage.minHealth :  "90") + '">% zycia</div><div>Spacja uruchamia przycisk GO <input type="checkbox" id="space-go" '+ (window.localStorage.spaceGo ?  (window.localStorage.spaceGo == "true" ? "checked" : "") :  "checked") +' style="margin-left: 10px; width: 20px; height: 20px; "></div></div>');
+    $('body').append('<div id="settings" style="display: none; width: 600px; height: auto; min-height: 200px; z-index: 9998; background: white; position: fixed; bottom: 0; right: 0; border: 3px solid #159589; padding: 10px; ">'+
+    '<div>Lecz gdy pierwszy pokemon ma mniej niz <input id="min-health" type="number" min="1" max="100" style="margin-left: 10px" value="' + (window.localStorage.minHealth ? window.localStorage.minHealth : "90") + '">% zycia</div>' +
+    '<div>Pokemon do 15 poziomu <input id="easy-lvl" type="number" min="0" max="5" style="margin-left: 10px" value="' + (window.localStorage.easyLvl ? window.localStorage.easyLvl : "1") + '"></div>' +
+    '<div>Pokemon od 15 do 30 poziomu <input id="low-lvl" type="number" min="0" max="5" style="margin-left: 10px" value="' + (window.localStorage.lowLvl ? window.localStorage.lowLvl : "1") + '"></div>' +
+    '<div>Pokemon od 30 do 50 poziomu <input id="mid-lvl" type="number" min="0" max="5" style="margin-left: 10px" value="' + (window.localStorage.midLvl ? window.localStorage.midLvl : "1") + '"></div>' +
+    '<div>Pokemon od 50 do 70 poziomu <input id="hard-lvl" type="number" min="0" max="5" style="margin-left: 10px" value="' + (window.localStorage.hardLvl ? window.localStorage.hardLvl : "1") + '"></div>' +
+    '<div>Pokemon od 70 do 90 poziomu <input id="power-lvl" type="number" min="0" max="5" style="margin-left: 10px" value="' + (window.localStorage.powerLvl ? window.localStorage.powerLvl : "1") + '"></div>' +
+    '<div>Pokemon od 90 do 100 poziomu <input id="ultimate-lvl" type="number" min="0" max="5" style="margin-left: 10px" value="' + (window.localStorage.ultimateLvl ? window.localStorage.ultimateLvl : "1") + '"></div>' +
+    '<div>Włącz exp mode <input type="checkbox" id="exp-mode" ' + (window.localStorage.expoMode ? (window.localStorage.expMode == "true" ? "checked" : "") : "checked") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
+    '<div>Spacja uruchamia przycisk GO <input type="checkbox" id="space-go" ' + (window.localStorage.spaceGo ? (window.localStorage.spaceGo == "true" ? "checked" : "") : "checked") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div></div>');
 
 
     initPokemonIcons();
     initLocationIcons();
     initBallIcons();
+    window.localStorage.expMode = false;
 
     function click() {
-        if (Number($('#sidebar .stan-pokemon:nth-child(2)').find('.progress-bar').attr('aria-valuenow')) * 100 / Number($('#sidebar .stan-pokemon:nth-child(2)').find('.progress-bar').attr('aria-valuemax')) < Number($('#min-health').val())) {
-            console.log('lecze sie');
-            $('#skrot_leczenie').trigger('click');
-            setTimeout(function () { click(); }, 100);
-        } else {
-
-            if ($('.dzikipokemon-background-shiny').length == 1) {
-                console.log('spotkalem shiny');
-                $('#goButton').css('background', 'green');
-                window.auto = false;
-                $('#goAutoButton').html('AutoGO');
-            } else if ($('.dzikipokemon-background-normalny').length == 1) {
-                $('button[href="dzicz.php?miejsce=' + iconSelect.getSelectedValue() + iconPoke.getSelectedValue() + '"]').trigger('click');
-            } else if ($('button[href="dzicz.php?miejsce=' + iconSelect.getSelectedValue() + iconBall.getSelectedValue() + '"]').length == 1) {
-                $('button[href="dzicz.php?miejsce=' + iconSelect.getSelectedValue() + iconBall.getSelectedValue() + '"]').trigger('click');
-                console.log('rzucam balla');
-            } else {
-                if ($('.progress-stan2 div').attr('aria-valuenow') < 5) {
-                    console.log('przerywam autoGo');
-                    window.auto = false;
-                    $('#goAutoButton').html('AutoGO');
-                } else {
-                    console.log('ide do dziczy ' + iconSelect.getSelectedValue());
-                    $('#pasek_skrotow a[href="gra/dzicz.php?poluj&miejsce=' + iconSelect.getSelectedValue() + '"] img').trigger('click');
-                }
+        for (let i = 0; i < 12; i++) {
+            if (Number($('#sidebar .stan-pokemon:nth-child(' + i + ')').find('.progress-bar').attr('aria-valuenow')) * 100 / Number($('#sidebar .stan-pokemon:nth-child(2)').find('.progress-bar').attr('aria-valuemax')) < Number($('#min-health').val())) {
+                console.log('lecze sie');
+                $('#skrot_leczenie').trigger('click');
+                break;
             }
         }
+        if ($('.dzikipokemon-background-shiny').length == 1) {
+            console.log('spotkalem shiny');
+            $('#goButton').css('background', 'green');
+            window.auto = false;
+            $('#goAutoButton').html('AutoGO');
+        } else if ($('.dzikipokemon-background-normalny').length == 1) {
+            $('button[href="dzicz.php?miejsce=' + iconSelect.getSelectedValue() + getPockeIndex() + '"]').trigger('click');
+        } else if ($('button[href="dzicz.php?miejsce=' + iconSelect.getSelectedValue() + iconBall.getSelectedValue() + '"]').length == 1) {
+            $('button[href="dzicz.php?miejsce=' + iconSelect.getSelectedValue() + iconBall.getSelectedValue() + '"]').trigger('click');
+            console.log('rzucam balla');
+        } else {
+            if ($('.progress-stan2 div').attr('aria-valuenow') < 5) {
+                console.log('przerywam autoGo');
+                window.auto = false;
+                $('#goAutoButton').html('AutoGO');
+            } else {
+                console.log('ide do dziczy ' + iconSelect.getSelectedValue());
+                $('#pasek_skrotow a[href="gra/dzicz.php?poluj&miejsce=' + iconSelect.getSelectedValue() + '"] img').trigger('click');
+            }
+        }
+
     }
 
+    function getPockeIndex() {
+        if (!isExpMode)
+            return iconPoke.getSelectedValue();
+        var pokeLvlNode = getElementByXpath('//*[@id="glowne_okno"]/div/div[2]/div[1]/div/div[2]/b');
+        console.log(pokeLvlNode);
+        var pokeLvlText = pokeLvlNode.innerHTML;
+        var pokeLvlNumber = Number.parseInt(pokeLvlText.replace("Poziom: ",""));
+console.log(pokeLvlNumber);
+        return "&wybierz_pokemona=" + getPokForLvl(pokeLvlNumber);
+
+    }
+    function getElementByXpath(path) {
+        return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    }
+
+    function getPokForLvl(enemyLvl){
+        if(enemyLvl <= 15)
+            return Number($('#easy-lvl').val());
+        else if(enemyLvl > 15 && enemyLvl <= 30)
+            return Number($('#low-lvl').val());
+        else if(enemyLvl > 30 && enemyLvl <= 50)
+            return Number($('#mid-lvl').val());
+        else if(enemyLvl > 50 && enemyLvl <= 70)
+            return Number($('#hard-lvl').val());
+        else if(enemyLvl > 70 && enemyLvl <= 90)
+            return Number($('#power-lvl').val());
+        else
+            return Number($('#ultimate-lvl').val());
+    }
 
     $(window).keypress(function (e) {
-      if (e.key === ' ' || e.key === 'Spacebar') {
-          if ($('#space-go').is(":checked")){
-            // ' ' is standard, 'Spacebar' was used by IE9 and Firefox < 37
-            e.preventDefault();
-            console.log('Space pressed');
-            click();
-          }
-      }
+        if (e.key === ' ' || e.key === 'Spacebar') {
+            if ($('#space-go').is(":checked")) {
+                // ' ' is standard, 'Spacebar' was used by IE9 and Firefox < 37
+                e.preventDefault();
+                console.log('Space pressed');
+                click();
+            }
+        }
     });
+
+    var poksForLvl = {
+        easyLvl:0,
+        lowLvl:1,
+        midLvl:2,
+        hardLvl:3,
+        powerLvl:4,
+        ultimateLvl:5
+    };
 
     $(document).off("click", "nav a");
     $(document).on("click", "nav a", function (event) {
@@ -159,23 +208,52 @@ $(document).ready(function () {
     });
 
     $(document).on("change", '#space-go', function () {
-        if($('#space-go').is(":checked")){
+        if ($('#space-go').is(":checked")) {
             window.localStorage.spaceGo = true;
         } else {
             window.localStorage.spaceGo = false;
         }
     });
 
-    $('body').on('click', ':not(#settings *, #settings)', function(){
+    $(document).on("change", '#exp-mode', function () {
+        if ($('#exp-mode').is(":checked")) {
+            window.localStorage.expMode = true;
+            isExpMode = true;
+        } else {
+            isExpMode = false;
+            window.localStorage.expMode = false;
+        }
+    });
+
+    $('body').on('click', ':not(#settings *, #settings)', function () {
         $('#settings').css('display', "none");
         $('#goSettings').css('display', "block");
     });
 
-    $(document).on("change", '#min-health', function (){
-        if($(this).val() > 100 ||  $(this).val() < 1){
-           $(this).val(90);
+    $(document).on("change", '#min-health', function () {
+        if ($(this).val() > 100 || $(this).val() < 1) {
+            $(this).val(90);
         }
         window.localStorage.minHealth = $(this).val();
+    });
+
+    $(document).on("change", '#easy-lvl', function () {
+        window.localStorage.easyLvl = $(this).val();
+    });
+    $(document).on("change", '#low-lvl', function () {
+        window.localStorage.lowLvl = $(this).val();
+    });
+    $(document).on("change", '#mid-lvl', function () {
+        window.localStorage.midLvl = $(this).val();
+    });
+    $(document).on("change", '#hard-lvl', function () {
+        window.localStorage.hardLvl = $(this).val();
+    });
+    $(document).on("change", '#power-lvl', function () {
+        window.localStorage.powerLvl = $(this).val();
+    });
+    $(document).on("change", '#ultimate-lvl', function () {
+        window.localStorage.ultimateLvl = $(this).val();
     });
 
     $(document).on("click", '#goSettings', function () {
@@ -235,7 +313,7 @@ function initPokemonIcons() {
         window.localStorage.pokemonIconsIndex = 0;
     }
 
-    document.getElementById('setPok').addEventListener('changed', function(e){
+    document.getElementById('setPok').addEventListener('changed', function (e) {
         window.localStorage.pokemonIconsIndex = iconPoke.getSelectedIndex();
     });
 }
@@ -268,7 +346,7 @@ function initLocationIcons() {
         window.localStorage.locationIconsIndex = 0;
     }
 
-    document.getElementById('goDzicz').addEventListener('changed', function(e){
+    document.getElementById('goDzicz').addEventListener('changed', function (e) {
         window.localStorage.locationIconsIndex = iconSelect.getSelectedIndex();
     });
 }
@@ -303,11 +381,9 @@ function initBallIcons() {
         window.localStorage.ballIconsIndex = 1;
     }
 
-    document.getElementById('setBall').addEventListener('changed', function(e){
+    document.getElementById('setBall').addEventListener('changed', function (e) {
         window.localStorage.ballIconsIndex = iconBall.getSelectedIndex();
     });
 
 }
-
-
 
