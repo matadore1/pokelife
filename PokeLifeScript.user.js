@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.1.6
+// @version      1.1.7
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -21,12 +21,26 @@ var isExpMode = false;
 var iconSelect;
 var iconPoke;
 var iconBall;
+window.jsonData;
+
 $(document).ready(function() {
     $.wait = function(ms) {
         var defer = $.Deferred();
         setTimeout(function() { defer.resolve(); }, ms);
         return defer;
     };
+
+    function loadDataFromJson() {
+        var flickerAPI = "https://raw.githubusercontent.com/krozum/pokelife/master/data.json";
+        $.getJSON( flickerAPI, {
+            format: "json"
+        })
+            .done(function( data ) {
+            window.jsonData = data;
+        });
+    };
+    loadDataFromJson();
+
 
     $('body').append('<div id="setPok" style="position: fixed; cursor: pointer; top: 0; left: 10px; z-index: 9999"></div>');
     $('body').append('<div id="setBall" style="position: fixed; cursor: pointer; top: 0; left: 60px; z-index: 9999"></div>');
@@ -104,6 +118,25 @@ $(document).ready(function() {
 
     }
 
+    function updateTMView() {
+        if($('#plecak-tm').length > 0 ){
+            $('#plecak-tm > div.col-xs-6').each(function(index, val){
+                var id = $(this).find('h3').html().split(" ")[1];
+                $(this).find("br").remove();
+                if(window.jsonData["tm"][id-1]["category_id"] == 1){
+                    $(this).children().css("background-color", "#f9856e");
+                }
+                if(window.jsonData["tm"][id-1]["category_id"] == 2){
+                    $(this).children().css("background-color", "#4d98b0");
+                }
+                if(window.jsonData["tm"][id-1]["category_id"] == 3){
+                    $(this).children().css("background-color", "#bdbcbb");
+                }
+                $(this).children().prepend('<br><img src="https://pokelife.pl/images/typy/'+window.jsonData["tm"][id-1]["type_id"]+'.png" style="width: 40px;">');
+            });
+        }
+    }
+
     function getPockeIndex() {
         if (!isExpMode)
             return iconPoke.getSelectedValue();
@@ -170,6 +203,7 @@ $(document).ready(function() {
 
             //$("#glowne_okno").html(loadingbar);
             $("#glowne_okno").load($(this).attr('href'), function() {
+                updateTMView();
                 if (window.auto) {
                     setTimeout(function() { click(); }, 150);
                 }
@@ -215,6 +249,7 @@ $(document).ready(function() {
         //$("#glowne_okno").html(loadingbar);
         $("#glowne_okno").load('gra/' + $(this).attr('href'), { limit: 20 },
             function(responseText, textStatus, req) {
+                updateTMView();
                 if (window.auto) {
                     setTimeout(function() { click(); }, 150);
                 }
@@ -416,3 +451,4 @@ function initBallIcons() {
     });
 
 }
+
