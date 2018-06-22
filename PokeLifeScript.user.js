@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.1.8
+// @version      1.1.8.1
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -65,8 +65,14 @@ $(document).ready(function() {
                 window.auto = false;
                 $('#goAutoButton').html('AutoGO');
             } else {
-                console.log('PokeLifeScript: idę do dziczy ' + iconSelect.getSelectedValue() + ".");
-                $('#pasek_skrotow a[href="gra/dzicz.php?poluj&miejsce=' + iconSelect.getSelectedValue() + '"] img').trigger('click');
+                if(iconSelect.getSelectedValue() == "ruiny_miasta" && $('.progress-stan2 div').attr('aria-valuenow') < 12){
+                    console.log('PokeLifeScript: brak PA, przerywam AutoGo');
+                    window.auto = false;
+                    $('#goAutoButton').html('AutoGO');
+                } else {
+                    console.log('PokeLifeScript: idę do dziczy ' + iconSelect.getSelectedValue() + ".");
+                    $('#pasek_skrotow a[href="gra/dzicz.php?poluj&miejsce=' + iconSelect.getSelectedValue() + '"] img').trigger('click');
+                }
             }
         }
 
@@ -472,5 +478,6 @@ function initBallIcons() {
         window.localStorage.ballIconsIndex = iconBall.getSelectedIndex();
     });
 }
+
 
 
