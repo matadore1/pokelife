@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.2
+// @version      1.2.1
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -137,6 +137,24 @@ $(document).ready(function() {
         }
     }
 
+    function updateWymianaView() {
+        if($('#glowne_okno .panel-heading').html() === "Centrum wymiany Punktów Zasług"){
+            var dostepne = Number($('#glowne_okno .panel-body big').html().split(" ")[0]);
+            var cena_zakupu = Number($('#target0').parent().find("b").html().split("¥")[0].replace(/\./g, ''));
+            var ilosc_yenow = Number($('a[href="http://pokelife.pl/pokedex/index.php?title=Pieniądze"]').parent().html().split("</a>")[1].split("<a")[0].replace(/\./g, ''));
+
+            var ile_moge_kupic = Number((ilosc_yenow / cena_zakupu).toFixed());
+
+            if(ile_moge_kupic>dostepne){
+                ile_moge_kupic = dostepne;
+            }
+
+            console.log('PokeLifeScript: dostępnych PZ do kupienia: '+ile_moge_kupic);
+            $('#target0').val(ile_moge_kupic);
+            $('#target0').keyup();
+        }
+    }
+
     $(document).off("click", "#clickAllLinks");
     $(document).on("click", "#clickAllLinks", function(event) {
         var id = $('#klikniecie-1').parent().find("a").attr("onclick").split(",")[1].split(")")[0];
@@ -224,6 +242,7 @@ $(document).ready(function() {
             $("#glowne_okno").load($(this).attr('href'), function() {
                 updateTMView();
                 updateKlikanieView();
+                updateWymianaView();
                 updateInfoLog();
                 if (window.auto) {
                     setTimeout(function() { click(); }, 150);
@@ -272,6 +291,7 @@ $(document).ready(function() {
             function(responseText, textStatus, req) {
                 updateTMView();
                 updateKlikanieView();
+                updateWymianaView();
                 updateInfoLog();
                 if (window.auto) {
                     setTimeout(function() { click(); }, 150);
