@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.1.9
+// @version      1.2
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -35,47 +35,53 @@ $(document).ready(function() {
     initBallIcons();
 
     function click() {
-        for (let i = 0; i < 12; i++) {
-            if (Number($('#sidebar .stan-pokemon:nth-child(' + i + ')').find('.progress-bar').attr('aria-valuenow')) * 100 / Number($('#sidebar .stan-pokemon:nth-child(2)').find('.progress-bar').attr('aria-valuemax')) < Number($('#min-health').val())) {
+        var canRun = true;
+        $('.stan-pokemon div.progress:first-of-type .progress-bar').each(function( index ) {
+            var now = $(this).attr("aria-valuenow");
+            var max = $(this).attr("aria-valuemax");
+            if (Number(now) * 100 / Number(max) < Number($('#min-health').val())) {
+                canRun = false;
                 console.log('PokeLifeScript: leczę się');
                 $('#skrot_leczenie').trigger('click');
-                break;
+                setTimeout(function(){ click(); }, 400);
             }
-        }
-        if ($('.dzikipokemon-background-shiny').length == 1) {
-            console.log('PokeLifeScript: spotkany Shiny, przerwanie AutoGo');
-            $('#goButton').css('background', 'green');
-            window.auto = false;
-            $('#goAutoButton').html('AutoGO');
-        } else if (window.localStorage.catchMode == "true" && $('.dzikipokemon-background-normalny img[src="images/inne/pokeball_miniature2.png"]').length > 0) {
-            console.log('PokeLifeScript: spotkany niezłapany pokemona, przerwanie AutoGo');
-            $('#goButton').css('background', 'green');
-            window.auto = false;
-            $('#goAutoButton').html('AutoGO');
-        } else if ($('.dzikipokemon-background-normalny').length == 1) {
-            console.log('PokeLifeScript: atakuje pokemona');
-            var url = "dzicz.php?miejsce=" + iconSelect.getSelectedValue() + getPockeIndex();
-            $('button[href="'+url+'"]').trigger('click');
-        } else if ($('button[href="dzicz.php?miejsce=' + iconSelect.getSelectedValue() + iconBall.getSelectedValue() + '"]').length == 1) {
-            $('button[href="dzicz.php?miejsce=' + iconSelect.getSelectedValue() + iconBall.getSelectedValue() + '"]').trigger('click');
-            console.log('PokeLifeScript: rzucam pokeballa');
-        } else {
-            if ($('.progress-stan2 div').attr('aria-valuenow') < 5) {
-                console.log('PokeLifeScript: brak PA, przerywam AutoGo');
+        });
+
+        if(canRun){
+            if ($('.dzikipokemon-background-shiny').length == 1) {
+                console.log('PokeLifeScript: spotkany Shiny, przerwanie AutoGo');
+                $('#goButton').css('background', 'green');
                 window.auto = false;
                 $('#goAutoButton').html('AutoGO');
+            } else if (window.localStorage.catchMode == "true" && $('.dzikipokemon-background-normalny img[src="images/inne/pokeball_miniature2.png"]').length > 0) {
+                console.log('PokeLifeScript: spotkany niezłapany pokemona, przerwanie AutoGo');
+                $('#goButton').css('background', 'green');
+                window.auto = false;
+                $('#goAutoButton').html('AutoGO');
+            } else if ($('.dzikipokemon-background-normalny').length == 1) {
+                console.log('PokeLifeScript: atakuje pokemona');
+                var url = "dzicz.php?miejsce=" + iconSelect.getSelectedValue() + getPockeIndex();
+                $('button[href="'+url+'"]').trigger('click');
+            } else if ($('button[href="dzicz.php?miejsce=' + iconSelect.getSelectedValue() + iconBall.getSelectedValue() + '"]').length == 1) {
+                $('button[href="dzicz.php?miejsce=' + iconSelect.getSelectedValue() + iconBall.getSelectedValue() + '"]').trigger('click');
+                console.log('PokeLifeScript: rzucam pokeballa');
             } else {
-                if(iconSelect.getSelectedValue() == "ruiny_miasta" && $('.progress-stan2 div').attr('aria-valuenow') < 12){
+                if ($('.progress-stan2 div').attr('aria-valuenow') < 5) {
                     console.log('PokeLifeScript: brak PA, przerywam AutoGo');
                     window.auto = false;
                     $('#goAutoButton').html('AutoGO');
                 } else {
-                    console.log('PokeLifeScript: idę do dziczy ' + iconSelect.getSelectedValue() + ".");
-                    $('#pasek_skrotow a[href="gra/dzicz.php?poluj&miejsce=' + iconSelect.getSelectedValue() + '"] img').trigger('click');
+                    if(iconSelect.getSelectedValue() == "ruiny_miasta" && $('.progress-stan2 div').attr('aria-valuenow') < 12){
+                        console.log('PokeLifeScript: brak PA, przerywam AutoGo');
+                        window.auto = false;
+                        $('#goAutoButton').html('AutoGO');
+                    } else {
+                        console.log('PokeLifeScript: idę do dziczy ' + iconSelect.getSelectedValue() + ".");
+                        $('#pasek_skrotow a[href="gra/dzicz.php?poluj&miejsce=' + iconSelect.getSelectedValue() + '"] img').trigger('click');
+                    }
                 }
             }
         }
-
     }
 
     function updateInfoLog() {
@@ -124,6 +130,36 @@ $(document).ready(function() {
         }
     }
 
+    function updateKlikanieView() {
+        if($('#glowne_okno .panel-heading').html() === "Promuj stronę"){
+            var html = '<div class="col-xs-12" style=" text-align: center; "><button id="clickAllLinks" style=" background-color: #f1b03b; border: 1px solid #ce9532; border-radius: 5px; padding: 5px 25px; text-transform: uppercase; line-height: 20px; height: 40px; ">Wyklikaj wszystkie</button></div>';
+            $('#glowne_okno .panel-body>div:first-of-type').append(html);
+        }
+    }
+
+    $(document).off("click", "#clickAllLinks");
+    $(document).on("click", "#clickAllLinks", function(event) {
+        var id = $('#klikniecie-1').parent().find("a").attr("onclick").split(",")[1].split(")")[0];
+        setTimeout(function(){ clickInLink(1, id); }, 200);
+    });
+
+    function clickInLink(number, id){
+        if(number<11){
+            var w = window.open("", "myWindow", "width=200,height=100");
+            w.location.href= 'http://pokelife.pl/index.php?k='+number+'&g='+id;
+            $(w).ready(function(){
+                w.close();
+                $('#klikniecie-'+number).html('TAK');
+                console.log('PokeLifeScript: klikam link '+number);
+                setTimeout(function(){ clickInLink(number+1, id); }, 300);
+            });
+        } else {
+            setTimeout(function(){
+                $("#sidebar").load('inc/stan.php');
+            }, 1500);
+        }
+    }
+
     function getPockeIndex() {
         if (window.localStorage.expMode == "false")
             return iconPoke.getSelectedValue();
@@ -131,7 +167,6 @@ $(document).ready(function() {
         var pokeLvlText = pokeLvlNode.innerHTML;
         var pokeLvlNumber = Number.parseInt(pokeLvlText.replace("Poziom: ", ""));
         return "&wybierz_pokemona=" + getPokForLvl(pokeLvlNumber);
-
     }
 
     function getElementByXpath(path) {
@@ -188,6 +223,7 @@ $(document).ready(function() {
             //$("#glowne_okno").html(loadingbar);
             $("#glowne_okno").load($(this).attr('href'), function() {
                 updateTMView();
+                updateKlikanieView();
                 updateInfoLog();
                 if (window.auto) {
                     setTimeout(function() { click(); }, 150);
@@ -235,6 +271,7 @@ $(document).ready(function() {
         $("#glowne_okno").load('gra/' + $(this).attr('href'), { limit: 20 },
             function(responseText, textStatus, req) {
                 updateTMView();
+                updateKlikanieView();
                 updateInfoLog();
                 if (window.auto) {
                     setTimeout(function() { click(); }, 150);
@@ -363,7 +400,7 @@ function addNewElementsToWebsite(){
 
     $('body').append('<div id="goSettings" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;right: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: rgb(21, 149, 137);z-index: 9999;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></div>');
     $('body').append('<div id="settings" style="display: none; width: 600px; height: auto; min-height: 200px; z-index: 9998; background: white; position: fixed; bottom: 0; right: 0; border: 3px solid #159589; padding: 10px; ">' +
-        '<div>Lecz gdy pierwszy pokemon ma mniej niz <input id="min-health" type="number" min="1" max="100" style="margin-left: 10px" value="' + (window.localStorage.minHealth ? window.localStorage.minHealth : "90") + '">% zycia</div>' +
+        '<div>Lecz gdy któryś pokemon ma mniej niż <input id="min-health" type="number" min="1" max="100" style="margin-left: 10px" value="' + (window.localStorage.minHealth ? window.localStorage.minHealth : "90") + '">% zycia</div>' +
         '<div><b>EXP MODE:</b><br>Pokemon do 15 poziomu <input id="easy-lvl" type="number" min="0" max="5" style="margin-left: 10px" value="' + (window.localStorage.easyLvl ? window.localStorage.easyLvl : "1") + '"></div>' +
         '<div>Pokemon od 15 do 30 poziomu <input id="low-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.lowLvl ? window.localStorage.lowLvl : "1") + '"></div>' +
         '<div>Pokemon od 30 do 50 poziomu <input id="mid-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.midLvl ? window.localStorage.midLvl : "1") + '"></div>' +
@@ -478,6 +515,7 @@ function initBallIcons() {
         window.localStorage.ballIconsIndex = iconBall.getSelectedIndex();
     });
 }
+
 
 
 
