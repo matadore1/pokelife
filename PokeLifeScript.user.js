@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.2.3
+// @version      1.2.4
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -43,7 +43,6 @@ $(document).ready(function() {
                 canRun = false;
                 console.log('PokeLifeScript: leczę się');
                 $('#skrot_leczenie').trigger('click');
-                setTimeout(function(){ click(); }, 400);
             }
         });
 
@@ -255,6 +254,19 @@ $(document).ready(function() {
             /* wyłącza aktywne menu */
             //$('.nav li').removeClass('active');
         }
+    });
+
+
+    $(document).off("click", "#skrot_leczenie");
+    $(document).on( "click", "#skrot_leczenie", function(event) {
+        $("#skrot_leczenie_img").attr("src","images/leczenie_load.gif");
+        //$("#miniOkno_content").html(loadingbar);
+        $("#miniOkno_Label").html('Centrum Pokemon');
+        $("#miniOkno_content").load('gra/lecznica.php?wylecz_wszystkie&tylko_komunikat', function() {
+                if (window.auto) {
+                    setTimeout(function() { click(); }, 150);
+                }
+        });
     });
 
     $(document).off("click", ".btn-akcja");
@@ -535,8 +547,3 @@ function initBallIcons() {
         window.localStorage.ballIconsIndex = iconBall.getSelectedIndex();
     });
 }
-
-
-
-
-
