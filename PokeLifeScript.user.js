@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.2.2
+// @version      1.2.3
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -165,12 +165,12 @@ $(document).ready(function() {
         if(number<11){
             var w = window.open("", "myWindow", "width=200,height=100");
             w.location.href= 'http://pokelife.pl/index.php?k='+number+'&g='+id;
-            $(w).ready(function(){
+            $(w).load(setTimeout(function(){
                 w.close();
                 $('#klikniecie-'+number).html('TAK');
                 console.log('PokeLifeScript: klikam link '+number);
                 setTimeout(function(){ clickInLink(number+1, id); }, 300);
-            });
+            }, 300));
         } else {
             setTimeout(function(){
                 $("#sidebar").load('inc/stan.php');
