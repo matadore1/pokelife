@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.1.8.1
+// @version      1.1.9
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -47,7 +47,7 @@ $(document).ready(function() {
             $('#goButton').css('background', 'green');
             window.auto = false;
             $('#goAutoButton').html('AutoGO');
-        } else if ($('.dzikipokemon-background-normalny img[src="images/inne/pokeball_miniature2.png"]').length > 0) {
+        } else if (window.localStorage.catchMode == "true" && $('.dzikipokemon-background-normalny img[src="images/inne/pokeball_miniature2.png"]').length > 0) {
             console.log('PokeLifeScript: spotkany niezłapany pokemona, przerwanie AutoGo');
             $('#goButton').css('background', 'green');
             window.auto = false;
@@ -140,15 +140,15 @@ $(document).ready(function() {
 
     function getPokForLvl(enemyLvl) {
         if (enemyLvl <= 15)
-            return Number($('#easy-lvl').val());
+            return Number($('#easy-lvl').val()-1);
         else if (enemyLvl > 15 && enemyLvl <= 30)
-            return Number($('#low-lvl').val());
+            return Number($('#low-lvl').val()-1);
         else if (enemyLvl > 30 && enemyLvl <= 50)
-            return Number($('#mid-lvl').val());
+            return Number($('#mid-lvl').val()-1);
         else if (enemyLvl > 50 && enemyLvl <= 70)
-            return Number($('#hard-lvl').val());
+            return Number($('#hard-lvl').val()-1);
         else if (enemyLvl > 70 && enemyLvl <= 90)
-            return Number($('#power-lvl').val());
+            return Number($('#power-lvl').val()-1);
         else
             return Number($('#ultimate-lvl').val());
     }
@@ -344,7 +344,7 @@ function initVariables() {
         window.localStorage.expMode = false;
     }
     if(window.localStorage.catchMode == undefined){
-        window.localStorage.catchMode = false;
+        window.localStorage.catchMode = true;
     }
     if(window.localStorage.spaceGo == undefined){
         window.localStorage.spaceGo = true;
@@ -364,15 +364,15 @@ function addNewElementsToWebsite(){
     $('body').append('<div id="goSettings" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;right: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: rgb(21, 149, 137);z-index: 9999;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></div>');
     $('body').append('<div id="settings" style="display: none; width: 600px; height: auto; min-height: 200px; z-index: 9998; background: white; position: fixed; bottom: 0; right: 0; border: 3px solid #159589; padding: 10px; ">' +
         '<div>Lecz gdy pierwszy pokemon ma mniej niz <input id="min-health" type="number" min="1" max="100" style="margin-left: 10px" value="' + (window.localStorage.minHealth ? window.localStorage.minHealth : "90") + '">% zycia</div>' +
-        '<div>Pokemon do 15 poziomu <input id="easy-lvl" type="number" min="0" max="5" style="margin-left: 10px" value="' + (window.localStorage.easyLvl ? window.localStorage.easyLvl : "1") + '"></div>' +
-        '<div>Pokemon od 15 do 30 poziomu <input id="low-lvl" type="number" min="0" max="5" style="margin-left: 10px" value="' + (window.localStorage.lowLvl ? window.localStorage.lowLvl : "1") + '"></div>' +
-        '<div>Pokemon od 30 do 50 poziomu <input id="mid-lvl" type="number" min="0" max="5" style="margin-left: 10px" value="' + (window.localStorage.midLvl ? window.localStorage.midLvl : "1") + '"></div>' +
-        '<div>Pokemon od 50 do 70 poziomu <input id="hard-lvl" type="number" min="0" max="5" style="margin-left: 10px" value="' + (window.localStorage.hardLvl ? window.localStorage.hardLvl : "1") + '"></div>' +
-        '<div>Pokemon od 70 do 90 poziomu <input id="power-lvl" type="number" min="0" max="5" style="margin-left: 10px" value="' + (window.localStorage.powerLvl ? window.localStorage.powerLvl : "1") + '"></div>' +
-        '<div>Pokemon od 90 do 100 poziomu <input id="ultimate-lvl" type="number" min="0" max="5" style="margin-left: 10px" value="' + (window.localStorage.ultimateLvl ? window.localStorage.ultimateLvl : "1") + '"></div>' +
+        '<div><b>EXP MODE:</b><br>Pokemon do 15 poziomu <input id="easy-lvl" type="number" min="0" max="5" style="margin-left: 10px" value="' + (window.localStorage.easyLvl ? window.localStorage.easyLvl : "1") + '"></div>' +
+        '<div>Pokemon od 15 do 30 poziomu <input id="low-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.lowLvl ? window.localStorage.lowLvl : "1") + '"></div>' +
+        '<div>Pokemon od 30 do 50 poziomu <input id="mid-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.midLvl ? window.localStorage.midLvl : "1") + '"></div>' +
+        '<div>Pokemon od 50 do 70 poziomu <input id="hard-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.hardLvl ? window.localStorage.hardLvl : "1") + '"></div>' +
+        '<div>Pokemon od 70 do 90 poziomu <input id="power-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.powerLvl ? window.localStorage.powerLvl : "1") + '"></div>' +
+        '<div>Pokemon od 90 do 100 poziomu <input id="ultimate-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.ultimateLvl ? window.localStorage.ultimateLvl : "1") + '"></div>' +
         '<div>Włącz exp mode <input type="checkbox" id="exp-mode" ' + (window.localStorage.expMode ? (window.localStorage.expMode == "true" ? "checked" : "") : "") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
-        '<div>Włącz catch mode <input type="checkbox" id="catch-mode" ' + (window.localStorage.catchMode ? (window.localStorage.catchMode == "true" ? "checked" : "") : "") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
-        '<div>Spacja uruchamia przycisk GO <input type="checkbox" id="space-go" ' + (window.localStorage.spaceGo ? (window.localStorage.spaceGo == "true" ? "checked" : "") : "checked") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div></div>');
+        '<div><b>Zatrzymuj gdy spotkasz niezłapanego</b> <input type="checkbox" id="catch-mode" ' + (window.localStorage.catchMode ? (window.localStorage.catchMode == "true" ? "checked" : "") : "") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
+        '<div><b>Spacja uruchamia przycisk GO</b> <input type="checkbox" id="space-go" ' + (window.localStorage.spaceGo ? (window.localStorage.spaceGo == "true" ? "checked" : "") : "checked") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div></div>');
 }
 
 function initPokemonIcons() {
@@ -478,6 +478,7 @@ function initBallIcons() {
         window.localStorage.ballIconsIndex = iconBall.getSelectedIndex();
     });
 }
+
 
 
 
