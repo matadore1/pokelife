@@ -192,12 +192,13 @@ $(document).ready(function() {
     }
 
     function getPockeIndex() {
-        if (window.localStorage.expMode == "false")
-            return iconPoke.getSelectedValue();
         var pokeLvlNode = getElementByXpath('//*[@id="glowne_okno"]/div/div[2]/div[1]/div/div[2]/b');
         var pokeLvlText = pokeLvlNode.innerHTML;
         var pokeLvlNumber = Number.parseInt(pokeLvlText.replace("Poziom: ", ""));
         lastPokLvl = pokeLvlNumber;
+        if (window.localStorage.expMode == "false")
+            return iconPoke.getSelectedValue();
+        
         return "&wybierz_pokemona=" + getPokForLvl(pokeLvlNumber);
     }
 
