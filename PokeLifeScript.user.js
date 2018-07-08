@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.4.1
+// @version      1.5
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -260,7 +260,7 @@ $(document).ready(function() {
                 updateWymianaView();
                 updateInfoLog();
                 if (window.auto) {
-                    setTimeout(function() { click(); }, 150);
+                    setTimeout(function() { click(); }, window.localStorage.clickSpeed);
                 }
             });
 
@@ -280,9 +280,13 @@ $(document).ready(function() {
         $("#miniOkno_Label").html('Centrum Pokemon');
         $("#miniOkno_content").load('gra/lecznica.php?wylecz_wszystkie&tylko_komunikat', function() {
             if (window.auto) {
-                setTimeout(function() { click(); }, 150);
+                setTimeout(function() { click(); }, window.localStorage.clickSpeed);
             }
         });
+    });
+
+    $(document).on("change", "#clickSpeed", function(event) {
+        window.localStorage.clickSpeed = $(this).val();
     });
 
     $(document).off("click", ".btn-akcja");
@@ -322,7 +326,7 @@ $(document).ready(function() {
                 updateWymianaView();
                 updateInfoLog();
                 if (window.auto) {
-                    setTimeout(function() { click(); }, 150);
+                    setTimeout(function() { click(); }, window.localStorage.clickSpeed);
                 }
                 if (textStatus == "error") {
                     $("#glowne_okno").html(responseText);
@@ -434,6 +438,9 @@ function initVariables() {
     if (window.localStorage.spaceGo == undefined) {
         window.localStorage.spaceGo = true;
     }
+    if (window.localStorage.clickSpeed == undefined) {
+        window.localStorage.clickSpeed = 200;
+    }
 };
 
 
@@ -446,6 +453,7 @@ function addNewElementsToWebsite() {
     $('body').append('<div id="goButton" style="border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 10px; font-size: 36px; text-align: center; width: 100px; height: 48px; line-height: 48px; background: ' + $('.panel-heading').css('background-color') + '; z-index: 9999">GO</div>');
     $('body').append('<div id="goAutoButton" style="border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 122px; font-size: 36px; text-align: center; width: 140px; height: 48px; line-height: 48px; background: ' + $('.panel-heading').css('background-color') + '; z-index: 9999">AutoGO</div>');
 
+    $('body').append('<div id="newVersionInfo" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;right: 10px; color: yellow; font-size: 19px;text-align: center;width: 150px;height: 30px;line-height: 35px;z-index: 9999;">v1.5</div>');
     $('body').append('<div id="goSettings" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;right: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: rgb(21, 149, 137);z-index: 9999;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></div>');
     $('body').append('<div id="settings" style="display: none; width: 600px; height: auto; min-height: 200px; z-index: 9998; background: white; position: fixed; bottom: 0; right: 0; border: 3px solid #159589; padding: 10px; ">' +
         '<div>Lecz gdy któryś pokemon ma mniej niż <input id="min-health" type="number" min="1" max="100" style="margin-left: 10px" value="' + (window.localStorage.minHealth ? window.localStorage.minHealth : "90") + '">% zycia</div>' +
@@ -457,7 +465,10 @@ function addNewElementsToWebsite() {
         '<div>Pokemon od 90 do 100 poziomu <input id="ultimate-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.ultimateLvl ? window.localStorage.ultimateLvl : "1") + '"></div>' +
         '<div>Włącz exp mode <input type="checkbox" id="exp-mode" ' + (window.localStorage.expMode ? (window.localStorage.expMode == "true" ? "checked" : "") : "") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
         '<div><b>Zatrzymuj gdy spotkasz niezłapanego</b> <input type="checkbox" id="catch-mode" ' + (window.localStorage.catchMode ? (window.localStorage.catchMode == "true" ? "checked" : "") : "") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
-        '<div><b>Spacja uruchamia przycisk GO</b> <input type="checkbox" id="space-go" ' + (window.localStorage.spaceGo ? (window.localStorage.spaceGo == "true" ? "checked" : "") : "checked") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div></div>');
+        '<div><b>Spacja uruchamia przycisk GO</b> <input type="checkbox" id="space-go" ' + (window.localStorage.spaceGo ? (window.localStorage.spaceGo == "true" ? "checked" : "") : "checked") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
+        '<div style="margin-top: 10px;"><b>Szybkość klikania:</b><input type="range" min="200" max="1000" value="' + (window.localStorage.clickSpeed ? window.localStorage.clickSpeed : "200") + '" class="slider" id="clickSpeed" style="width: 300px;"></div>' +
+        '<br><br></div>');
+
 }
 
 function initPokemonIcons() {
