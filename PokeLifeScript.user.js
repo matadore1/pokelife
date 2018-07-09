@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.6
+// @version      1.6.1
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -454,9 +454,9 @@ function loadShinyData() {
         format: "json"
     }).done(function(data) {
         window.shinyData = data;
-        $('#shinyBox').html("");
+        $('#shinyBox').html("<b>Ostatnio spotkanie shiny:</b>");
         $.each(window.shinyData, function( key, value ) {
-            $('#shinyBox').append('<div style="width: 290px;margin-bottom: 10px;"><img style="width: 50px" src="http://poke-life.net/pokemony/srednie/s'+value['pokemon_id']+'.png"><span>Spotkany o '+value['creation_date']+'</span></div>');
+            $('#shinyBox').append('<div style="width: 290px;margin-bottom: 10px;"><img style="width: 50px" src="http://poke-life.net/pokemony/srednie/s'+value['pokemon_id']+'.png"><span style="margin-left: 5px">Spotkany o '+value['creation_date']+'</span></div>');
         });
     });
 };
