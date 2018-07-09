@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.5.2
+// @version      1.5.3
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -19,6 +19,7 @@ GM_addStyle(newCSS);
 var iconSelect;
 var iconPoke;
 var iconBall;
+var lastClick;
 window.jsonData = [];
 
 $(document).ready(function() {
@@ -40,13 +41,19 @@ $(document).ready(function() {
             var now = $(this).attr("aria-valuenow");
             var max = $(this).attr("aria-valuemax");
             if (Number(now) * 100 / Number(max) < Number($('#min-health').val())) {
-                canRun = false;
-                console.log('PokeLifeScript: leczę się');
-                $('#skrot_leczenie').trigger('click');
+                if(lastClick === 'leczenie'){
+                    canRun = false;
+                } else {
+                    canRun = false;
+                    console.log('PokeLifeScript: leczę się');
+                    lastClick = 'leczenie';
+                    $('#skrot_leczenie').trigger('click');
+                }
             }
         });
 
         if (canRun) {
+            lastClick = 'nieleczenie';
             if ($('.dzikipokemon-background-shiny').length == 1) {
                 console.log('PokeLifeScript: spotkany Shiny, przerwanie AutoGo');
                 $('#goButton').css('background', 'green');
@@ -70,7 +77,11 @@ $(document).ready(function() {
                     window.auto = false;
                     $('#goAutoButton').html('AutoGO');
                 } else {
-                    if (iconSelect.getSelectedValue() == "ruiny_miasta" && $('.progress-stan2 div').attr('aria-valuenow') < 12) {
+                    if (iconSelect.getSelectedValue() == "ruiny_miasta" && $('.progress-stan2 div').attr('aria-valuenow') < 11) {
+                        console.log('PokeLifeScript: brak PA, przerywam AutoGo');
+                        window.auto = false;
+                        $('#goAutoButton').html('AutoGO');
+                    } else if (iconSelect.getSelectedValue() == "park_narodowy" && $('.progress-stan2 div').attr('aria-valuenow') < 12) {
                         console.log('PokeLifeScript: brak PA, przerywam AutoGo');
                         window.auto = false;
                         $('#goAutoButton').html('AutoGO');
@@ -464,7 +475,7 @@ function addNewElementsToWebsite() {
         '<div>Włącz exp mode <input type="checkbox" id="exp-mode" ' + (window.localStorage.expMode ? (window.localStorage.expMode == "true" ? "checked" : "") : "") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
         '<div><b>Zatrzymuj gdy spotkasz niezłapanego</b> <input type="checkbox" id="catch-mode" ' + (window.localStorage.catchMode ? (window.localStorage.catchMode == "true" ? "checked" : "") : "") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
         '<div><b>Spacja uruchamia przycisk GO</b> <input type="checkbox" id="space-go" ' + (window.localStorage.spaceGo ? (window.localStorage.spaceGo == "true" ? "checked" : "") : "checked") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
-        '<div style="margin-top: 10px;"><b>Szybkość klikania:</b><input type="range" min="200" max="1000" value="' + (window.localStorage.clickSpeed ? window.localStorage.clickSpeed : "200") + '" class="slider" id="clickSpeed" style="width: 300px;"></div>' +
+        '<div style="margin-top: 10px;"><b>Szybkość klikania:</b><input type="range" min="130" max="1000" value="' + (window.localStorage.clickSpeed ? window.localStorage.clickSpeed : "200") + '" class="slider" id="clickSpeed" style="width: 300px;"></div>' +
         '<br><br></div>');
 
     window.localStorage.lastVersion = GM_info.script.version;
