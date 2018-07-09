@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.5.1
+// @version      1.5.2
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -19,7 +19,6 @@ GM_addStyle(newCSS);
 var iconSelect;
 var iconPoke;
 var iconBall;
-var lastPokLvl = 0;
 window.jsonData = [];
 
 $(document).ready(function() {
@@ -48,7 +47,6 @@ $(document).ready(function() {
         });
 
         if (canRun) {
-            console.log(lastPokLvl);
             if ($('.dzikipokemon-background-shiny').length == 1) {
                 console.log('PokeLifeScript: spotkany Shiny, przerwanie AutoGo');
                 $('#goButton').css('background', 'green');
@@ -113,11 +111,13 @@ $(document).ready(function() {
     }
 
     function getBallIndex() {
-        console.log(lastPokLvl);
         if (iconBall.getSelectedValue() != "mixed")
             return iconBall.getSelectedValue()
         else {
-            if (lastPokLvl < 15)
+            var pokeLvlNode = getElementByXpath('//*[@id="glowne_okno"]/div/div[2]/div[1]/div/div[2]/b');
+            var pokeLvlText = pokeLvlNode.innerHTML;
+            var pokeLvlNumber = Number.parseInt(pokeLvlText.replace("Poziom: ", ""));
+            if (pokeLvlNumber < 15)
                 return '&zlap_pokemona=nestballe';
             else
                 return '&zlap_pokemona=greatballe'
@@ -195,10 +195,8 @@ $(document).ready(function() {
         var pokeLvlNode = getElementByXpath('//*[@id="glowne_okno"]/div/div[2]/div[1]/div/div[2]/b');
         var pokeLvlText = pokeLvlNode.innerHTML;
         var pokeLvlNumber = Number.parseInt(pokeLvlText.replace("Poziom: ", ""));
-        lastPokLvl = pokeLvlNumber;
         if (window.localStorage.expMode == "false")
             return iconPoke.getSelectedValue();
-        
         return "&wybierz_pokemona=" + getPokForLvl(pokeLvlNumber);
     }
 
