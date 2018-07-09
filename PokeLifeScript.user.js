@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.5.3
+// @version      1.6
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -21,6 +21,7 @@ var iconPoke;
 var iconBall;
 var lastClick;
 window.jsonData = [];
+window.shinyData = [];
 
 $(document).ready(function() {
     $.wait = function(ms) {
@@ -101,6 +102,14 @@ $(document).ready(function() {
             }
             if ($('#glowne_okno p.alert:first').html() === "Natrafiasz na dzikiego pokemona:") {
                 console.log('PokeLifeScript: spotkałem pokemona');
+                if ($('.dzikipokemon-background-shiny').length == 1) {
+                    var shinyAPIInsert = "http://bra1ns.xaa.pl/insert.php?pokemon_id="+$('.dzikipokemon-background-normalny .center-block img').attr('src').split('/')[1].split('.')[0];
+                    $.getJSON(shinyAPIInsert, {
+                        format: "json"
+                    }).done(function(data) {
+                        loadShinyData();
+                    });
+                }
             }
         }
 
@@ -435,6 +444,21 @@ function initJsonData() {
     }).done(function(data) {
         window.jsonData = data;
     });
+
+    loadShinyData();
+};
+
+function loadShinyData() {
+    var shinyAPI = "http://bra1ns.xaa.pl/get.php";
+    $.getJSON(shinyAPI, {
+        format: "json"
+    }).done(function(data) {
+        window.shinyData = data;
+        $('#shinyBox').html("");
+        $.each(window.shinyData, function( key, value ) {
+            $('#shinyBox').append('<div style="width: 290px;margin-bottom: 10px;"><img style="width: 50px" src="http://poke-life.net/pokemony/srednie/s'+value['pokemon_id']+'.png"><span>Spotkany o '+value['creation_date']+'</span></div>');
+        });
+    });
 };
 
 function initVariables() {
@@ -462,7 +486,7 @@ function addNewElementsToWebsite() {
     $('body').append('<div id="goButton" style="border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 10px; font-size: 36px; text-align: center; width: 100px; height: 48px; line-height: 48px; background: ' + $('.panel-heading').css('background-color') + '; z-index: 9999">GO</div>');
     $('body').append('<div id="goAutoButton" style="border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 122px; font-size: 36px; text-align: center; width: 140px; height: 48px; line-height: 48px; background: ' + $('.panel-heading').css('background-color') + '; z-index: 9999">AutoGO</div>');
 
-    $('body').append('<div id="newVersionInfo" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; right: 60px; color: yellow; font-size: 19px; text-align: center; width: 250px; height: 30px; line-height: 35px; z-index: 9999; text-align: right;">'+(GM_info.script.version == window.localStorage.lastVersion ? "" : "New Version! ")+'v'+GM_info.script.version+'</div>');
+    $('body').append('<div id="newVersionInfo" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; right: 60px; color: yellow; font-size: 19px; text-align: center; width: 250px; height: 30px; line-height: 35px; z-index: 9998; text-align: right;">'+(GM_info.script.version == window.localStorage.lastVersion ? "" : "New Version! ")+'v'+GM_info.script.version+'</div>');
     $('body').append('<div id="goSettings" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;right: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: rgb(21, 149, 137);z-index: 9999;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></div>');
     $('body').append('<div id="settings" style="display: none; width: 600px; height: auto; min-height: 200px; z-index: 9998; background: white; position: fixed; bottom: 0; right: 0; border: 3px solid #159589; padding: 10px; ">' +
         '<div>Lecz gdy któryś pokemon ma mniej niż <input id="min-health" type="number" min="1" max="100" style="margin-left: 10px" value="' + (window.localStorage.minHealth ? window.localStorage.minHealth : "90") + '">% zycia</div>' +
@@ -476,6 +500,7 @@ function addNewElementsToWebsite() {
         '<div><b>Zatrzymuj gdy spotkasz niezłapanego</b> <input type="checkbox" id="catch-mode" ' + (window.localStorage.catchMode ? (window.localStorage.catchMode == "true" ? "checked" : "") : "") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
         '<div><b>Spacja uruchamia przycisk GO</b> <input type="checkbox" id="space-go" ' + (window.localStorage.spaceGo ? (window.localStorage.spaceGo == "true" ? "checked" : "") : "checked") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
         '<div style="margin-top: 10px;"><b>Szybkość klikania:</b><input type="range" min="130" max="1000" value="' + (window.localStorage.clickSpeed ? window.localStorage.clickSpeed : "200") + '" class="slider" id="clickSpeed" style="width: 300px;"></div>' +
+        '<div style="margin-top: 10px;" id="shinyBox"><b>Ostatnio spotkane shiny:</b></div>' +
         '<br><br></div>');
 
     window.localStorage.lastVersion = GM_info.script.version;
