@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.6.2
+// @version      1.6.3
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -23,10 +23,10 @@ var lastClick;
 window.jsonData = [];
 window.shinyData = [];
 
-$(document).ready(function() {
-    $.wait = function(ms) {
+$(document).ready(function () {
+    $.wait = function (ms) {
         var defer = $.Deferred();
-        setTimeout(function() { defer.resolve(); }, ms);
+        setTimeout(function () { defer.resolve(); }, ms);
         return defer;
     };
     initJsonData();
@@ -38,11 +38,11 @@ $(document).ready(function() {
 
     function click() {
         var canRun = true;
-        $('.stan-pokemon div.progress:first-of-type .progress-bar').each(function(index) {
+        $('.stan-pokemon div.progress:first-of-type .progress-bar').each(function (index) {
             var now = $(this).attr("aria-valuenow");
             var max = $(this).attr("aria-valuemax");
             if (Number(now) * 100 / Number(max) < Number($('#min-health').val())) {
-                if(lastClick === 'leczenie'){
+                if (lastClick === 'leczenie') {
                     canRun = false;
                 } else {
                     canRun = false;
@@ -69,7 +69,7 @@ $(document).ready(function() {
                 console.log('PokeLifeScript: atakuje pokemona');
                 var url = "dzicz.php?miejsce=" + iconSelect.getSelectedValue() + getPockeIndex();
                 $('button[href="' + url + '"]').trigger('click');
-            } else if ($('button[href="dzicz.php?miejsce=' + iconSelect.getSelectedValue() + getBallIndex() + '"]').length == 1) {
+            } else if ($('button[href="dzicz.php?miejsce=' + iconSelect.getSelectedValue() + getBallIndex(true) + '"]').length == 1) {
                 $('button[href="dzicz.php?miejsce=' + iconSelect.getSelectedValue() + getBallIndex() + '"]').trigger('click');
                 console.log('PokeLifeScript: rzucam pokeballa');
             } else {
@@ -103,10 +103,10 @@ $(document).ready(function() {
             if ($('#glowne_okno p.alert:first').html() === "Natrafiasz na dzikiego pokemona:") {
                 console.log('PokeLifeScript: spotkałem pokemona');
                 if ($('.dzikipokemon-background-shiny').length == 1) {
-                    var shinyAPIInsert = "http://bra1ns.xaa.pl/insert.php?pokemon_id="+$('.dzikipokemon-background-shiny .center-block img').attr('src').split('/')[1].split('.')[0];
+                    var shinyAPIInsert = "http://bra1ns.xaa.pl/insert.php?pokemon_id=" + $('.dzikipokemon-background-shiny .center-block img').attr('src').split('/')[1].split('.')[0];
                     $.getJSON(shinyAPIInsert, {
                         format: "json"
-                    }).done(function(data) {
+                    }).done(function (data) {
                         loadShinyData();
                     });
                 }
@@ -130,13 +130,18 @@ $(document).ready(function() {
         }
     }
 
-    function getBallIndex() {
+    function getBallIndex(check) {
         if (iconBall.getSelectedValue() != "mixed")
             return iconBall.getSelectedValue()
         else {
-            var pokeLvlNode = getElementByXpath('//*[@id="glowne_okno"]/div/div[2]/div[1]/div/div[2]/b');
-            var pokeLvlText = pokeLvlNode.innerHTML;
-            var pokeLvlNumber = Number.parseInt(pokeLvlText.replace("Poziom: ", ""));
+            let pokeLvlNumber = 0;
+            if (!check) {
+                let pokeLvlNode = getElementByXpath('//*[@id="glowne_okno"]/div/div[2]/table[2]/tbody/tr/td[2]/center/b/text()');
+                let pokeLvlText = pokeLvlNode.data.replace("(", "");
+                pokeLvlText = pokeLvlText.replace("poz.)","");
+                pokeLvlNumber = Number.parseInt(pokeLvlText.trim());
+            }
+
             if (pokeLvlNumber < 15)
                 return '&zlap_pokemona=nestballe';
             else
@@ -146,7 +151,7 @@ $(document).ready(function() {
 
     function updateTMView() {
         if ($('#plecak-tm').length > 0) {
-            $('#plecak-tm > div.col-xs-6').each(function(index, val) {
+            $('#plecak-tm > div.col-xs-6').each(function (index, val) {
                 var id = $(this).find('h3').html().split(" ")[1];
                 $(this).find("br").remove();
                 if (window.jsonData["tm"][id - 1]["category_id"] == 1) {
@@ -189,23 +194,23 @@ $(document).ready(function() {
     }
 
     $(document).off("click", "#clickAllLinks");
-    $(document).on("click", "#clickAllLinks", function(event) {
+    $(document).on("click", "#clickAllLinks", function (event) {
         var id = $('#klikniecie-1').parent().find("a").attr("onclick").split(",")[1].split(")")[0];
-        setTimeout(function() { clickInLink(1, id); }, 200);
+        setTimeout(function () { clickInLink(1, id); }, 200);
     });
 
     function clickInLink(number, id) {
         if (number < 11) {
             var w = window.open("", "myWindow", "width=200,height=100");
             w.location.href = 'http://pokelife.pl/index.php?k=' + number + '&g=' + id;
-            $(w).load(setTimeout(function() {
+            $(w).load(setTimeout(function () {
                 w.close();
                 $('#klikniecie-' + number).html('TAK');
                 console.log('PokeLifeScript: klikam link ' + number);
-                setTimeout(function() { clickInLink(number + 1, id); }, 300);
+                setTimeout(function () { clickInLink(number + 1, id); }, 300);
             }, 300));
         } else {
-            setTimeout(function() {
+            setTimeout(function () {
                 $("#sidebar").load('inc/stan.php');
             }, 1500);
         }
@@ -239,7 +244,7 @@ $(document).ready(function() {
             return Number($('#ultimate-lvl').val());
     }
 
-    $(window).keypress(function(e) {
+    $(window).keypress(function (e) {
         if (e.key === ' ' || e.key === 'Spacebar') {
             if ($('#space-go').is(":checked")) {
                 // ' ' is standard, 'Spacebar' was used by IE9 and Firefox < 37
@@ -248,18 +253,8 @@ $(document).ready(function() {
             }
         }
     });
-
-    var poksForLvl = {
-        easyLvl: 0,
-        lowLvl: 1,
-        midLvl: 2,
-        hardLvl: 3,
-        powerLvl: 4,
-        ultimateLvl: 5
-    };
-
     $(document).off("click", "nav a");
-    $(document).on("click", "nav a", function(event) {
+    $(document).on("click", "nav a", function (event) {
         if ($(this).attr('href').charAt(0) != '#' && !$(this).hasClass("link")) {
             event.preventDefault();
 
@@ -272,13 +267,13 @@ $(document).ready(function() {
             $("html, body").animate({ scrollTop: 0 }, "fast");
 
             //$("#glowne_okno").html(loadingbar);
-            $("#glowne_okno").load($(this).attr('href'), function() {
+            $("#glowne_okno").load($(this).attr('href'), function () {
                 updateTMView();
                 updateKlikanieView();
                 updateWymianaView();
                 updateInfoLog();
                 if (window.auto) {
-                    setTimeout(function() { click(); }, window.localStorage.clickSpeed);
+                    setTimeout(function () { click(); }, window.localStorage.clickSpeed);
                 }
             });
 
@@ -290,25 +285,33 @@ $(document).ready(function() {
         }
     });
 
+    var poksForLvl = {
+        easyLvl: 0,
+        lowLvl: 1,
+        midLvl: 2,
+        hardLvl: 3,
+        powerLvl: 4,
+        ultimateLvl: 5
+    };
 
     $(document).off("click", "#skrot_leczenie");
-    $(document).on("click", "#skrot_leczenie", function(event) {
+    $(document).on("click", "#skrot_leczenie", function (event) {
         $("#skrot_leczenie_img").attr("src", "images/leczenie_load.gif");
         //$("#miniOkno_content").html(loadingbar);
         $("#miniOkno_Label").html('Centrum Pokemon');
-        $("#miniOkno_content").load('gra/lecznica.php?wylecz_wszystkie&tylko_komunikat', function() {
+        $("#miniOkno_content").load('gra/lecznica.php?wylecz_wszystkie&tylko_komunikat', function () {
             if (window.auto) {
-                setTimeout(function() { click(); }, window.localStorage.clickSpeed);
+                setTimeout(function () { click(); }, window.localStorage.clickSpeed);
             }
         });
     });
 
-    $(document).on("change", "#clickSpeed", function(event) {
+    $(document).on("change", "#clickSpeed", function (event) {
         window.localStorage.clickSpeed = $(this).val();
     });
 
     $(document).off("click", ".btn-akcja");
-    $(document).on("click", ".btn-akcja", function(event) {
+    $(document).on("click", ".btn-akcja", function (event) {
         event.preventDefault();
 
 
@@ -338,13 +341,13 @@ $(document).ready(function() {
 
         //$("#glowne_okno").html(loadingbar);
         $("#glowne_okno").load('gra/' + $(this).attr('href'), { limit: 20 },
-            function(responseText, textStatus, req) {
+            function (responseText, textStatus, req) {
                 updateTMView();
                 updateKlikanieView();
                 updateWymianaView();
                 updateInfoLog();
                 if (window.auto) {
-                    setTimeout(function() { click(); }, window.localStorage.clickSpeed);
+                    setTimeout(function () { click(); }, window.localStorage.clickSpeed);
                 }
                 if (textStatus == "error") {
                     $("#glowne_okno").html(responseText);
@@ -353,11 +356,11 @@ $(document).ready(function() {
         //$("#glowne_okno").load($(this).attr('href'),{});
     });
 
-    $(document).on("click", '#goButton', function() {
+    $(document).on("click", '#goButton', function () {
         click();
     });
 
-    $(document).on("change", '#space-go', function() {
+    $(document).on("change", '#space-go', function () {
         if ($('#space-go').is(":checked")) {
             window.localStorage.spaceGo = true;
         } else {
@@ -365,7 +368,7 @@ $(document).ready(function() {
         }
     });
 
-    $(document).on("change", '#exp-mode', function() {
+    $(document).on("change", '#exp-mode', function () {
         if ($('#exp-mode').is(":checked")) {
             window.localStorage.expMode = true;
         } else {
@@ -373,7 +376,7 @@ $(document).ready(function() {
         }
     });
 
-    $(document).on("change", '#catch-mode', function() {
+    $(document).on("change", '#catch-mode', function () {
         if ($('#catch-mode').is(":checked")) {
             window.localStorage.catchMode = true;
         } else {
@@ -381,38 +384,38 @@ $(document).ready(function() {
         }
     });
 
-    $('body').on('click', ':not(#settings *, #settings)', function() {
+    $('body').on('click', ':not(#settings *, #settings)', function () {
         $('#settings').css('display', "none");
         $('#goSettings').css('display', "block");
     });
 
-    $(document).on("change", '#min-health', function() {
+    $(document).on("change", '#min-health', function () {
         if ($(this).val() > 100 || $(this).val() < 1) {
             $(this).val(90);
         }
         window.localStorage.minHealth = $(this).val();
     });
 
-    $(document).on("change", '#easy-lvl', function() {
+    $(document).on("change", '#easy-lvl', function () {
         window.localStorage.easyLvl = $(this).val();
     });
-    $(document).on("change", '#low-lvl', function() {
+    $(document).on("change", '#low-lvl', function () {
         window.localStorage.lowLvl = $(this).val();
     });
-    $(document).on("change", '#mid-lvl', function() {
+    $(document).on("change", '#mid-lvl', function () {
         window.localStorage.midLvl = $(this).val();
     });
-    $(document).on("change", '#hard-lvl', function() {
+    $(document).on("change", '#hard-lvl', function () {
         window.localStorage.hardLvl = $(this).val();
     });
-    $(document).on("change", '#power-lvl', function() {
+    $(document).on("change", '#power-lvl', function () {
         window.localStorage.powerLvl = $(this).val();
     });
-    $(document).on("change", '#ultimate-lvl', function() {
+    $(document).on("change", '#ultimate-lvl', function () {
         window.localStorage.ultimateLvl = $(this).val();
     });
 
-    $(document).on("click", '#goSettings', function() {
+    $(document).on("click", '#goSettings', function () {
         if ($('#settings').css('display') == "none") {
             $('#settings').css('display', "block");
             $('#goSettings').css('display', "none");
@@ -423,7 +426,7 @@ $(document).ready(function() {
     });
 
     window.auto = false;
-    $(document).on("click", '#goAutoButton', function() {
+    $(document).on("click", '#goAutoButton', function () {
         if (window.auto) {
             window.auto = false;
             $('#goAutoButton').html('AutoGO');
@@ -441,7 +444,7 @@ function initJsonData() {
     var flickerAPI = "https://raw.githubusercontent.com/krozum/pokelife/master/data.json";
     $.getJSON(flickerAPI, {
         format: "json"
-    }).done(function(data) {
+    }).done(function (data) {
         window.jsonData = data;
     });
 
@@ -452,11 +455,11 @@ function loadShinyData() {
     var shinyAPI = "http://bra1ns.xaa.pl/get.php";
     $.getJSON(shinyAPI, {
         format: "json"
-    }).done(function(data) {
+    }).done(function (data) {
         window.shinyData = data;
         $('#shinyBox').html("<b>Ostatnio spotkanie shiny:</b>");
-        $.each(window.shinyData, function( key, value ) {
-            $('#shinyBox').append('<div style="width: 290px;margin-bottom: 10px;"><img style="width: 50px" src="http://poke-life.net/pokemony/srednie/s'+value['pokemon_id']+'.png"><span style="margin-left: 5px">Spotkany o '+value['creation_date']+'</span></div>');
+        $.each(window.shinyData, function (key, value) {
+            $('#shinyBox').append('<div style="width: 290px;margin-bottom: 10px;"><img style="width: 50px" src="http://poke-life.net/pokemony/srednie/s' + value['pokemon_id'] + '.png"><span style="margin-left: 5px">Spotkany o ' + value['creation_date'] + '</span></div>');
         });
     });
 };
@@ -486,7 +489,7 @@ function addNewElementsToWebsite() {
     $('body').append('<div id="goButton" style="border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 10px; font-size: 36px; text-align: center; width: 100px; height: 48px; line-height: 48px; background: ' + $('.panel-heading').css('background-color') + '; z-index: 9999">GO</div>');
     $('body').append('<div id="goAutoButton" style="border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 122px; font-size: 36px; text-align: center; width: 140px; height: 48px; line-height: 48px; background: ' + $('.panel-heading').css('background-color') + '; z-index: 9999">AutoGO</div>');
 
-    $('body').append('<div id="newVersionInfo" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; right: 60px; color: yellow; font-size: 19px; text-align: center; width: 250px; height: 30px; line-height: 35px; z-index: 9998; text-align: right;">'+(GM_info.script.version == window.localStorage.lastVersion ? "" : "New Version! ")+'v'+GM_info.script.version+'</div>');
+    $('body').append('<div id="newVersionInfo" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; right: 60px; color: yellow; font-size: 19px; text-align: center; width: 250px; height: 30px; line-height: 35px; z-index: 9998; text-align: right;">' + (GM_info.script.version == window.localStorage.lastVersion ? "" : "New Version! ") + 'v' + GM_info.script.version + '</div>');
     $('body').append('<div id="goSettings" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;right: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: rgb(21, 149, 137);z-index: 9999;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></div>');
     $('body').append('<div id="settings" style="display: none; width: 600px; height: auto; min-height: 200px; z-index: 9998; background: white; position: fixed; bottom: 0; right: 0; border: 3px solid #159589; padding: 10px; ">' +
         '<div>Lecz gdy któryś pokemon ma mniej niż <input id="min-health" type="number" min="1" max="100" style="margin-left: 10px" value="' + (window.localStorage.minHealth ? window.localStorage.minHealth : "90") + '">% zycia</div>' +
@@ -520,7 +523,7 @@ function initPokemonIcons() {
     });
     var selectPoke = [];
     let i = 0;
-    $.each($('.stan-pokemon'), function(index, item) {
+    $.each($('.stan-pokemon'), function (index, item) {
 
         let src = $(item).find('img').attr('src');
         if (src != "undefined" && src != undefined) {
@@ -539,7 +542,7 @@ function initPokemonIcons() {
         window.localStorage.pokemonIconsIndex = 0;
     }
 
-    document.getElementById('setPok').addEventListener('changed', function(e) {
+    document.getElementById('setPok').addEventListener('changed', function (e) {
         window.localStorage.pokemonIconsIndex = iconPoke.getSelectedIndex();
     });
 }
@@ -556,7 +559,7 @@ function initLocationIcons() {
         'horizontalIconNumber': 6
     });
     var icons = [];
-    $.each($('#pasek_skrotow li'), function(index, item) {
+    $.each($('#pasek_skrotow li'), function (index, item) {
         if ($(item).find('a').attr('href').substring(0, 9) == "gra/dzicz") {
             icons.push({ 'iconFilePath': $(item).find('img').attr('src'), 'iconValue': $(item).find('a').attr('href').substring(28) });
         }
@@ -571,7 +574,7 @@ function initLocationIcons() {
         window.localStorage.locationIconsIndex = 0;
     }
 
-    document.getElementById('goDzicz').addEventListener('changed', function(e) {
+    document.getElementById('goDzicz').addEventListener('changed', function (e) {
         window.localStorage.locationIconsIndex = iconSelect.getSelectedIndex();
     });
 }
@@ -608,7 +611,7 @@ function initBallIcons() {
         window.localStorage.ballIconsIndex = 1;
     }
 
-    document.getElementById('setBall').addEventListener('changed', function(e) {
+    document.getElementById('setBall').addEventListener('changed', function (e) {
         window.localStorage.ballIconsIndex = iconBall.getSelectedIndex();
     });
 }
