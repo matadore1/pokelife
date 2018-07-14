@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.6.4
+// @version      1.6.5
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -44,6 +44,7 @@ $(document).ready(function () {
             if (Number(now) * 100 / Number(max) < Number($('#min-health').val())) {
                 if (lastClick === 'leczenie') {
                     canRun = false;
+                    setTimeout(click, window.localStorage.clickSpeed);
                 } else {
                     canRun = false;
                     console.log('PokeLifeScript: leczę się');
@@ -212,7 +213,7 @@ $(document).ready(function () {
         } else {
             setTimeout(function () {
                 $("#sidebar").load('inc/stan.php');
-            }, 1500);
+            }, 100);
         }
     }
 
