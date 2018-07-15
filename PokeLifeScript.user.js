@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.6.6
+// @version      1.6.7
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -37,6 +37,7 @@ $(document).ready(function () {
     initBallIcons();
 
     function click() {
+        console.log("clicl");
         var canRun = true;
         $('.stan-pokemon div.progress:first-of-type .progress-bar').each(function (index) {
             var now = $(this).attr("aria-valuenow");
@@ -300,8 +301,12 @@ $(document).ready(function () {
         //$("#miniOkno_content").html(loadingbar);
         $("#miniOkno_Label").html('Centrum Pokemon');
         $("#miniOkno_content").load('gra/lecznica.php?wylecz_wszystkie&tylko_komunikat', function () {
+            $('.btn-wybor_pokemona').attr("disabled", false);
+            $('.btn-wybor_pokemona .progress-bar').css("width", "100%");
+            $('.btn-wybor_pokemona .progress-bar span').html("100% PŻ");
             if (window.auto) {
-                setTimeout(function () { click(); }, window.localStorage.clickSpeed+200);
+                console.log("clic3");
+                setTimeout(function () { click(); }, 500);
             }
         });
     });
