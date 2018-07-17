@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.6.10
+// @version      1.6.11
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -38,7 +38,6 @@ $(document).ready(function () {
     insertLoginInfo();
 
     function click() {
-        console.log("clicl");
         var canRun = true;
         $('.stan-pokemon div.progress:first-of-type .progress-bar').each(function (index) {
             var now = $(this).attr("aria-valuenow");
@@ -55,6 +54,7 @@ $(document).ready(function () {
             }
         });
 
+        console.log(canRun);
         if (canRun) {
             lastClick = 'nieleczenie';
             if ($('.dzikipokemon-background-shiny').length == 1) {
@@ -105,7 +105,7 @@ $(document).ready(function () {
             if ($('#glowne_okno p.alert:first').html() === "Natrafiasz na dzikiego pokemona:") {
                 console.log('PokeLifeScript: spotkałem pokemona');
                 if ($('.dzikipokemon-background-shiny').length == 1) {
-                    var shinyAPIInsert = "http://www.bra1ns.com/pokelife/insert.php?pokemon_id=" + $('.dzikipokemon-background-shiny .center-block img').attr('src').split('/')[1].split('.')[0].split('s')[1]+"&login="+$('#sidebar > div:nth-child(3) .panel-heading').html().split("<div")[0].trim();
+                    var shinyAPIInsert = "http://www.bra1ns.com/pokelife/insert.php?pokemon_id=" + $('.dzikipokemon-background-shiny .center-block img').attr('src').split('/')[1].split('.')[0].split('s')[1]+"&login="+$('#wyloguj').parent().parent().html().split("<div")[0].trim();
                     $.getJSON(shinyAPIInsert, {
                         format: "json"
                     }).done(function (data) {
@@ -472,7 +472,7 @@ function loadShinyData() {
 
 function insertLoginInfo() {
     setTimeout(function(){
-        var insertLoginInfoURL = "http://www.bra1ns.com/pokelife/insert_user.php?bot_version=" + GM_info.script.version +"&login="+$('#sidebar > div:nth-child(3) .panel-heading').html().split("<div")[0].trim();
+        var insertLoginInfoURL = "http://www.bra1ns.com/pokelife/insert_user.php?bot_version=" + GM_info.script.version +"&login="+$('#wyloguj').parent().parent().html().split("<div")[0].trim();
         $.getJSON(insertLoginInfoURL, {
             format: "json"
         }).done(function (data) {
