@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.6.11
+// @version      1.6.12
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -10,11 +10,18 @@
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
 // @require      http://bug7a.github.io/iconselect.js/sample/lib/control/iconselect.js
-// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=6.2
+// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=6.5
+// @resource     customCSS_dark  https://raw.githubusercontent.com/krozum/pokelife/master/style_dark.css?v=6.5
 // ==/UserScript==
 
-var newCSS = GM_getResourceText("customCSS");
-GM_addStyle(newCSS);
+var newCSS;
+if(window.localStorage.skinStyle == 2){
+    newCSS = GM_getResourceText("customCSS_dark");
+    GM_addStyle(newCSS);
+} else {
+    newCSS = GM_getResourceText("customCSS");
+    GM_addStyle(newCSS);
+}
 
 var iconSelect;
 var iconPoke;
@@ -395,6 +402,16 @@ $(document).ready(function () {
         $('#goSettings').css('display', "block");
     });
 
+    $('body').on('click', '#changeStyle', function () {
+       if(window.localStorage.skinStyle == 2){
+           window.localStorage.skinStyle = 1;
+           location.reload();
+       } else {
+           window.localStorage.skinStyle = 2;
+           location.reload();
+       }
+    });
+
     $(document).on("change", '#min-health', function () {
         if ($(this).val() > 100 || $(this).val() < 1) {
             $(this).val(90);
@@ -523,6 +540,8 @@ function addNewElementsToWebsite() {
         '<div style="margin-top: 10px;"><b>Szybkość klikania:</b><input type="range" min="130" max="1000" value="' + (window.localStorage.clickSpeed ? window.localStorage.clickSpeed : "200") + '" class="slider" id="clickSpeed" style="width: 300px;"></div>' +
         '<div style="margin-top: 10px;" id="shinyBox"><b>Ostatnio spotkane shiny:</b></div>' +
         '<br><br></div>');
+
+    $('body').append('<div id="changeStyle" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;left: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: ' + (window.localStorage.skinStyle == 2 ? '#d85046' : '#74b5b1' ) + ';z-index: 9999;"></div>');
 
     window.localStorage.lastVersion = GM_info.script.version;
 
