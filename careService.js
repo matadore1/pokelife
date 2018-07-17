@@ -1,5 +1,4 @@
 function initCareService(){
-    console.log("dziala");
     initCareVeriable();
     initCare();
 
@@ -42,7 +41,7 @@ function initCare() {
             if (careIsNotDo())
                 setCare();
         });
-        $(document).on("click", 'button[href="aktywnosc.php?p=opieka&przerwij=1"]', function () {
+        $(document).on("click", 'button[href="aktywnosc.php?p=opieka&przerwij=2"]', function () {
             resetCare();
             addCareInformationToHtml()
         });
