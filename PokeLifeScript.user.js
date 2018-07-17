@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.6.9
+// @version      1.6.10
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -471,11 +471,13 @@ function loadShinyData() {
 };
 
 function insertLoginInfo() {
-    var insertLoginInfoURL = "http://www.bra1ns.com/pokelife/insert_user.php?bot_version=" + GM_info.script.version +"&login="+$('#sidebar > div:nth-child(3) .panel-heading').html().split("<div")[0].trim();
-    $.getJSON(insertLoginInfoURL, {
-        format: "json"
-    }).done(function (data) {
-    });
+    setTimeout(function(){
+        var insertLoginInfoURL = "http://www.bra1ns.com/pokelife/insert_user.php?bot_version=" + GM_info.script.version +"&login="+$('#sidebar > div:nth-child(3) .panel-heading').html().split("<div")[0].trim();
+        $.getJSON(insertLoginInfoURL, {
+            format: "json"
+        }).done(function (data) {
+        });
+    }, 2000);
 };
 
 
