@@ -11,6 +11,7 @@
 // @grant        GM_getResourceText
 // @require      http://bug7a.github.io/iconselect.js/sample/lib/control/iconselect.js
 // @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=6.2
+// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/careService.js?v=6.2
 // ==/UserScript==
 
 var newCSS = GM_getResourceText("customCSS");
@@ -36,6 +37,7 @@ $(document).ready(function () {
     initLocationIcons();
     initBallIcons();
     insertLoginInfo();
+    initCareService();
 
     function click() {
         console.log("clicl");
@@ -105,7 +107,7 @@ $(document).ready(function () {
             if ($('#glowne_okno p.alert:first').html() === "Natrafiasz na dzikiego pokemona:") {
                 console.log('PokeLifeScript: spotkałem pokemona');
                 if ($('.dzikipokemon-background-shiny').length == 1) {
-                    var shinyAPIInsert = "http://www.bra1ns.com/pokelife/insert.php?pokemon_id=" + $('.dzikipokemon-background-shiny .center-block img').attr('src').split('/')[1].split('.')[0].split('s')[1]+"&login="+$('#sidebar > div:nth-child(3) .panel-heading').html().split("<div")[0].trim();
+                    var shinyAPIInsert = "http://www.bra1ns.com/pokelife/insert.php?pokemon_id=" + $('.dzikipokemon-background-shiny .center-block img').attr('src').split('/')[1].split('.')[0].split('s')[1] + "&login=" + $('#sidebar > div:nth-child(3) .panel-heading').html().split("<div")[0].trim();
                     $.getJSON(shinyAPIInsert, {
                         format: "json"
                     }).done(function (data) {
@@ -140,7 +142,7 @@ $(document).ready(function () {
             if (!check) {
                 let pokeLvlNode = getElementByXpath('//*[@id="glowne_okno"]/div/div[2]/table[2]/tbody/tr/td[2]/center/b/text()');
                 let pokeLvlText = pokeLvlNode.data.replace("(", "");
-                pokeLvlText = pokeLvlText.replace("poz.)","");
+                pokeLvlText = pokeLvlText.replace("poz.)", "");
                 pokeLvlNumber = Number.parseInt(pokeLvlText.trim());
             }
 
@@ -374,14 +376,6 @@ $(document).ready(function () {
         }
     });
 
-    $(document).on("change", '#care', function () {
-        if ($('#care').is(":checked")) {
-            window.localStorage.care = true;
-        } else {
-            window.localStorage.care = false;
-        }
-    });
-
     $(document).on("change", '#exp-mode', function () {
         if ($('#exp-mode').is(":checked")) {
             window.localStorage.expMode = true;
@@ -479,8 +473,8 @@ function loadShinyData() {
 };
 
 function insertLoginInfo() {
-    setTimeout(function(){
-        var insertLoginInfoURL = "http://www.bra1ns.com/pokelife/insert_user.php?bot_version=" + GM_info.script.version +"&login="+$('#sidebar > div:nth-child(3) .panel-heading').html().split("<div")[0].trim();
+    setTimeout(function () {
+        var insertLoginInfoURL = "http://www.bra1ns.com/pokelife/insert_user.php?bot_version=" + GM_info.script.version + "&login=" + $('#sidebar > div:nth-child(3) .panel-heading').html().split("<div")[0].trim();
         $.getJSON(insertLoginInfoURL, {
             format: "json"
         }).done(function (data) {
@@ -502,9 +496,6 @@ function initVariables() {
     }
     if (window.localStorage.clickSpeed == undefined) {
         window.localStorage.clickSpeed = 200;
-    }
-    if(window.localStorage.care == undefined){
-        window.localStorage.care = false;
     }
 };
 
