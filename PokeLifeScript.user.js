@@ -374,6 +374,14 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on("change", '#care', function () {
+        if ($('#care').is(":checked")) {
+            window.localStorage.care = true;
+        } else {
+            window.localStorage.care = false;
+        }
+    });
+
     $(document).on("change", '#exp-mode', function () {
         if ($('#exp-mode').is(":checked")) {
             window.localStorage.expMode = true;
@@ -495,6 +503,9 @@ function initVariables() {
     if (window.localStorage.clickSpeed == undefined) {
         window.localStorage.clickSpeed = 200;
     }
+    if(window.localStorage.care == undefined){
+        window.localStorage.care = false;
+    }
 };
 
 
@@ -520,6 +531,7 @@ function addNewElementsToWebsite() {
         '<div>Włącz exp mode <input type="checkbox" id="exp-mode" ' + (window.localStorage.expMode ? (window.localStorage.expMode == "true" ? "checked" : "") : "") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
         '<div><b>Zatrzymuj gdy spotkasz niezłapanego</b> <input type="checkbox" id="catch-mode" ' + (window.localStorage.catchMode ? (window.localStorage.catchMode == "true" ? "checked" : "") : "") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
         '<div><b>Spacja uruchamia przycisk GO</b> <input type="checkbox" id="space-go" ' + (window.localStorage.spaceGo ? (window.localStorage.spaceGo == "true" ? "checked" : "") : "checked") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
+        '<div><b>Sprawdzaj opieke</b> <input type="checkbox" id="care" ' + (window.localStorage.care ? (window.localStorage.care == "true" ? "checked" : "") : "checked") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
         '<div style="margin-top: 10px;"><b>Szybkość klikania:</b><input type="range" min="130" max="1000" value="' + (window.localStorage.clickSpeed ? window.localStorage.clickSpeed : "200") + '" class="slider" id="clickSpeed" style="width: 300px;"></div>' +
         '<div style="margin-top: 10px;" id="shinyBox"><b>Ostatnio spotkane shiny:</b></div>' +
         '<br><br></div>');
