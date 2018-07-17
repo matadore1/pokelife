@@ -12,7 +12,7 @@
 // @require      http://bug7a.github.io/iconselect.js/sample/lib/control/iconselect.js
 // @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=6.5
 // @resource     customCSS_dark  https://raw.githubusercontent.com/krozum/pokelife/master/style_dark.css?v=6.5
-// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/careService.js?v=6.2
+// @require      https://raw.githubusercontent.com/krozum/pokelife/master/careService.js?v=6.1
 // ==/UserScript==
 
 var newCSS;
