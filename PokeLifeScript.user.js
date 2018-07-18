@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.7.4
+// @version      1.7.5
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -191,6 +191,8 @@ $(document).ready(function () {
         }
 
         $(document).on("click", "#plecak-trzymane .thumbnail-plecak button[type='submit']", function(e){
+            var id = $(this).attr("href").split("rozbierz=")[1].split("&napewno")[0];
+            $("#plecak-przedmiot-"+id).remove();
             setTimeout(function(){
                 $('.modal-backdrop').remove();
             }, 400);
