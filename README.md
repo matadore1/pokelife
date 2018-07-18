@@ -12,6 +12,11 @@
 * Przypomnienia o nieodbytej opiece.
 * Alerty shiny - pokazuje ostatnie 3 spotkane shiny.
 
+# Instrukcja instalacji
+
+1. Zainstaluj dodatek http://tampermonkey.net/
+2. Po zainstalowaniu wejdż w link https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js i kliknij przycisk Zainstaluj
+
 
 Changelog
 ---------
