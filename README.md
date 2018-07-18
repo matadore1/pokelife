@@ -10,11 +10,15 @@
   - Nowy widok zakładki TM
   - Szybkie rozkładanie przedmiotów
 * Przypomnienia o nieodbytej opiece.
+* Alerty shiny - pokazuje ostatnie 3 spotkane shiny.
 
 
 Changelog
 ---------
 
+
+1.7.6 (2018-07-18)
+* dodanie przekierowanie na github po kliknięciu w numer wersji
 
 1.7.5 (2018-07-18)
 * dodanie przycisku do szybkiego rozkładania przedmiotów na zakładce Plecak/Trzymane
