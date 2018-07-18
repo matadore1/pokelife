@@ -1,11 +1,10 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.7.6
+// @version      1.7.7
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
-// @author       brains, metinowy15
 // @match        http://poke-life.net/*
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
@@ -142,9 +141,7 @@ $(document).ready(function () {
     }
 
     function getBallIndex(check) {
-        if (iconBall.getSelectedValue() != "mixed")
-            return iconBall.getSelectedValue()
-        else {
+        if (iconBall.getSelectedValue() == "mixed"){
             let pokeLvlNumber = 0;
             if (!check) {
                 let pokeLvlNode = getElementByXpath('//*[@id="glowne_okno"]/div/div[2]/table[2]/tbody/tr/td[2]/center/b/text()');
@@ -152,11 +149,32 @@ $(document).ready(function () {
                 pokeLvlText = pokeLvlText.replace("poz.)", "");
                 pokeLvlNumber = Number.parseInt(pokeLvlText.trim());
             }
-
-            if (pokeLvlNumber < 15)
+            if (pokeLvlNumber < 15){
                 return '&zlap_pokemona=nestballe';
-            else
-                return '&zlap_pokemona=greatballe'
+            } else {
+                return '&zlap_pokemona=greatballe';
+            }
+        } else if (iconBall.getSelectedValue() == "mixed2") {
+            var d = new Date();
+            var h = d.getHours();
+            if(h >= 22 && h < 6 ){
+                return '&zlap_pokemona=nightballe';
+            } else {
+                let pokeLvlNumber = 0;
+                if (!check) {
+                    let pokeLvlNode = getElementByXpath('//*[@id="glowne_okno"]/div/div[2]/table[2]/tbody/tr/td[2]/center/b/text()');
+                    let pokeLvlText = pokeLvlNode.data.replace("(", "");
+                    pokeLvlText = pokeLvlText.replace("poz.)", "");
+                    pokeLvlNumber = Number.parseInt(pokeLvlText.trim());
+                }
+                if (pokeLvlNumber < 15){
+                    return '&zlap_pokemona=nestballe';
+                } else {
+                    return '&zlap_pokemona=greatballe';
+                }
+            }
+        } else {
+            return iconBall.getSelectedValue()
         }
     }
 
@@ -661,7 +679,8 @@ function initBallIcons() {
         { 'iconFilePath': "images/pokesklep/nightballe.jpg", 'iconValue': '&zlap_pokemona=nightballe' },
         { 'iconFilePath': "images/pokesklep/cherishballe.jpg", 'iconValue': '&zlap_pokemona=cherishballe' },
         { 'iconFilePath': "images/pokesklep/lureballe.jpg", 'iconValue': '&zlap_pokemona=lureballe' },
-        { 'iconFilePath': "http://oi66.tinypic.com/2hro8zo.jpg", 'iconValue': 'mixed' }
+        { 'iconFilePath': "http://oi66.tinypic.com/2hro8zo.jpg", 'iconValue': 'mixed' },
+        { 'iconFilePath': "http://oi63.tinypic.com/fm2juu.jpg", 'iconValue': 'mixed2' }
 
     ];
 
