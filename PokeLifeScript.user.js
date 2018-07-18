@@ -157,7 +157,7 @@ $(document).ready(function () {
         } else if (iconBall.getSelectedValue() == "mixed2") {
             var d = new Date();
             var h = d.getHours();
-            if(h >= 22 && h < 6 ){
+            if(h >= 22 || h < 6 ){
                 return '&zlap_pokemona=nightballe';
             } else {
                 let pokeLvlNumber = 0;
