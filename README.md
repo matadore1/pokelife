@@ -22,6 +22,8 @@ Instrukcja instalacji
 Changelog
 ---------
 
+1.7.7 (2018-07-18)
+* dodanie nowego rodzaju balla, mixed2 (połączenie nestballa, nightballa oraz greatballa)
 
 1.7.6 (2018-07-18)
 * dodanie przekierowanie na github po kliknięciu w numer wersji
