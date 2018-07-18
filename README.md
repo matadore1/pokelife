@@ -10,3 +10,13 @@
   - Nowy widok zakładki TM
   - Szybkie rozkładanie przedmiotów
 * Przypomnienia o nieodbytej opiece.
+
+
+Changelog
+---------
+
+
+1.7.5 (2018-07-18)
+^^^^^^^^^^^^^^^^^^^
+
+* dodanie przycisku do szybkiego rozkładania przedmiotów na zakładce Plecak/Trzymane
