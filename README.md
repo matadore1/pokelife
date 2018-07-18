@@ -1,4 +1,4 @@
-# pokelife
+# PokeLifeScript
 
 * AutoGo czyli automatyczne wyklinanie punktów w wybraną dzicz:
   - Wybór w którą dzicz będzie klikał
