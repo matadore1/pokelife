@@ -26,7 +26,7 @@ Changelog
 * poprawka na logowanie do czatu, ładuje sie teraz o 2s szybciej
 
 1.7.8 (2018-07-24)
-* dodanie oznaczenia na czacie, gdy użytkownik był aktywny w ciągu ostatnich 30m
+* dodanie oznaczenia na czacie, gdy użytkownik był aktywny w ciągu ostatnich 30m (pokazuje tylko informacje o użytkownikach skryptu)
 
 1.7.7 (2018-07-18)
 * dodanie nowego rodzaju balla, mixed2 (połączenie nestballa, nightballa oraz greatballa)
