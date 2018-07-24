@@ -22,6 +22,9 @@ Instrukcja instalacji
 Changelog
 ---------
 
+1.7.9 (2018-07-24)
+* poprawka na logowanie do czatu, ładuje sie teraz o 2s szybciej
+
 1.7.8 (2018-07-24)
 * dodanie oznaczenia na czacie, gdy użytkownik był aktywny w ciągu ostatnich 30m
 
