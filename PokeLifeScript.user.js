@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.7.7
+// @version      1.7.8
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -29,6 +29,7 @@ var iconBall;
 var lastClick;
 window.jsonData = [];
 window.shinyData = [];
+window.lastActiveData = [];
 
 $(document).ready(function () {
     $.wait = function (ms) {
@@ -44,6 +45,7 @@ $(document).ready(function () {
     initBallIcons();
     insertLoginInfo();
     initCareService();
+    loadLastActiveData();
 
     function click() {
         var canRun = true;
@@ -363,6 +365,16 @@ $(document).ready(function () {
         window.localStorage.clickSpeed = $(this).val();
     });
 
+    $("#shout_list").bind("DOMSubtreeModified", function(){
+        var name = $('#shout_list li:last-of-type > .shout_post_name').html();
+
+        $.each(window.lastActiveData, function (key, value) {
+            $('#shout_list .shout_post_name:contains("'+value.login+'"):not(:has("span"))').prepend('<span class="fa fa-circle fa-fw" style="color: #62d262"></span>');
+        });
+    });
+
+
+
     $(document).off("click", ".btn-akcja");
     $(document).on("click", ".btn-akcja", function (event) {
         event.preventDefault();
@@ -524,6 +536,15 @@ function loadShinyData() {
         $.each(window.shinyData, function (key, value) {
             $('#shinyBox').append('<div style="width: 290px;margin-bottom: 10px;"><img style="width: 50px" src="http://poke-life.net/pokemony/srednie/s' + value['pokemon_id'] + '.png"><span style="margin-left: 5px">Spotkany o ' + value['creation_date'] + '</span></div>');
         });
+    });
+};
+
+function loadLastActiveData() {
+    var lastActiveAPI = "http://www.bra1ns.com/pokelife/get_last_active.php";
+    $.getJSON(lastActiveAPI, {
+        format: "json"
+    }).done(function (data) {
+        window.lastActiveData = data;
     });
 };
 
