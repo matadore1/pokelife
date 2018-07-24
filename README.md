@@ -21,6 +21,8 @@ Instrukcja instalacji
 
 Changelog
 ---------
+1.7.11 (2018-07-24)
+* dodanie nowego stylu
 
 1.7.10 (2018-07-24)
 * dodanie obsługi dziczy eventowej przy zatrzymywaniu AutoGo
