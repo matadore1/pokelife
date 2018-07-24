@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.7.8
+// @version      1.7.9
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -344,6 +344,10 @@ $(document).ready(function () {
         powerLvl: 4,
         ultimateLvl: 5
     };
+
+    $(document).on( "click", "#zaloguj_chat", function(event) {
+		$("#shout_refresher").load("gra/chat/shout.php?refresh="+window.shoutLastID);
+	});
 
     $(document).off("click", "#skrot_leczenie");
     $(document).on("click", "#skrot_leczenie", function (event) {
