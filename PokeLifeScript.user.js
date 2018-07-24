@@ -64,7 +64,6 @@ $(document).ready(function () {
             }
         });
 
-        console.log(canRun);
         if (canRun) {
             lastClick = 'nieleczenie';
             if ($('.dzikipokemon-background-shiny').length == 1) {
@@ -359,7 +358,6 @@ $(document).ready(function () {
             $('.btn-wybor_pokemona .progress-bar').css("width", "100%");
             $('.btn-wybor_pokemona .progress-bar span').html("100% PŻ");
             if (window.auto) {
-                console.log("clic3");
                 setTimeout(function () { click(); }, 500);
             }
         });
