@@ -22,6 +22,10 @@ Instrukcja instalacji
 Changelog
 ---------
 
+1.7.10 (2018-07-24)
+* dodanie obsługi dziczy eventowej przy zatrzymywaniu AutoGo
+* drobne poprawki w kodzie
+
 1.7.9 (2018-07-24)
 * poprawka na logowanie do czatu, ładuje sie teraz o 2s szybciej
 
