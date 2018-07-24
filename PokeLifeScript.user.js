@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.7.9
+// @version      1.7.10
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -94,6 +94,10 @@ $(document).ready(function () {
                         window.auto = false;
                         $('#goAutoButton').html('AutoGO');
                     } else if (iconSelect.getSelectedValue() == "park_narodowy" && $('.progress-stan2 div').attr('aria-valuenow') < 12) {
+                        console.log('PokeLifeScript: brak PA, przerywam AutoGo');
+                        window.auto = false;
+                        $('#goAutoButton').html('AutoGO');
+                    } else if (iconSelect.getSelectedValue() == "z_wakacyjna_wyspa" && $('.progress-stan2 div').attr('aria-valuenow') < 15) {
                         console.log('PokeLifeScript: brak PA, przerywam AutoGo');
                         window.auto = false;
                         $('#goAutoButton').html('AutoGO');
