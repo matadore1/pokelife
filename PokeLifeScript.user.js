@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.7.15
+// @version      1.7.16
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -9,7 +9,7 @@
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
 // @require      http://bug7a.github.io/iconselect.js/sample/lib/control/iconselect.js
-// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=7.7
+// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=7.8
 // @resource     customCSS_dark  https://raw.githubusercontent.com/krozum/pokelife/master/style_dark.css?v=7.3
 // @resource     customCSS_3  https://raw.githubusercontent.com/krozum/pokelife/master/style_3.css?v=7.3
 // @require      https://raw.githubusercontent.com/krozum/pokelife/master/careService.js?v=7.3
@@ -583,6 +583,9 @@ function initVariables() {
     if (window.localStorage.expMode == undefined) {
         window.localStorage.expMode = false;
     }
+    if(window.localStorage.expMode === "true"){
+        $('.exp-mode').addClass("exp-mode-visible");
+    }
     if (window.localStorage.catchMode == undefined) {
         window.localStorage.catchMode = true;
     }
@@ -613,14 +616,14 @@ function addNewElementsToWebsite() {
     $('body').append('<div id="newVersionInfo" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; right: 60px; font-size: 19px; text-align: center; width: 250px; height: 30px; line-height: 35px; z-index: 9998; text-align: right;"><a style="color: yellow;text-decoration:none;" target="_blank" href="https://github.com/krozum/pokelife">' + (GM_info.script.version == window.localStorage.lastVersion ? "" : "New Version! ") + 'v' + GM_info.script.version + '</a></div>');
     $('body').append('<div id="goSettings" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;right: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: rgb(21, 149, 137);z-index: 9999;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></div>');
     $('body').append('<div id="settings" style="display: none; width: 420px; height: auto; min-height: 200px; z-index: 9998; background: white; position: fixed; bottom: 0; right: 0; border: 3px solid #159589; padding: 10px; ">' +
-        '<div>Lecz gdy któryś pokemon ma mniej niż <input id="min-health" type="number" min="1" max="100" style="margin-left: 10px" value="' + (window.localStorage.minHealth ? window.localStorage.minHealth : "90") + '">% zycia</div>' +
-        '<div>Włącz exp mode <input type="checkbox" id="exp-mode" ' + (window.localStorage.expMode ? (window.localStorage.expMode == "true" ? "checked" : "") : "") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
+        '<div>Lecz gdy któryś pokemon ma mniej % życia niż: <input id="min-health" type="number" min="1" max="100" style="margin-left: 10px" value="' + (window.localStorage.minHealth ? window.localStorage.minHealth : "90") + '"></div>' +
+        '<div><b>Włącz exp mode</b> <input type="checkbox" id="exp-mode" ' + (window.localStorage.expMode ? (window.localStorage.expMode == "true" ? "checked" : "") : "") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
         '<div class="exp-mode"><div><b>EXP MODE:</b></div><div>Pokemon do 15 poziomu <input id="easy-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.easyLvl ? window.localStorage.easyLvl : "1") + '"></div>' +
-        '<div>Pokemon od 16 do 30 poziomu <input id="low-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.lowLvl ? window.localStorage.lowLvl : "1") + '"></div>' +
-        '<div>Pokemon od 31 do 50 poziomu <input id="mid-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.midLvl ? window.localStorage.midLvl : "1") + '"></div>' +
-        '<div>Pokemon od 51 do 70 poziomu <input id="hard-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.hardLvl ? window.localStorage.hardLvl : "1") + '"></div>' +
-        '<div>Pokemon od 71 do 90 poziomu <input id="power-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.powerLvl ? window.localStorage.powerLvl : "1") + '"></div>' +
-        '<div>Pokemon od 91 do 100 poziomu <input id="ultimate-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.ultimateLvl ? window.localStorage.ultimateLvl : "1") + '"></div>' +
+        '<div>Pokemon od 16 do 30 poziomu: <input id="low-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.lowLvl ? window.localStorage.lowLvl : "1") + '"></div>' +
+        '<div>Pokemon od 31 do 50 poziomu: <input id="mid-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.midLvl ? window.localStorage.midLvl : "1") + '"></div>' +
+        '<div>Pokemon od 51 do 70 poziomu: <input id="hard-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.hardLvl ? window.localStorage.hardLvl : "1") + '"></div>' +
+        '<div>Pokemon od 71 do 90 poziomu: <input id="power-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.powerLvl ? window.localStorage.powerLvl : "1") + '"></div>' +
+        '<div>Pokemon od 91 do 100 poziomu: <input id="ultimate-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.ultimateLvl ? window.localStorage.ultimateLvl : "1") + '"></div>' +
         '</div>' +
         '<div><b>Zatrzymuj gdy spotkasz niezłapanego</b> <input type="checkbox" id="catch-mode" ' + (window.localStorage.catchMode ? (window.localStorage.catchMode == "true" ? "checked" : "") : "") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
         '<div><b>Spacja uruchamia przycisk GO</b> <input type="checkbox" id="space-go" ' + (window.localStorage.spaceGo ? (window.localStorage.spaceGo == "true" ? "checked" : "") : "checked") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
