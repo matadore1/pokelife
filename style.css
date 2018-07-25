@@ -100,14 +100,19 @@ body {
 .exp-mode{
   height: 0px;
   overflow: hidden;
-  transition-duration: 0.2s;
+  transition-duration: 0.3s;
 }
-.exp-mode div{
+#settings div{
   float:left;
   width:100%;
   margin-bottom:4px;
   border-bottom: solid 1px rgb(238, 238, 238);
 }
-.exp-mode input{
+#settings input{
   float:right;
+}
+
+.exp-mode-visible{
+  height: auto;
+  transition-duration: 0.3s;
 }

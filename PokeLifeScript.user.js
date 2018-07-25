@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.7.13
+// @version      1.7.15
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -9,7 +9,7 @@
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
 // @require      http://bug7a.github.io/iconselect.js/sample/lib/control/iconselect.js
-// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=7.6
+// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=7.7
 // @resource     customCSS_dark  https://raw.githubusercontent.com/krozum/pokelife/master/style_dark.css?v=7.3
 // @resource     customCSS_3  https://raw.githubusercontent.com/krozum/pokelife/master/style_3.css?v=7.3
 // @require      https://raw.githubusercontent.com/krozum/pokelife/master/careService.js?v=7.3
@@ -446,10 +446,10 @@ $(document).ready(function () {
     $(document).on("change", '#exp-mode', function () {
         if ($('#exp-mode').is(":checked")) {
             window.localStorage.expMode = true;
-            $('.exp-mode').css("height","auto")
+            $('.exp-mode').addClass("exp-mode-visible")
         } else {
             window.localStorage.expMode = false;
-            $('.exp-mode').css("height","0px")
+            $('.exp-mode').removeClass("exp-mode-visible")
         }
     });
 
