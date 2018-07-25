@@ -97,10 +97,16 @@ body {
   overflow: hidden;
   float: left;
 }
+.exp-mode{
+  height: 0px;
+  overflow: hidden;
+  transition-duration: 0.2s;
+}
 .exp-mode div{
   float:left;
   width:100%;
-  margin-bottom:4px
+  margin-bottom:4px;
+  border-bottom: solid 1px rgb(238, 238, 238);
 }
 .exp-mode input{
   float:right;
