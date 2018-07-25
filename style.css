@@ -97,3 +97,12 @@ body {
   overflow: hidden;
   float: left;
 }
+.exp-mode{
+  height: 100%;
+  width: 100%;
+}
+.exp-mode input{
+  float: right;
+  margin-right: 10px;
+  width:40px;
+}
