@@ -92,3 +92,27 @@ body {
   overflow: hidden;
   float: left;
 }
+
+.exp-mode{
+  height: 0px;
+  overflow: hidden;
+  transition-duration: 0.3s;
+}
+#settings div{
+  float:left;
+  width:100%;
+  margin-bottom:4px;
+}
+
+.exp-mode div{
+  border-bottom: solid 1px rgb(238, 238, 238);
+}
+#settings input{
+  float:right;
+}
+
+.exp-mode-visible{
+  margin-top: 6px;
+  height: auto;
+  transition-duration: 0.3s;
+}

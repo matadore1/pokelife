@@ -21,6 +21,10 @@ Instrukcja instalacji
 
 Changelog
 ---------
+1.7.13 (2018-07-25)
+* Poprawienie wyglądu ustawień
+* Exp mode pokazywany po aktywowaniu
+
 1.7.11 (2018-07-24)
 * dodanie nowego stylu
 

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.7.16
+// @version      1.7.13
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -9,10 +9,10 @@
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
 // @require      http://bug7a.github.io/iconselect.js/sample/lib/control/iconselect.js
-// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=7.8
-// @resource     customCSS_dark  https://raw.githubusercontent.com/krozum/pokelife/master/style_dark.css?v=7.3
-// @resource     customCSS_3  https://raw.githubusercontent.com/krozum/pokelife/master/style_3.css?v=7.3
-// @require      https://raw.githubusercontent.com/krozum/pokelife/master/careService.js?v=7.3
+// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=7.4
+// @resource     customCSS_dark  https://raw.githubusercontent.com/krozum/pokelife/master/style_dark.css?v=7.4
+// @resource     customCSS_3  https://raw.githubusercontent.com/krozum/pokelife/master/style_3.css?v=7.4
+// @require      https://raw.githubusercontent.com/krozum/pokelife/master/careService.js?v=7.4
 // ==/UserScript==
 
 var newCSS;
