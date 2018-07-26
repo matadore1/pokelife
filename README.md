@@ -22,10 +22,11 @@ Instrukcja instalacji
 Changelog
 ---------
 
-1.7.14 (2018-07-26)
+1.7.15 (2018-07-26)
 * Poprawienie wyglądu ustawień v2
 * Poprawienie logowania aktywności użytkowników (od teraz zapisuje z dokładnością do 1m)
 * Poprawka na wyświetlanie aktywności na czacie
+* Kliknięcie PPM na GO Button zmienia czy jest aktywny GO Button na spacji + dodanie wyszarzenia przycisku, gdy Go Button na spacji jest aktywny
 
 1.7.13 (2018-07-25)
 * Poprawienie wyglądu ustawień
