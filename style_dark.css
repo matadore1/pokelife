@@ -112,6 +112,7 @@ body {
 
 .exp-mode-visible{
   margin-top: 6px;
+  margin-bottom: 6px;
   height: auto;
   transition-duration: 0.3s;
 }
