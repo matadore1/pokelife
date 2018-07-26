@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.7.16
+// @version      1.7.17
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -388,7 +388,12 @@ $(document).ready(function () {
         var name = $('#shout_list li:last-of-type > .shout_post_name').html();
 
         $.each(window.lastActiveData, function (key, value) {
-            $('#shout_list .shout_post_name:contains("'+value.login+'"):not(:has("span"))').prepend('<span class="fa fa-circle fa-fw" style="color: #62d262"></span>');
+            var date1 = new Date(value.last_login_time);
+            var date2 = new Date();
+            var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+            var diffMinutes = Math.ceil(timeDiff / (1000 * 60));
+            var opacity = 1/diffMinutes;
+            $('#shout_list .shout_post_name:contains("'+value.login+'"):not(:has("span"))').prepend('<span class="fa fa-circle fa-fw" style="color: #62d262; opacity: '+opacity+'"></span>');
         });
     });
 
@@ -595,7 +600,12 @@ function loadLastActiveData() {
         window.lastActiveData = data;
         $("#shout_list").find("span.fa").remove();
         $.each(window.lastActiveData, function (key, value) {
-            $('#shout_list .shout_post_name:contains("'+value.login+'"):not(:has("span"))').prepend('<span class="fa fa-circle fa-fw" style="color: #62d262"></span>');
+            var date1 = new Date(value.last_login_time);
+            var date2 = new Date();
+            var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+            var diffMinutes = Math.ceil(timeDiff / (1000 * 60));
+            var opacity = 1/diffMinutes;
+            $('#shout_list .shout_post_name:contains("'+value.login+'"):not(:has("span"))').prepend('<span class="fa fa-circle fa-fw" style="color: #62d262;opacity: '+opacity+'"></span>');
         });
     });
 };
