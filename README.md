@@ -21,6 +21,12 @@ Instrukcja instalacji
 
 Changelog
 ---------
+
+1.7.14 (2018-07-26)
+* Poprawienie wyglądu ustawień v2
+* Poprawienie logowania aktywności użytkowników (od teraz zapisuje z dokładnością do 1m)
+* Poprawka na wyświetlanie aktywności na czacie
+
 1.7.13 (2018-07-25)
 * Poprawienie wyglądu ustawień
 * Exp mode pokazywany po aktywowaniu
