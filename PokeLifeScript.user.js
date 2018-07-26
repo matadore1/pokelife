@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.7.15
+// @version      1.7.16
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -34,6 +34,14 @@ var lastClick;
 window.jsonData = [];
 window.shinyData = [];
 window.lastActiveData = [];
+
+(function($) {
+    var origAppend = $.fn.append;
+
+    $.fn.append = function () {
+        return origAppend.apply(this, arguments).trigger("append");
+    };
+})(jQuery);
 
 $(document).ready(function () {
     $.wait = function (ms) {
@@ -375,7 +383,8 @@ $(document).ready(function () {
         window.localStorage.clickSpeed = $(this).val();
     });
 
-    $("#shout_list").bind("DOMSubtreeModified", function(){
+    $("#shouts ul").bind("append", function() {
+        console.log('test');
         var name = $('#shout_list li:last-of-type > .shout_post_name').html();
 
         $.each(window.lastActiveData, function (key, value) {
@@ -585,6 +594,9 @@ function loadLastActiveData() {
     }).done(function (data) {
         window.lastActiveData = data;
         $("#shout_list").find("span.fa").remove();
+        $.each(window.lastActiveData, function (key, value) {
+            $('#shout_list .shout_post_name:contains("'+value.login+'"):not(:has("span"))').prepend('<span class="fa fa-circle fa-fw" style="color: #62d262"></span>');
+        });
     });
 };
 
@@ -593,7 +605,6 @@ function updateActiveLog() {
     s.setMinutes(s.getMinutes()-1);
     if(window.lastActiveTime < s || window.lastActiveTime == undefined){
         window.lastActiveTime = new Date();
-        console.log(window.lastActiveTime);
         setTimeout(function(){
             var insertLoginInfoURL = "http://www.bra1ns.com/pokelife/insert_user.php?bot_version=" + GM_info.script.version +"&login="+$('#wyloguj').parent().parent().html().split("<div")[0].trim();
             $.getJSON(insertLoginInfoURL, {
