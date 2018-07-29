@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.7.17
+// @version      1.7.18
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -215,9 +215,16 @@ $(document).ready(function () {
             $('#plecak-trzymane > div.col-xs-6').each(function (index, val) {
                 var id = $(this).find('.thumbnail-plecak').data("target").split("#plecak-przedmiot-")[1];
                 var level = $(this).find('strong').html();
+                var html = "";
                 if(level != undefined){
-                    if(level.split(" ").pop() != "V" && level.split(" ").pop() != "IV"){
-                        var html = '<button type="submit" class="btn btn-danger btn-akcja" href="plecak.php?rozbierz='+id+'&napewno=1&p=4" style=" margin: 0 auto; text-align: center; display: block; ">Rozbierz</button>';
+                    if(level.split(" ").pop() == "I"){
+                        html = '<button type="submit" class="btn btn-success btn-akcja" href="plecak.php?rozbierz='+id+'&napewno=1&p=4" style=" margin: 0 auto; text-align: center; display: block; ">Rozbierz</button>';
+                        $(this).find('.caption').append(html);
+                    } else if (level.split(" ").pop() == "II"){
+                        html = '<button type="submit" class="btn btn-warning btn-akcja" href="plecak.php?rozbierz='+id+'&napewno=1&p=4" style=" margin: 0 auto; text-align: center; display: block; ">Rozbierz</button>';
+                        $(this).find('.caption').append(html);
+                    } else if (level.split(" ").pop() == "III"){
+                        html = '<button type="submit" class="btn btn-danger btn-akcja" href="plecak.php?rozbierz='+id+'&napewno=1&p=4" style=" margin: 0 auto; text-align: center; display: block; ">Rozbierz</button>';
                         $(this).find('.caption').append(html);
                     }
                 }
@@ -454,9 +461,11 @@ $(document).ready(function () {
     $("#goButton" ).contextmenu(function(event) {
         event.preventDefault();
         if ($('#space-go').is(":checked")) {
+            window.localStorage.spaceGo = true;
             $("#space-go").prop( "checked", false );
             $("#goButton").css("opacity", "1");
         } else {
+            window.localStorage.spaceGo = true;
             $("#goButton").css("opacity", "0.3");
             $("#space-go").prop( "checked", true );
         }
