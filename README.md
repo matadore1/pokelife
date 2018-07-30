@@ -27,7 +27,7 @@ Changelog
 
 1.7.18 (2018-07-29)
 * Poprawka do PPM na GO Button - nie zapisywało zmian do local storage
-* Dodanie różnych kolorów przycisków do szybkiego rozkładania przedmiotów, w zależności od poziomu przedmiotu. Zielony dla poziomu I, żółte dla poziomu II oraz czerwone dla poziomu III.
+* Dodanie różnych kolorów przycisków do szybkiego rozkładania przedmiotów, w zależności od poziomu przedmiotu. Źółte dla poziomu II oraz czerwone dla poziomu III.
 
 1.7.17 (2018-07-26)
 * Poprawienie wyglądu ustawień v2
