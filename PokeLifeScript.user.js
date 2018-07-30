@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.7.19
+// @version      1.7.18
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -391,7 +391,6 @@ $(document).ready(function () {
     });
 
     $("#shouts ul").bind("append", function() {
-        console.log('test');
         var name = $('#shout_list li:last-of-type > .shout_post_name').html();
 
         $.each(window.lastActiveData, function (key, value) {
