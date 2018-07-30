@@ -217,10 +217,7 @@ $(document).ready(function () {
                 var level = $(this).find('strong').html();
                 var html = "";
                 if(level != undefined){
-                    if(level.split(" ").pop() == "I"){
-                        html = '<button type="submit" class="btn btn-success btn-akcja" href="plecak.php?rozbierz='+id+'&napewno=1&p=4" style=" margin: 0 auto; text-align: center; display: block; ">Rozbierz</button>';
-                        $(this).find('.caption').append(html);
-                    } else if (level.split(" ").pop() == "II"){
+                    if (level.split(" ").pop() == "II"){
                         html = '<button type="submit" class="btn btn-warning btn-akcja" href="plecak.php?rozbierz='+id+'&napewno=1&p=4" style=" margin: 0 auto; text-align: center; display: block; ">Rozbierz</button>';
                         $(this).find('.caption').append(html);
                     } else if (level.split(" ").pop() == "III"){
