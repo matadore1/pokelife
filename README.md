@@ -22,6 +22,9 @@ Instrukcja instalacji
 Changelog
 ---------
 
+1.7.19 (2018-07-30)
+* CTRL + SPACE zmienia czy jest aktywny GO Button na spacji
+
 1.7.18 (2018-07-29)
 * Poprawka do PPM na GO Button - nie zapisywało zmian do local storage
 * Dodanie różnych kolorów przycisków do szybkiego rozkładania przedmiotów, w zależności od poziomu przedmiotu. Zielony dla poziomu I, żółte dla poziomu II oraz czerwone dla poziomu III.
