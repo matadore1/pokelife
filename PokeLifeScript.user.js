@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.9.20
+// @version      1.9.21
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -547,7 +547,19 @@ $(document).ready(function () {
     });
 
 
-
+    document.onkeydown = function(e) {
+        if (e.ctrlKey && e.which == 32) {
+            if ($('#space-go').is(":checked")) {
+                window.localStorage.spaceGo = true;
+                $("#space-go").prop( "checked", false );
+                $("#goButton").css("opacity", "1");
+            } else {
+                window.localStorage.spaceGo = true;
+                $("#goButton").css("opacity", "0.3");
+                $("#space-go").prop( "checked", true );
+            }
+        }
+    };
 
     $(document).on("click", '#goSettings', function () {
         if ($('#settings').css('display') == "none") {
