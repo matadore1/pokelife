@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.7.19
+// @version      1.9.20
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -315,13 +315,16 @@ $(document).ready(function () {
 
     $(window).keypress(function (e) {
         if (e.key === ' ' || e.key === 'Spacebar') {
-            if ($('#space-go').is(":checked")) {
-                // ' ' is standard, 'Spacebar' was used by IE9 and Firefox < 37
-                e.preventDefault();
-                click();
+            if($('input:focus').length == 0 && $('textarea:focus').length == 0){
+                if ($('#space-go').is(":checked")) {
+                    // ' ' is standard, 'Spacebar' was used by IE9 and Firefox < 37
+                    e.preventDefault();
+                    click();
+                }
             }
         }
     });
+
     $(document).off("click", "nav a");
     $(document).on("click", "nav a", function (event) {
         if ($(this).attr('href').charAt(0) != '#' && !$(this).hasClass("link")) {
@@ -466,21 +469,6 @@ $(document).ready(function () {
             $("#space-go").prop( "checked", true );
         }
     });
-
-
-    document.onkeydown = function(e) {
-        if (e.ctrlKey && e.which == 32) {
-            if ($('#space-go').is(":checked")) {
-                window.localStorage.spaceGo = true;
-                $("#space-go").prop( "checked", false );
-                $("#goButton").css("opacity", "1");
-            } else {
-                window.localStorage.spaceGo = true;
-                $("#goButton").css("opacity", "0.3");
-                $("#space-go").prop( "checked", true );
-            }
-        }
-    };
 
     $(document).on("change", '#space-go', function () {
         if ($('#space-go').is(":checked")) {
@@ -679,7 +667,7 @@ function addNewElementsToWebsite() {
     $('body').append('<div id="goButton" style="' + (window.localStorage.spaceGo ? (window.localStorage.spaceGo == "true" ? "opacity: 0.3;" : "opacity: 1;") : "opacity: 1;") + 'border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 10px; font-size: 36px; text-align: center; width: 100px; height: 48px; line-height: 48px; background: ' + $('.panel-heading').css('background-color') + '; z-index: 9999">GO</div>');
     $('body').append('<div id="goAutoButton" style="border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 122px; font-size: 36px; text-align: center; width: 140px; height: 48px; line-height: 48px; background: ' + $('.panel-heading').css('background-color') + '; z-index: 9999">AutoGO</div>');
 
-    $('body').append('<div id="newVersionInfo" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; right: 60px; font-size: 19px; text-align: center; width: 250px; height: 30px; line-height: 35px; z-index: 9998; text-align: right;"><a style="color: yellow;text-decoration:none;" target="_blank" href="https://github.com/krozum/pokelife#user-content-changelog">' + (GM_info.script.version == window.localStorage.lastVersion ? "" : "New Version! ") + 'v' + GM_info.script.version + '</a></div>');
+    $('body').append('<div id="newVersionInfo" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; right: 60px; font-size: 19px; text-align: center; width: 250px; height: 30px; line-height: 35px; z-index: 9998; text-align: right;"><a style="color: yellow;text-decoration:none;" target="_blank" href="https://github.com/krozum/pokelife">' + (GM_info.script.version == window.localStorage.lastVersion ? "" : "New Version! ") + 'v' + GM_info.script.version + '</a></div>');
     $('body').append('<div id="goSettings" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;right: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: rgb(21, 149, 137);z-index: 9999;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></div>');
     $('body').append('<div id="settings" style="display: none; width: 430px; height: auto; min-height: 200px; z-index: 9998; background: white; position: fixed; bottom: 0; right: 0; border: 3px solid #159589; padding: 20px; ">' +
         '<div>Lecz gdy któryś pokemon ma mniej % życia niż: <input id="min-health" type="number" min="1" max="100" style="margin-left: 10px" value="' + (window.localStorage.minHealth ? window.localStorage.minHealth : "90") + '"></div>' +
