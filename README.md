@@ -22,7 +22,7 @@ Instrukcja instalacji
 Changelog
 ---------
 
-1.7.20 (2018-08-03)
+1.7.21 (2018-08-03)
 * Skrót CTRL + SPACE został usuniety
 * Gdy jest zacznaczony input lub textarea nie działa Go Button na spacji
 
