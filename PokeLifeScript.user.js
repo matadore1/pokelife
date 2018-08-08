@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.7.21
+// @version      1.7.22
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -82,7 +82,7 @@ $(document).ready(function () {
                 $('#goButton').css('background', 'green');
                 window.auto = false;
                 $('#goAutoButton').html('AutoGO');
-            } else if (window.localStorage.catchMode == "true" && $('.dzikipokemon-background-normalny img[src="images/inne/pokeball_miniature2.png"]').length > 0) {
+            } else if (window.localStorage.catchMode == "true" && $('.dzikipokemon-background-normalny img[src="images/inne/pokeball_miniature2.png"]').length > 0 && $('.dzikipokemon-background-normalny img[src="images/trudnosc/trudnoscx.png"]').length < 1 && $('.dzikipokemon-background-normalny .col-xs-9 > b').html().split("Poziom: ")[1] <= 50) {
                 console.log('PokeLifeScript: spotkany niezłapany pokemona, przerwanie AutoGo');
                 $('#goButton').css('background', 'green');
                 window.auto = false;
