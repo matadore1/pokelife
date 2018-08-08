@@ -21,6 +21,8 @@ Instrukcja instalacji
 
 Changelog
 ---------
+1.7.22 (2018-08-08)
+* Poprawka do do zatrzymywania przy pokach niezłapanych. Od teraz nie zatrzumuje się gdy pokemon jest powyżej 50 poziomu lub ma trudność złapania X
 
 1.7.21 (2018-08-03)
 * Gdy jest zacznaczony input lub textarea nie działa Go Button na spacji
