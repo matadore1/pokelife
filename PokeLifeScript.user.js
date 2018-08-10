@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.8
+// @version      1.8.1
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -573,6 +573,63 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on("click", "#fastShop button", function(event) {
+        var MAIN = $(this).parent();
+        var MAIN_FORM = $(this).parent().html();
+        event.preventDefault();
+        var formData = $(this).parent().serialize();
+        MAIN.html("<button class='btn btn-primary' style='width: 100%; background-color: #c72929; border-color: #c72929'>Zakupiono</button>");
+
+        $.ajax({
+            type: 'POST',
+            url: "gra/"+MAIN.attr('action'),
+            data: formData
+        })
+
+        var ilosc_old, ilosc_new, html;
+        if(formData == "kup_greatballe=30"){
+            if($('form[action="dzicz.php?zlap"] button[data-original-title="Greatball"]').length > 0){
+                ilosc_old = $('form[action="dzicz.php?zlap"] button[data-original-title="Greatball"]').html().split("<br>")[1].split(" ")[0];
+                ilosc_new = Number(ilosc_old)+Number(30);
+                html = $('form[action="dzicz.php?zlap"] button[data-original-title="Greatball"]').html();
+                $('form[action="dzicz.php?zlap"] button[data-original-title="Greatball"]').html(html.replace(ilosc_old, ilosc_new));
+            } else {
+                html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&amp;zlap_pokemona=greatballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Greatball" aria-describedby="tooltip822784"><img src="images/pokesklep/greatballe.jpg" alt="Greatball" width="93px"><br>30 sztuk</button>';
+                $('form[action="dzicz.php?zlap"] center').prepend(html);
+            }
+        }
+        if(formData == "kup_nestballe=30"){
+            if($('form[action="dzicz.php?zlap"] button[data-original-title="Nestball"]').length > 0){
+                ilosc_old = $('form[action="dzicz.php?zlap"] button[data-original-title="Nestball"]').html().split("<br>")[1].split(" ")[0];
+                ilosc_new = Number(ilosc_old)+Number(30);
+                html = $('form[action="dzicz.php?zlap"] button[data-original-title="Nestball"]').html();
+                $('form[action="dzicz.php?zlap"] button[data-original-title="Nestball"]').html(html.replace(ilosc_old, ilosc_new));
+            } else {
+                html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&amp;zlap_pokemona=nestballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Nestball" aria-describedby="tooltip822784"><img src="images/pokesklep/nestballe.jpg" alt="Nestball" width="93px"><br>30 sztuk</button>';
+                $('form[action="dzicz.php?zlap"] center').prepend(html);
+            }
+        }
+        if(formData == "kup_nightballe=30"){
+            if($('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').length > 0){
+                ilosc_old = $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html().split("<br>")[1].split(" ")[0];
+                ilosc_new = Number(ilosc_old)+Number(30);
+                html = $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html();
+                $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html(html.replace(ilosc_old, ilosc_new));
+            } else {
+                html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&amp;zlap_pokemona=nightballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Nightball" aria-describedby="tooltip822784"><img src="images/pokesklep/nightballe.jpg" alt="Nightball" width="93px"><br>30 sztuk</button>';
+                $('form[action="dzicz.php?zlap"] center').prepend(html);
+            }
+        }
+
+        $(function() {
+            $("#sidebar").load('inc/stan.php');
+        });
+
+        setTimeout(function(){
+            MAIN.html(MAIN_FORM);
+        }, 500);
+    });
+
     $(document).on("click", '#goFastShop', function () {
         if ($('#fastShop').css('display') == "none") {
             var ilosc_yenow = Number($('a[href="http://pokelife.pl/pokedex/index.php?title=Pieniądze"]').parent().html().split("</a>")[1].split("<a")[0].replace(/\./g, ''));
@@ -731,10 +788,10 @@ function addNewElementsToWebsite() {
     $('body').append('<div id="changeStyle" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;left: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: ' + (window.localStorage.skinStyle == 2 ? '#dbce5d' : (window.localStorage.skinStyle == 3 ? "#d85046" : "#74b5b1") ) + ';z-index: 9999;"></div>');
     $('body').append('<div id="goFastShop" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; left: 60px; font-size: 19px; text-align: center; width: 250px; height: 30px; line-height: 35px; z-index: 9998; text-align: left;"><a style="color: inherit;text-decoration:none;">Szybki sklep</a></div>');
     $('body').append('<div id="fastShop" style="box-shadow: 5px -5px 3px -3px rgba(0,0,0,0.53);display: none; width: 250px; height: auto; min-height: 400px; z-index: 10001; background: white; position: fixed; bottom: 0; left: 0; padding: 20px; ">'+
-                     '<form style="margin-top: 5px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="greatball btn btn-primary" type="submit">Kup 100 greatballi</button><input style="display: none" id="target3" value="100" name="kup_greatballe"></form>'+
-                     '<form style="margin-top: 5px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="nestball btn btn-primary" type="submit">Kup 100 nestballi</button><input style="display: none" id="target3" value="100" name="kup_nestballe"></form>'+
-                     '<form style="margin-top: 5px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="nightball btn btn-primary" type="submit">Kup 100 nightballi</button><input style="display: none" id="target3" value="100" name="kup_nightballe"></form>'+
-                     '<form style="margin-top: 5px;" action="pokesklep.php?zakupy&amp;z=2" class="form-inline"><button class="repel btn btn-primary" type="submit">Kup repel</button><input style="display: none" id="target3" value="1" name="kup_repel1"></form>'+
+                     '<form style="margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="greatball btn btn-primary" style="width: 100%;" type="submit">Kup 30 greatballi</button><input style="display: none" id="target3" value="30" name="kup_greatballe"></form>'+
+                     '<form style="margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="nestball btn btn-primary" style="width: 100%;" type="submit">Kup 30 nestballi</button><input style="display: none" id="target3" value="30" name="kup_nestballe"></form>'+
+                     '<form style="margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="nightball btn btn-primary" style="width: 100%;" type="submit">Kup 30 nightballi</button><input style="display: none" id="target3" value="30" name="kup_nightballe"></form>'+
+                     '<form style="margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=2" class="form-inline"><button class="repel btn btn-primary" style="width: 100%;" type="submit">Kup repel</button><input style="display: none" id="target3" value="1" name="kup_repel1"></form>'+
                      '</div>');
 
     window.localStorage.lastVersion = GM_info.script.version;
