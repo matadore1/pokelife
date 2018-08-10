@@ -21,6 +21,9 @@ Instrukcja instalacji
 
 Changelog
 ---------
+1.8.1 (2018-08-10)
+* Przeniesienie sklepu na zapytania Ajax. Gdy jestes na widoku łapania pokemona zwiększa ilość balli do wyboru.
+
 1.8 (2018-08-10)
 * Dodano Szybki Sklep
 
