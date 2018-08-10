@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.8.1.2
+// @version      1.8.2
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -404,6 +404,38 @@ $(document).ready(function () {
         });
     });
 
+    $(document).off('submit', 'form');
+    $(document).on('submit', 'form', function(e) {
+        if (!$(this).attr("form-normal-submit")) {
+            $(this).children('input[type=submit]').attr("disabled", "disabled");
+            $("html, body").animate({ scrollTop: 0 }, "fast");
+
+            //Obejście modali
+            if($('body').hasClass('modal-open') && $(this).attr("dont-close-modal") != 1) {
+                $('body').removeClass('modal-open');
+                $('body').css({"padding-right":"0px"});
+                $('.modal-backdrop').remove();
+            } else {
+                $(".modal").animate({ scrollTop: 0 }, "fast");
+            }
+
+            var postData = $(this).serializeArray();
+
+            if ($(this).attr("form-target")) {
+                //$($(this).attr('form-target')).html(loadingbar);
+                $($(this).attr('form-target')).load('gra/'+$(this).attr('action'),  postData );
+            } else {
+                $("html, body").animate({ scrollTop: 0 }, "fast");
+                //$("#glowne_okno").html(loadingbar);
+                $("#glowne_okno").load('gra/'+$(this).attr('action'),  postData, function(){
+                    updateWymianaView();
+                });
+            }
+
+            e.preventDefault(); //STOP default action
+            e.unbind(); //unbind. to stop multiple form submit.
+        }
+    });
 
 
     $(document).off("click", ".btn-akcja");
