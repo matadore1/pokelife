@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.8.1.1
+// @version      1.8.1.2
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -9,10 +9,10 @@
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
 // @require      http://bug7a.github.io/iconselect.js/sample/lib/control/iconselect.js
-// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=1.8
-// @resource     customCSS_dark  https://raw.githubusercontent.com/krozum/pokelife/master/style_dark.css?v=1.8
-// @resource     customCSS_3  https://raw.githubusercontent.com/krozum/pokelife/master/style_3.css?v=1.8
-// @require      https://raw.githubusercontent.com/krozum/pokelife/master/careService.js?v=1.8
+// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=1.8.1.2
+// @resource     customCSS_dark  https://raw.githubusercontent.com/krozum/pokelife/master/style_dark.css?v=1.8.1.2
+// @resource     customCSS_3  https://raw.githubusercontent.com/krozum/pokelife/master/style_3.css?v=1.8.1.2
+// @require      https://raw.githubusercontent.com/krozum/pokelife/master/careService.js?v=1.8.1.2
 // ==/UserScript==
 
 var newCSS;
@@ -228,6 +228,7 @@ $(document).ready(function () {
             });
         }
 
+        $(document).off("click", "#plecak-trzymane");
         $(document).on("click", "#plecak-trzymane .thumbnail-plecak button[type='submit']", function(e){
             var id = $(this).attr("href").split("rozbierz=")[1].split("&napewno")[0];
             $("#plecak-przedmiot-"+id).remove();
@@ -633,13 +634,13 @@ $(document).ready(function () {
     $(document).on("click", '#goFastShop', function () {
         if ($('#fastShop').css('display') == "none") {
             var ilosc_yenow = Number($('a[href="http://pokelife.pl/pokedex/index.php?title=Pieniądze"]').parent().html().split("</a>")[1].split("<a")[0].replace(/\./g, ''));
-            if(ilosc_yenow < 100000){
+            if(ilosc_yenow < 30000){
                 $('#fastShop .greatball').attr("disabled", true);
             }
-            if(ilosc_yenow < 125000){
+            if(ilosc_yenow < 37500){
                 $('#fastShop .nightball').attr("disabled", true);
             }
-            if(ilosc_yenow < 40000){
+            if(ilosc_yenow < 12000){
                 $('#fastShop .nestball').attr("disabled", true);
             }
             if(ilosc_yenow < 75000){
