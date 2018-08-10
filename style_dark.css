@@ -1,6 +1,24 @@
 body {	
     background-color: #363636;	
-}	
+}
+
+#fastShop, #settings {
+    border: 3px solid #76b5b3; 
+}
+
+#goSettings {
+    color: #303030;
+    background-color: #76b5b3;
+}
+
+#goFastShop {
+    color: #76b5b3; 
+}
+
+#fastShop button {
+    background-color: #76b5b3;
+    border-color: #76b5b3
+}
 	
 .panel-primary, .panel-primary>.panel-heading, .awatar, h2, .modal-header {	
     border-color: #74b5b1 !important;
