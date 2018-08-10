@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.7.22
+// @version      1.8
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -9,10 +9,10 @@
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
 // @require      http://bug7a.github.io/iconselect.js/sample/lib/control/iconselect.js
-// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=7.6
-// @resource     customCSS_dark  https://raw.githubusercontent.com/krozum/pokelife/master/style_dark.css?v=7.6
-// @resource     customCSS_3  https://raw.githubusercontent.com/krozum/pokelife/master/style_3.css?v=7.6
-// @require      https://raw.githubusercontent.com/krozum/pokelife/master/careService.js?v=7.6
+// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=1.8
+// @resource     customCSS_dark  https://raw.githubusercontent.com/krozum/pokelife/master/style_dark.css?v=1.8
+// @resource     customCSS_3  https://raw.githubusercontent.com/krozum/pokelife/master/style_3.css?v=1.8
+// @require      https://raw.githubusercontent.com/krozum/pokelife/master/careService.js?v=1.8
 // ==/UserScript==
 
 var newCSS;
@@ -498,9 +498,11 @@ $(document).ready(function () {
         }
     });
 
-    $('body').on('click', ':not(#settings *, #settings)', function () {
+    $('body').on('click', ':not(#settings *, #settings, #fastShop, #fastShop *)', function () {
         $('#settings').css('display', "none");
         $('#goSettings').css('display', "block");
+        $('#fastShop').css('display', "none");
+        $('#goFastShop').css('display', "block");
     });
 
     $('body').on('click', '#changeStyle', function () {
@@ -568,6 +570,34 @@ $(document).ready(function () {
         } else {
             $('#settings').css('display', "none");
             $('#goSettings').css('display', "block");
+        }
+    });
+
+    $(document).on("click", '#goFastShop', function () {
+        if ($('#fastShop').css('display') == "none") {
+            var ilosc_yenow = Number($('a[href="http://pokelife.pl/pokedex/index.php?title=Pieniądze"]').parent().html().split("</a>")[1].split("<a")[0].replace(/\./g, ''));
+            if(ilosc_yenow < 100000){
+                $('#fastShop .greatball').attr("disabled", true);
+            }
+            if(ilosc_yenow < 125000){
+                $('#fastShop .nightball').attr("disabled", true);
+            }
+            if(ilosc_yenow < 40000){
+                $('#fastShop .nestball').attr("disabled", true);
+            }
+            if(ilosc_yenow < 75000){
+                $('#fastShop .repel').attr("disabled", true);
+            }
+
+            $('#fastShop').css('display', "block");
+            $('#goFastShop').css('display', "none");
+        } else {
+            $('#fastShop').css('display', "none");
+            $('#goFastShop').css('display', "block");
+            $('#fastShop .greatball').attr("disabled", false);
+            $('#fastShop .nightball').attr("disabled", false);
+            $('#fastShop .nestball').attr("disabled", false);
+            $('#fastShop .repel').attr("disabled", false);
         }
     });
 
@@ -680,8 +710,8 @@ function addNewElementsToWebsite() {
     $('body').append('<div id="goAutoButton" style="border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 122px; font-size: 36px; text-align: center; width: 140px; height: 48px; line-height: 48px; background: ' + $('.panel-heading').css('background-color') + '; z-index: 9999">AutoGO</div>');
 
     $('body').append('<div id="newVersionInfo" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; right: 60px; font-size: 19px; text-align: center; width: 250px; height: 30px; line-height: 35px; z-index: 9998; text-align: right;"><a style="color: yellow;text-decoration:none;" target="_blank" href="https://github.com/krozum/pokelife#user-content-changelog">' + (GM_info.script.version == window.localStorage.lastVersion ? "" : "New Version! ") + 'v' + GM_info.script.version + '</a></div>');
-    $('body').append('<div id="goSettings" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;right: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: rgb(21, 149, 137);z-index: 9999;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></div>');
-    $('body').append('<div id="settings" style="display: none; width: 430px; height: auto; min-height: 200px; z-index: 9998; background: white; position: fixed; bottom: 0; right: 0; border: 3px solid #159589; padding: 20px; ">' +
+    $('body').append('<div id="goSettings" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;right: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px; z-index: 9999;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></div>');
+    $('body').append('<div id="settings" style="box-shadow: -5px -5px 3px -3px rgba(0,0,0,0.53);display: none; width: 430px; height: auto; min-height: 200px; z-index: 9998; background: white; position: fixed; bottom: 0; right: 0; padding: 20px; ">' +
         '<div>Lecz gdy któryś pokemon ma mniej % życia niż: <input id="min-health" type="number" min="1" max="100" style="margin-left: 10px" value="' + (window.localStorage.minHealth ? window.localStorage.minHealth : "90") + '"></div>' +
         '<div style="margin-top: 5px;"><b>Włącz exp mode</b> <input type="checkbox" id="exp-mode" ' + (window.localStorage.expMode ? (window.localStorage.expMode == "true" ? "checked" : "") : "") + ' style="margin-left: 10px; width: 20px; height: 20px; "></div>' +
         '<div class="exp-mode ' + (window.localStorage.expMode ? (window.localStorage.expMode == "true" ? "exp-mode-visible" : "") : "") + '"><div><b>EXP MODE:</b></div><div>Pokemon do 15 poziomu <input id="easy-lvl" type="number" min="1" max="6" style="margin-left: 10px" value="' + (window.localStorage.easyLvl ? window.localStorage.easyLvl : "1") + '"></div>' +
@@ -699,6 +729,13 @@ function addNewElementsToWebsite() {
         '<br><br></div>');
 
     $('body').append('<div id="changeStyle" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;left: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: ' + (window.localStorage.skinStyle == 2 ? '#dbce5d' : (window.localStorage.skinStyle == 3 ? "#d85046" : "#74b5b1") ) + ';z-index: 9999;"></div>');
+    $('body').append('<div id="goFastShop" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; left: 60px; font-size: 19px; text-align: center; width: 250px; height: 30px; line-height: 35px; z-index: 9998; text-align: left;"><a style="color: inherit;text-decoration:none;">Szybki sklep</a></div>');
+    $('body').append('<div id="fastShop" style="box-shadow: 5px -5px 3px -3px rgba(0,0,0,0.53);display: none; width: 250px; height: auto; min-height: 400px; z-index: 10001; background: white; position: fixed; bottom: 0; left: 0; padding: 20px; ">'+
+                     '<form style="margin-top: 5px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="greatball btn btn-primary" type="submit">Kup 100 greatballi</button><input style="display: none" id="target3" value="100" name="kup_greatballe"></form>'+
+                     '<form style="margin-top: 5px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="nestball btn btn-primary" type="submit">Kup 100 nestballi</button><input style="display: none" id="target3" value="100" name="kup_nestballe"></form>'+
+                     '<form style="margin-top: 5px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="nightball btn btn-primary" type="submit">Kup 100 nightballi</button><input style="display: none" id="target3" value="100" name="kup_nightballe"></form>'+
+                     '<form style="margin-top: 5px;" action="pokesklep.php?zakupy&amp;z=2" class="form-inline"><button class="repel btn btn-primary" type="submit">Kup repel</button><input style="display: none" id="target3" value="1" name="kup_repel1"></form>'+
+                     '</div>');
 
     window.localStorage.lastVersion = GM_info.script.version;
 
