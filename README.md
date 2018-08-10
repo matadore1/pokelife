@@ -21,6 +21,9 @@ Instrukcja instalacji
 
 Changelog
 ---------
+1.8 (2018-08-10)
+* Dodano Szybki Sklep
+
 1.7.22 (2018-08-08)
 * Poprawka do do zatrzymywania przy pokach niezłapanych. Od teraz nie zatrzymuje się gdy pokemon jest powyżej 50 poziomu lub ma trudność złapania X
 
