@@ -14,6 +14,11 @@ body {
 #goFastShop {
     color: #e9635f; 
 }
+
+#fastShop button {
+    background-color: #159589;
+    border-color: #159589
+}
 	
 .panel-primary, .panel-primary>.panel-heading, .awatar, h2, .modal-header {	
     border-color: #0a665e;	
