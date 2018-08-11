@@ -21,6 +21,9 @@ Instrukcja instalacji
 
 Changelog
 ---------
+1.8.3 (2018-08-11)
+* Dodanie Stunballa do Szybkiego Sklepu
+
 1.8.2 (2018-08-10)
 * Ponowne autouzupełnienie pola po zakupie PZ na widoku wymiany
 
