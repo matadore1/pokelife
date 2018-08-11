@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.8.3
+// @version      1.8.3.1
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -689,6 +689,7 @@ $(document).ready(function () {
     $(document).on("click", '#goFastShop', function () {
         if ($('#fastShop').css('display') == "none") {
             var ilosc_yenow = Number($('a[href="http://pokelife.pl/pokedex/index.php?title=Pieniądze"]').parent().html().split("</a>")[1].split("<a")[0].replace(/\./g, ''));
+            var ilosc_pz = Number($('a[href="http://pokelife.pl/pokedex/index.php?title=Punkty_Zasług"]').parent().html().split("</a>")[1].split("<a")[0].replace(/\./g, ''));
             if(ilosc_yenow < 30000){
                 $('#fastShop .greatball').attr("disabled", true);
             }
@@ -701,6 +702,9 @@ $(document).ready(function () {
             if(ilosc_yenow < 75000){
                 $('#fastShop .repel').attr("disabled", true);
             }
+            if(ilosc_pz < 7){
+                $('#fastShop .stunball').attr("disabled", true);
+            }
 
             $('#fastShop').css('display', "block");
             $('#goFastShop').css('display', "none");
@@ -711,6 +715,7 @@ $(document).ready(function () {
             $('#fastShop .nightball').attr("disabled", false);
             $('#fastShop .nestball').attr("disabled", false);
             $('#fastShop .repel').attr("disabled", false);
+            $('#fastShop .stunball').attr("disabled", false);
         }
     });
 
@@ -860,7 +865,7 @@ function addNewElementsToWebsite() {
     }).done(function(response){
         var hash = response.split("input type='hidden' name='s' value='")[1].split("'/>")[0];
         window.localStorage.s = hash;
-        var html = '<form style="margin-top: 5px;height: 35px;" action="zaslugi_wydaj.php?wymien" class="form-inline"><button class="repel btn btn-primary" style="width: 100%;" type="submit">Kup 1 stunballa (PZ) <img src="https://t00.deviantart.net/JpLqXypqZZn45GZqRx_LRr_pxaU=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/a325/th/pre/f/2014/317/c/e/net_ball_by_oykawoo-d86assn.png"  style=" width: 23px; height: 23px; "></button><input style="display: none" type="text" class="form-control" name="zamien_ile" value="1" placeholder="Ilość"><input type="hidden" name="zamien" value="stunball"><input type="hidden" name="s" value="'+hash+'"></form>';
+        var html = '<form style="margin-top: 5px;height: 35px;" action="zaslugi_wydaj.php?wymien" class="form-inline"><button class="stunball btn btn-primary" style="width: 100%;" type="submit">Kup 1 stunballa (PZ) <img src="https://t00.deviantart.net/JpLqXypqZZn45GZqRx_LRr_pxaU=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/a325/th/pre/f/2014/317/c/e/net_ball_by_oykawoo-d86assn.png"  style=" width: 23px; height: 23px; "></button><input style="display: none" type="text" class="form-control" name="zamien_ile" value="1" placeholder="Ilość"><input type="hidden" name="zamien" value="stunball"><input type="hidden" name="s" value="'+hash+'"></form>';
         $("#fastShop").append(html);
     });
 
