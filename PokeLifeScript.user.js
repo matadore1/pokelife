@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.8.3.1
+// @version      1.8.3.2
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -617,107 +617,110 @@ $(document).ready(function () {
             type: 'POST',
             url: "gra/"+MAIN.attr('action'),
             data: formData
-        })
+        }).done(function(){
+            var ilosc_old, ilosc_new, html;
+            if(formData == "kup_greatballe=30"){
+                if($('form[action="dzicz.php?zlap"] button[data-original-title="Greatball"]').length > 0){
+                    ilosc_old = $('form[action="dzicz.php?zlap"] button[data-original-title="Greatball"]').html().split("<br>")[1].split(" ")[0];
+                    ilosc_new = Number(ilosc_old)+Number(30);
+                    html = $('form[action="dzicz.php?zlap"] button[data-original-title="Greatball"]').html();
+                    $('form[action="dzicz.php?zlap"] button[data-original-title="Greatball"]').html(html.replace(ilosc_old, ilosc_new));
+                } else {
+                    html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&amp;zlap_pokemona=greatballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Greatball" aria-describedby="tooltip822784"><img src="images/pokesklep/greatballe.jpg" alt="Greatball" width="93px"><br>30 sztuk</button>';
+                    $('form[action="dzicz.php?zlap"] center').prepend(html);
+                }
+            }
+            if(formData == "kup_nestballe=30"){
+                if($('form[action="dzicz.php?zlap"] button[data-original-title="Nestball"]').length > 0){
+                    ilosc_old = $('form[action="dzicz.php?zlap"] button[data-original-title="Nestball"]').html().split("<br>")[1].split(" ")[0];
+                    ilosc_new = Number(ilosc_old)+Number(30);
+                    html = $('form[action="dzicz.php?zlap"] button[data-original-title="Nestball"]').html();
+                    $('form[action="dzicz.php?zlap"] button[data-original-title="Nestball"]').html(html.replace(ilosc_old, ilosc_new));
+                } else {
+                    html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&amp;zlap_pokemona=nestballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Nestball" aria-describedby="tooltip822784"><img src="images/pokesklep/nestballe.jpg" alt="Nestball" width="93px"><br>30 sztuk</button>';
+                    $('form[action="dzicz.php?zlap"] center').prepend(html);
+                }
+            }
+            if(formData == "kup_nightballe=30"){
+                if($('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').length > 0){
+                    ilosc_old = $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html().split("<br>")[1].split(" ")[0];
+                    ilosc_new = Number(ilosc_old)+Number(30);
+                    html = $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html();
+                    $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html(html.replace(ilosc_old, ilosc_new));
+                } else {
+                    html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&amp;zlap_pokemona=nightballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Nightball" aria-describedby="tooltip822784"><img src="images/pokesklep/nightballe.jpg" alt="Nightball" width="93px"><br>30 sztuk</button>';
+                    $('form[action="dzicz.php?zlap"] center').prepend(html);
+                }
+            }
+            if(formData == "kup_nightballe=30"){
+                if($('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').length > 0){
+                    ilosc_old = $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html().split("<br>")[1].split(" ")[0];
+                    ilosc_new = Number(ilosc_old)+Number(30);
+                    html = $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html();
+                    $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html(html.replace(ilosc_old, ilosc_new));
+                } else {
+                    html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&amp;zlap_pokemona=nightballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Nightball" aria-describedby="tooltip822784"><img src="images/pokesklep/nightballe.jpg" alt="Nightball" width="93px"><br>30 sztuk</button>';
+                    $('form[action="dzicz.php?zlap"] center').prepend(html);
+                }
+            }
 
-        var ilosc_old, ilosc_new, html;
-        if(formData == "kup_greatballe=30"){
-            if($('form[action="dzicz.php?zlap"] button[data-original-title="Greatball"]').length > 0){
-                ilosc_old = $('form[action="dzicz.php?zlap"] button[data-original-title="Greatball"]').html().split("<br>")[1].split(" ")[0];
-                ilosc_new = Number(ilosc_old)+Number(30);
-                html = $('form[action="dzicz.php?zlap"] button[data-original-title="Greatball"]').html();
-                $('form[action="dzicz.php?zlap"] button[data-original-title="Greatball"]').html(html.replace(ilosc_old, ilosc_new));
-            } else {
-                html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&amp;zlap_pokemona=greatballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Greatball" aria-describedby="tooltip822784"><img src="images/pokesklep/greatballe.jpg" alt="Greatball" width="93px"><br>30 sztuk</button>';
-                $('form[action="dzicz.php?zlap"] center').prepend(html);
+            if(formData == ("zamien_ile=1&zamien=stunball&s="+window.localStorage.s)){
+                if($('form[action="dzicz.php?zlap"] button[data-original-title="Stunball"]').length > 0){
+                    ilosc_old = $('form[action="dzicz.php?zlap"] button[data-original-title="Stunball"]').html().split("<br>")[1].split(" ")[0];
+                    ilosc_new = Number(ilosc_old)+Number(1);
+                    html = $('form[action="dzicz.php?zlap"] button[data-original-title="Stunball"]').html();
+                    $('form[action="dzicz.php?zlap"] button[data-original-title="Stunball"]').html(html.replace(ilosc_old, ilosc_new));
+                } else {
+                    html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&amp;zlap_pokemona=stunballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Stunball" aria-describedby="tooltip822784"><img src="images/pokesklep/stunballe.jpg" alt="Stunball" width="93px"><br>1 sztuk</button>';
+                    $('form[action="dzicz.php?zlap"] center').prepend(html);
+                }
             }
-        }
-        if(formData == "kup_nestballe=30"){
-            if($('form[action="dzicz.php?zlap"] button[data-original-title="Nestball"]').length > 0){
-                ilosc_old = $('form[action="dzicz.php?zlap"] button[data-original-title="Nestball"]').html().split("<br>")[1].split(" ")[0];
-                ilosc_new = Number(ilosc_old)+Number(30);
-                html = $('form[action="dzicz.php?zlap"] button[data-original-title="Nestball"]').html();
-                $('form[action="dzicz.php?zlap"] button[data-original-title="Nestball"]').html(html.replace(ilosc_old, ilosc_new));
-            } else {
-                html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&amp;zlap_pokemona=nestballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Nestball" aria-describedby="tooltip822784"><img src="images/pokesklep/nestballe.jpg" alt="Nestball" width="93px"><br>30 sztuk</button>';
-                $('form[action="dzicz.php?zlap"] center').prepend(html);
-            }
-        }
-        if(formData == "kup_nightballe=30"){
-            if($('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').length > 0){
-                ilosc_old = $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html().split("<br>")[1].split(" ")[0];
-                ilosc_new = Number(ilosc_old)+Number(30);
-                html = $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html();
-                $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html(html.replace(ilosc_old, ilosc_new));
-            } else {
-                html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&amp;zlap_pokemona=nightballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Nightball" aria-describedby="tooltip822784"><img src="images/pokesklep/nightballe.jpg" alt="Nightball" width="93px"><br>30 sztuk</button>';
-                $('form[action="dzicz.php?zlap"] center').prepend(html);
-            }
-        }
-        if(formData == "kup_nightballe=30"){
-            if($('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').length > 0){
-                ilosc_old = $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html().split("<br>")[1].split(" ")[0];
-                ilosc_new = Number(ilosc_old)+Number(30);
-                html = $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html();
-                $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html(html.replace(ilosc_old, ilosc_new));
-            } else {
-                html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&amp;zlap_pokemona=nightballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Nightball" aria-describedby="tooltip822784"><img src="images/pokesklep/nightballe.jpg" alt="Nightball" width="93px"><br>30 sztuk</button>';
-                $('form[action="dzicz.php?zlap"] center').prepend(html);
-            }
-        }
 
-        if(formData == ("zamien_ile=1&zamien=stunball&s="+window.localStorage.s)){
-            if($('form[action="dzicz.php?zlap"] button[data-original-title="Stunball"]').length > 0){
-                ilosc_old = $('form[action="dzicz.php?zlap"] button[data-original-title="Stunball"]').html().split("<br>")[1].split(" ")[0];
-                ilosc_new = Number(ilosc_old)+Number(1);
-                html = $('form[action="dzicz.php?zlap"] button[data-original-title="Stunball"]').html();
-                $('form[action="dzicz.php?zlap"] button[data-original-title="Stunball"]').html(html.replace(ilosc_old, ilosc_new));
-            } else {
-                html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&amp;zlap_pokemona=stunballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Stunball" aria-describedby="tooltip822784"><img src="images/pokesklep/stunballe.jpg" alt="Stunball" width="93px"><br>1 sztuk</button>';
-                $('form[action="dzicz.php?zlap"] center').prepend(html);
-            }
-        }
+            $(function() {
+                $("#sidebar").load('inc/stan.php');
+            });
 
-        $(function() {
-            $("#sidebar").load('inc/stan.php');
-        });
-
-        setTimeout(function(){
             MAIN.html(MAIN_FORM);
-        }, 500);
+            refreshShop();
+        });
     });
 
     $(document).on("click", '#goFastShop', function () {
+        refreshShop();
         if ($('#fastShop').css('display') == "none") {
-            var ilosc_yenow = Number($('a[href="http://pokelife.pl/pokedex/index.php?title=Pieniądze"]').parent().html().split("</a>")[1].split("<a")[0].replace(/\./g, ''));
-            var ilosc_pz = Number($('a[href="http://pokelife.pl/pokedex/index.php?title=Punkty_Zasług"]').parent().html().split("</a>")[1].split("<a")[0].replace(/\./g, ''));
-            if(ilosc_yenow < 30000){
-                $('#fastShop .greatball').attr("disabled", true);
-            }
-            if(ilosc_yenow < 37500){
-                $('#fastShop .nightball').attr("disabled", true);
-            }
-            if(ilosc_yenow < 12000){
-                $('#fastShop .nestball').attr("disabled", true);
-            }
-            if(ilosc_yenow < 75000){
-                $('#fastShop .repel').attr("disabled", true);
-            }
-            if(ilosc_pz < 7){
-                $('#fastShop .stunball').attr("disabled", true);
-            }
-
             $('#fastShop').css('display', "block");
             $('#goFastShop').css('display', "none");
         } else {
             $('#fastShop').css('display', "none");
             $('#goFastShop').css('display', "block");
-            $('#fastShop .greatball').attr("disabled", false);
-            $('#fastShop .nightball').attr("disabled", false);
-            $('#fastShop .nestball').attr("disabled", false);
-            $('#fastShop .repel').attr("disabled", false);
-            $('#fastShop .stunball').attr("disabled", false);
         }
     });
+
+    function refreshShop(){
+        $('#fastShop .greatball').attr("disabled", false);
+        $('#fastShop .nightball').attr("disabled", false);
+        $('#fastShop .nestball').attr("disabled", false);
+        $('#fastShop .repel').attr("disabled", false);
+        $('#fastShop .stunball').attr("disabled", false);
+
+        var ilosc_yenow = Number($('a[href="http://pokelife.pl/pokedex/index.php?title=Pieniądze"]').parent().html().split("</a>")[1].split("<a")[0].replace(/\./g, ''));
+        var ilosc_pz = Number($('a[href="http://pokelife.pl/pokedex/index.php?title=Punkty_Zasług"]').parent().html().split("</a>")[1].split("<a")[0].replace(/\./g, ''));
+        if(ilosc_yenow < 30000){
+            $('#fastShop .greatball').attr("disabled", true);
+        }
+        if(ilosc_yenow < 37500){
+            $('#fastShop .nightball').attr("disabled", true);
+        }
+        if(ilosc_yenow < 12000){
+            $('#fastShop .nestball').attr("disabled", true);
+        }
+        if(ilosc_yenow < 75000){
+            $('#fastShop .repel').attr("disabled", true);
+        }
+        if(ilosc_pz < 7){
+            $('#fastShop .stunball').attr("disabled", true);
+        }
+    }
 
     window.auto = false;
     $(document).on("click", '#goAutoButton', function () {
