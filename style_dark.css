@@ -276,3 +276,7 @@ a {
 #menu li, #menu ul {
     background-color: #272727;
 }
+
+#menu a {
+    background-color: #272727;
+}
