@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.8.4
+// @version      1.8.4.1
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -919,9 +919,9 @@ function addNewElementsToWebsite() {
                      '<form style="margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=2" class="form-inline"><button class="repel btn btn-primary" style="width: 100%;" type="submit">Kup repel (75k ￥) <img src="https://raw.githubusercontent.com/krozum/pokelife/master/repel.png"  style=" max-width: 23px; max-height: 23px; "></button><input style="display: none" id="target3" value="1" name="kup_repel1"></form>'+
                      '</div>');
 
-    $('#fastShop').append('<form style="margin-top: 5px;min-height: 35px;" method="POST" id="fastshop_napoj_energetyczny" action="targ_prz.php?szukaj&amp;przedmiot=napoj_energetyczny" class="form-inline"></form>');
-    $('#fastShop').append('<form style="margin-top: 5px;min-height: 35px;" method="POST" id="fastshop_niebieskie_jagody" action="targ_prz.php?szukaj&amp;przedmiot=niebieskie_jagody" class="form-inline"></form>');
-    $('#fastShop').append('<form style="margin-top: 5px;min-height: 35px;" method="POST" id="fastshop_stunballe_yeny" action="targ_prz.php?szukaj&amp;przedmiot=stunballe" class="form-inline"></form>');
+    $('#fastShop').append('<form style="margin-top: 5px;min-height: 57px;" method="POST" id="fastshop_napoj_energetyczny" action="targ_prz.php?szukaj&amp;przedmiot=napoj_energetyczny" class="form-inline"></form>');
+    $('#fastShop').append('<form style="margin-top: 5px;min-height: 57px;" method="POST" id="fastshop_niebieskie_jagody" action="targ_prz.php?szukaj&amp;przedmiot=niebieskie_jagody" class="form-inline"></form>');
+    $('#fastShop').append('<form style="margin-top: 5px;min-height: 57px;" method="POST" id="fastshop_stunballe_yeny" action="targ_prz.php?szukaj&amp;przedmiot=stunballe" class="form-inline"></form>');
 
     $.ajax({
         type: 'POST',
