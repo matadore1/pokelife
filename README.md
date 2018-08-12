@@ -21,6 +21,9 @@ Instrukcja instalacji
 
 Changelog
 ---------
+1.8.6 (2018-08-12)
+* Dodanie potwierdzenia przy zakupach w Szybkim Sklepie
+
 1.8.5 (2018-08-12)
 * Poprawki wyglądowe, został usunięty style3
 
