@@ -50,7 +50,11 @@ a {
 }	
 
 .nav a {
-     color: #f2cfc9 !important;
+    color: #f2cfc9 !important;
+}
+
+.nav-tabs a {
+    color: #4c4c4c !important;	
 }
 
 
