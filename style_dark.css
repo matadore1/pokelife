@@ -299,7 +299,7 @@ a {
     font-weight: 600;
 }
 
-.btn-info:hover {
+.btn-info:hover, .btn-info:active, .btn-info:active:focus, .btn-info:focus {
     color: #fff !important;
     background-color: #383838 !important;
     border-color: #383838 !important;
