@@ -267,3 +267,12 @@ a {
   height: auto;
   transition-duration: 0.3s;
 }
+
+#menu, #pasek_skrotow {
+    background-color: #272727;
+    color: #f0f0f0;
+}
+
+#menu li, #menu ul {
+    background-color: #272727;
+}
