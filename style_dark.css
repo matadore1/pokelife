@@ -57,9 +57,12 @@ a {
     color: #4c4c4c !important;	
 }
 
-.btn-primary {
-    background-color: #504b4a !important;
-    border-color: #504b4a !important;
+#shoutbox-panel {
+    background-color: #d4cbca;
+}
+
+#shouts ul li {
+    background-color: rgb(234, 234, 234);
 }
 
 
