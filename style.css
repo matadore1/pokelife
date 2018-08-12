@@ -167,3 +167,44 @@ div:not(#plecak-tm) > div >.thumbnail-plecak {
     padding: 0px;
     margin: 2px;
 }
+
+.btn-primary {
+    background-color: #009688;
+    border-color: #009688;
+}
+
+button.btn.btn-primary:hover {
+    color: #fff;
+    background-color: #275450 !important;
+    border-color: #275450 !important;
+}
+
+button.btn.btn-primary:active {
+    color: #fff;
+    background-color: #275450 !important;
+    border-color: #275450 !important;
+}
+
+button.btn.btn-primary:active:focus {
+    color: #fff;
+    background-color: #275450 !important;
+    border-color: #275450 !important;
+}
+
+button.btn.btn-primary:focus {
+    color: #fff;
+    background-color: #275450 !important;
+    border-color: #275450 !important;
+}
+
+.btn-primary[disabled] {
+    color: #fff;
+    background-color: #232323;
+    border-color: #232323;
+}
+
+.btn-primary.active, .btn-primary:active, .open>.dropdown-toggle.btn-primary {
+    color: #fff;
+    background-color: #6f6563;
+    border-color: #6f6563;
+}
