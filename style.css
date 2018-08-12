@@ -38,7 +38,11 @@ body {
     padding: 8px;
     border-radius: 5px;
 }
-	
+
+div:not(#plecak-tm) > div >.thumbnail-plecak {
+    background-color: white;	
+}
+
 .panel-primary, .panel-primary>.panel-heading, .awatar, h2, .modal-header {	
     border-color: #0a665e;	
 }	
