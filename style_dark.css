@@ -45,6 +45,11 @@ body {
     background-color: white !important;	
 }
 
+a {
+    color: #4c4c4c !important;	
+}	
+
+
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
     color: #555;
     background-color: #eaeaea;
