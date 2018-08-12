@@ -58,6 +58,12 @@ button.btn.btn-primary:active {
     border-color: #383838 !important;
 }
 
+button.btn.btn-primary:active:focus {
+    color: #fff;
+    background-color: #383838 !important;
+    border-color: #383838 !important;
+}
+
 button.btn.btn-primary:focus {
     color: #fff;
     background-color: #383838 !important;
