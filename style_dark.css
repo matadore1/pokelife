@@ -46,7 +46,7 @@ body {
     border-color: #adadad;
 }
 
-.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+button.btn.btn-primary:hover {
     color: #fff;
     background-color: #383838 !important;
     border-color: #383838 !important;
