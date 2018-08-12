@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.8.5
+// @version      1.8.5.1
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -900,7 +900,7 @@ function addNewElementsToWebsite() {
         '<br><br></div>');
 
     $('body').append('<div id="changeStyle" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;left: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: ' + (window.localStorage.skinStyle == 2 ? '#f2cfc9' : "#d85046") + ';z-index: 9999;"></div>');
-    $('body').append('<div id="goFastShop" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; left: 60px; font-size: 19px; text-align: center; width: 250px; height: 30px; line-height: 35px; z-index: 9998; text-align: left;"><a style="color: inherit;text-decoration:none;">Szybki sklep</a></div>');
+    $('body').append('<div id="goFastShop" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; left: 60px; font-size: 19px; text-align: center; width: 150px; height: 30px; line-height: 35px; z-index: 9998; text-align: left;"><a style="color: inherit;text-decoration:none;">Szybki sklep</a></div>');
     $('body').append('<div id="fastShop" style="box-shadow: 5px -5px 3px -3px rgba(0,0,0,0.53);display: none; width: 270px; height: auto; min-height: 470px; z-index: 10001; background: white; position: fixed; bottom: 0; left: 0; padding: 20px; ">'+
                      '<form style="margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="greatball btn btn-primary" style="width: 100%;" type="submit">Kup 30 greatballi (30.000 ￥) <img src="https://t00.deviantart.net/6LNr4Rou-uIXTDQBWysCj_95eic=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/8b61/th/pre/f/2014/317/3/6/great_ball_by_oykawoo-d86ar2c.png" style=" max-width: 23px; max-height: 23px; "></button><input style="display: none" id="target3" value="30" name="kup_greatballe"></form>'+
                      '<form style="margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="nestball btn btn-primary" style="width: 100%;" type="submit">Kup 30 nestballi (12.000 ￥) <img src="https://t00.deviantart.net/Arzhe_RxjSxt05wBb_XTD-Uwqq8=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/ba83/th/pre/f/2014/317/5/c/nest_ball_by_oykawoo-d86asrz.png" style=" max-width: 23px; max-height: 23px; "></button><input style="display: none" id="target3" value="30" name="kup_nestballe"></form>'+
