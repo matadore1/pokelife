@@ -20,6 +20,12 @@ body {
     border-color: #f2cfc9;
     color: #333;
 }
+
+#fastShop button.confirm {
+    background-color: orange;
+    border-color: orange;
+    color: #333;
+}
 	
 .panel-primary, .panel-primary>.panel-heading, .awatar, h2, .modal-header {	
     border-color: #f2cfc9 !important;
