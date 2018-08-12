@@ -93,6 +93,31 @@ button.btn.btn-primary:focus {
     background-color: #eaeaea;
 }
 
+.movecategory_physical {
+	background-color: #C92112;
+	border-color:#d96358;
+}
+.movecategory_physical:disabled {
+	background-color: #E94132;
+}
+
+.movecategory_special {
+	background-color: #4F5870;
+	border-color: #333948;
+}
+.movecategory_special:disabled {
+	background-color: #6F7890;
+}
+
+
+.movecategory_status {
+	background-color: #8C888C;
+	border-color: #5b585b;
+}
+.movecategory_status:disabled {
+	background-color: #ACA8AC;
+}
+
 .sortable-btn-up, .sortable-btn-down {
     margin-top: -4px;
     margin-left: 5px;
