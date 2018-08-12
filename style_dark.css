@@ -52,6 +52,11 @@ body {
     margin: 2px;
 }
 
+.sortable-btn-up, .sortable-btn-down {
+    margin-top: -4px;
+    margin-left: 5px;
+}
+
 div:not(#plecak-tm) > div >.thumbnail-plecak {
     background-color: white;	
 }
