@@ -46,6 +46,12 @@ body {
     border-color: #adadad;
 }
 
+.btn-primary:hover, .btn-primary:focus {
+    color: #fff;
+    background-color: #383838;
+    border-color: #383838;
+}
+
 .btn-druzyna {
     width: 22px;
     padding: 0px;
