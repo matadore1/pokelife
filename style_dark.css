@@ -12,12 +12,13 @@ body {
 }
 
 #goFastShop {
-    color: yellow; 
+    color: #f2cfc9;
 }
 
 #fastShop button {
     background-color: #f2cfc9;
-    border-color: #f2cfc9
+    border-color: #f2cfc9;
+    color: #616161;
 }
 	
 .panel-primary, .panel-primary>.panel-heading, .awatar, h2, .modal-header {	
