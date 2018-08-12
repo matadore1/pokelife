@@ -76,6 +76,12 @@ button.btn.btn-primary:focus {
     border-color: #232323;
 }
 
+.btn-primary.active, .btn-primary:active, .open>.dropdown-toggle.btn-primary {
+    color: #fff;
+    background-color: #6f6563;
+    border-color: #6f6563;
+}
+
 .btn-druzyna {
     width: 22px;
     padding: 0px;
