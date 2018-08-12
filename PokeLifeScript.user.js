@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         PokeLifeScript
-// @version      1.8.6.2
+// @version      1.8.6.3
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Dodatki do gry Pokelife
@@ -8,9 +8,9 @@
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
 // @require      http://bug7a.github.io/iconselect.js/sample/lib/control/iconselect.js
-// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=1.8.6.2
-// @resource     customCSS_dark  https://raw.githubusercontent.com/krozum/pokelife/master/style_dark.css?v=1.8.6.2
-// @require      https://raw.githubusercontent.com/krozum/pokelife/master/careService.js?v=1.8.6.2
+// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=1.8.6.3
+// @resource     customCSS_dark  https://raw.githubusercontent.com/krozum/pokelife/master/style_dark.css?v=1.8.6.3
+// @require      https://raw.githubusercontent.com/krozum/pokelife/master/careService.js?v=1.8.6.3
 // ==/UserScript==
 
 var newCSS;
@@ -826,7 +826,7 @@ function loadLastActiveData() {
             var date2 = new Date();
             var timeDiff = Math.abs(date2.getTime() - date1.getTime());
             var diffMinutes = Math.ceil(timeDiff / (1000 * 60));
-            var opacity = 1/diffMinutes;
+            var opacity = 1/(diffMinutes/5);
             $('#shout_list .shout_post_name:contains("'+value.login+'"):not(:has("span"))').prepend('<span class="fa fa-circle fa-fw" style="color: #62d262;opacity: '+opacity+'"></span>');
         });
     });
