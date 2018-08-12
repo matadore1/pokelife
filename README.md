@@ -21,6 +21,9 @@ Instrukcja instalacji
 
 Changelog
 ---------
+1.8.5 (2018-08-12)
+* Poprawki wyglądowe, został usunięty style3
+
 1.8.4 (2018-08-12)
 * Dodanie Niebieskich napoi, niebieskich jagód oraz stunballa za Yeny
 
