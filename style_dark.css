@@ -61,7 +61,7 @@ a {
     background-color: #d4cbca;
 }
 
-#shouts ul li {
+#shouts ul li, #shouts {
     background-color: rgb(234, 234, 234);
 }
 
