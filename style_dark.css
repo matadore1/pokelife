@@ -1,32 +1,32 @@
 body {	
-    background-color: #616161;	
+    background-color: #3c3c3c;	
 }
 
 #fastShop, #settings {
-    border: 3px solid #f2cfc9; 
+    border: 3px solid #e9635f; 
 }
 
 #goSettings {
     color: #303030;
-    background-color: #f2cfc9;
+    background-color: #e9635f;
 }
 
 #goFastShop {
-    color: #f2cfc9;
+    color: #e9635f;
 }
 
 #fastShop button {
-    background-color: #f2cfc9;
-    border-color: #f2cfc9;
-    color: #616161;
+    background-color: #e9635f;
+    border-color: #e9635f;
+    color: white;
 }
 	
 .panel-primary, .panel-primary>.panel-heading, .awatar, h2, .modal-header {	
-    border-color: #f2cfc9 !important;
+    border-color: #e9635f !important;
 }	
 	
 .panel-primary>.panel-heading, h2, .modal-header, #goButton, #goAutoButton {	
-    background-color: #f2cfc9 !important;
+    background-color: #e9635f !important;
 }	
 	
 .panel-primary>.panel-body, .osiagniecie {	
