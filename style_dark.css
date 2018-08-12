@@ -3,12 +3,12 @@ body {
 }
 
 #fastShop, #settings {
-    border: 3px solid #e9635f; 
+    border: 3px solid #f2cfc9; 
 }
 
 #goSettings {
     color: #303030;
-    background-color: #e9635f;
+    background-color: #f2cfc9;
 }
 
 #goFastShop {
@@ -16,17 +16,17 @@ body {
 }
 
 #fastShop button {
-    background-color: #e9635f;
-    border-color: #e9635f;
-    color: white;
+    background-color: #f2cfc9;
+    border-color: #f2cfc9;
+    color: #e3e3e3;
 }
 	
 .panel-primary, .panel-primary>.panel-heading, .awatar, h2, .modal-header {	
-    border-color: #e9635f !important;
+    border-color: #f2cfc9 !important;
 }	
 	
 .panel-primary>.panel-heading, h2, .modal-header, #goButton, #goAutoButton {	
-    background-color: #e9635f !important;
+    background-color: #f2cfc9 !important;
 }	
 	
 .panel-primary>.panel-body, .osiagniecie {	
