@@ -280,3 +280,8 @@ a {
 #menu a {
     background-color: #272727;
 }
+
+#fastShop button:hover {
+    background: #F2CFC8 !important;
+    border-color: #F2CFC8 !important;
+}
