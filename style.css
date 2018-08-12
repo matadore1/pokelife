@@ -161,3 +161,9 @@ div:not(#plecak-tm) > div >.thumbnail-plecak {
   height: auto;
   transition-duration: 0.3s;
 }
+
+.btn-druzyna {
+    width: 22px;
+    padding: 0px;
+    margin: 2px;
+}
