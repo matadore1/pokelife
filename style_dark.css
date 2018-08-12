@@ -41,7 +41,7 @@ body {
     border-radius: 5px;
 }
 
-.thumbnail-plecak {
+:not(#plecak-tm) .thumbnail-plecak {
     background-color: white;	
 }
 
