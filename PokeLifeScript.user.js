@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLifeScript
 // @namespace    http://tampermonkey.net/
-// @version      1.8.4.2
+// @version      1.8.4.3
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Auto Attack Script
@@ -665,7 +665,7 @@ $(document).ready(function () {
                 }
             }
 
-            if(formData == ("zamien_ile=1&zamien=stunball&s="+window.localStorage.s) || formData == "przedmiot=stunballe&id_oferty=2625340&ilosc_yeny=1&napewno=&kup="){
+            if(formData == ("zamien_ile=1&zamien=stunball&s="+window.localStorage.s) || formData.startsWith("przedmiot=stunballe&id_oferty=")){
                 if($('form[action="dzicz.php?zlap"] button[data-original-title="Stunball"]').length > 0){
                     ilosc_old = $('form[action="dzicz.php?zlap"] button[data-original-title="Stunball"]').html().split("<br>")[1].split(" ")[0];
                     ilosc_new = Number(ilosc_old)+Number(1);
