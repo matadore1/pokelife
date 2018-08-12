@@ -1,14 +1,14 @@
 body {	
-    background-color: #363636;	
+    background-color: #616161;	
 }
 
 #fastShop, #settings {
-    border: 3px solid #76b5b3; 
+    border: 3px solid #f2cfc9; 
 }
 
 #goSettings {
     color: #303030;
-    background-color: #76b5b3;
+    background-color: #f2cfc9;
 }
 
 #goFastShop {
@@ -16,16 +16,16 @@ body {
 }
 
 #fastShop button {
-    background-color: #76b5b3;
-    border-color: #76b5b3
+    background-color: #f2cfc9;
+    border-color: #f2cfc9
 }
 	
 .panel-primary, .panel-primary>.panel-heading, .awatar, h2, .modal-header {	
-    border-color: #74b5b1 !important;
+    border-color: #f2cfc9 !important;
 }	
 	
 .panel-primary>.panel-heading, h2, .modal-header, #goButton, #goAutoButton {	
-    background-color: #74b5b1 !important;
+    background-color: #f2cfc9 !important;
 }	
 	
 .panel-primary>.panel-body, .osiagniecie {	
