@@ -21,6 +21,9 @@ Instrukcja instalacji
 
 Changelog
 ---------
+1.8.4 (2018-08-12)
+* Dodanie Niebieskich napoi, niebieskich jagód oraz stunballa za Yeny
+
 1.8.3 (2018-08-11)
 * Dodanie Stunballa do Szybkiego Sklepu
 
