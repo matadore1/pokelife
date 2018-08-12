@@ -52,7 +52,7 @@ body {
     border-color: #383838;
 }
 
-.btn-primary:focus {
+.btn-primary.active.focus, .btn-primary.active:focus, .btn-primary.active:hover, .btn-primary:active.focus, .btn-primary:active:focus, .btn-primary:active:hover, .open>.dropdown-toggle.btn-primary.focus, .open>.dropdown-toggle.btn-primary:focus, .open>.dropdown-toggle.btn-primary:hover {
     color: #fff;
     background-color: #383838;
     border-color: #383838;
