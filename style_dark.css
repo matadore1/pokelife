@@ -304,3 +304,7 @@ a {
     background-color: #383838 !important;
     border-color: #383838 !important;
 }
+
+.progress-bar-info {
+    background-color: #f2cfc9;
+}
