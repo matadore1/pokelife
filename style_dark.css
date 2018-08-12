@@ -300,7 +300,7 @@ a {
 }
 
 .btn-info:hover {
-    color: #fff;
+    color: #fff !important;
     background-color: #383838 !important;
     border-color: #383838 !important;
 }
