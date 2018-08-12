@@ -298,3 +298,9 @@ a {
     border-color: #adadad;
     font-weight: 600;
 }
+
+.btn-info:hover {
+    color: #3c3c3c !important;
+    background-color: #f2d700;
+    border-color: #adadad;
+}
