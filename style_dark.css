@@ -285,3 +285,16 @@ a {
     background: #F2CFC8 !important;
     border-color: #F2CFC8 !important;
 }
+
+.alert-info {
+    color: #3c3c3c;
+    background-color: #f2cfc9;
+    border-color: #f2cfc9;
+}
+
+.btn-info {
+    color: #ffd736;
+    background-color: #adadad;
+    border-color: #adadad;
+    font-weight: 600;
+}
