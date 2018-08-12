@@ -82,6 +82,11 @@ button.btn.btn-primary:focus {
     margin: 2px;
 }
 
+.list-group-item-info {
+    color: #3c3c3c;
+    background-color: #eaeaea;
+}
+
 .sortable-btn-up, .sortable-btn-down {
     margin-top: -4px;
     margin-left: 5px;
