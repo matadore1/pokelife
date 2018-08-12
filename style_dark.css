@@ -41,6 +41,11 @@ body {
     border-radius: 5px;
 }
 
+.btn-primary {
+    background-color: #adadad;
+    border-color: #adadad;
+}
+
 div:not(#plecak-tm) > div >.thumbnail-plecak {
     background-color: white;	
 }
