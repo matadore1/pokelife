@@ -48,8 +48,8 @@ body {
 
 .btn-primary:hover, .btn-primary:acctive, .btn-primary:focus {
     color: #fff;
-    background-color: #383838;
-    border-color: #383838;
+    background-color: #383838 !important;
+    border-color: #383838 !important;
 }
 
 .btn-primary[disabled] {
