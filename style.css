@@ -2,7 +2,7 @@ body {
     background-color: #d85046;	
 }	
 
-#fastShop, #settings {
+#fastShop, #fastActivity, #settings {
     border: 3px solid #009688; 
 }
 
@@ -15,9 +15,18 @@ body {
     color: white; 
 }
 
+#goFastActivity {
+  color: white!important; 
+}
+
 #fastShop button {
     background-color: #159589;
     border-color: #159589
+}
+
+#fastActivity button {
+  background-color: #159589;
+  border-color: #159589
 }
 
 #fastShop button.confirm {

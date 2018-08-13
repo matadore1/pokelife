@@ -2,7 +2,7 @@ body {
     background-color: #3c3c3c;	
 }
 
-#fastShop, #settings {
+#fastShop, #fastActivity, #settings {
     border: 3px solid #f2cfc9; 
 }
 
@@ -15,12 +15,21 @@ body {
     color: #ffffff;
 }
 
-#fastShop button {
+#goFastActivity {
+    color: #ffffff!important;
+}
+
+#fastActivity button {
     background-color: #f2cfc9;
     border-color: #f2cfc9;
     color: #333;
 }
 
+#fastShop button {
+    background-color: #f2cfc9;
+    border-color: #f2cfc9;
+    color: #333;
+}
 
 #fastShop button.confirm {
     visibility: hidden;

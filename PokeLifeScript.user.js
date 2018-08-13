@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         PokeLifeScript
-// @version      1.8.6.3
+// @version      1.8.7.1
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Dodatki do gry Pokelife
@@ -14,7 +14,7 @@
 // ==/UserScript==
 
 var newCSS;
-if(window.localStorage.skinStyle == 2){
+if (window.localStorage.skinStyle == 2) {
     newCSS = GM_getResourceText("customCSS_dark");
     GM_addStyle(newCSS);
 } else {
@@ -25,12 +25,14 @@ if(window.localStorage.skinStyle == 2){
 var iconSelect;
 var iconPoke;
 var iconBall;
+var navigation;
 var lastClick;
+var activityClockInterval;
 window.jsonData = [];
 window.shinyData = [];
 window.lastActiveData = [];
 
-(function($) {
+(function ($) {
     var origAppend = $.fn.append;
 
     $.fn.append = function () {
@@ -52,6 +54,7 @@ $(document).ready(function () {
     initBallIcons();
     initCareService();
     loadLastActiveData();
+    checkActivity();
 
     function click() {
         var canRun = true;
@@ -122,7 +125,7 @@ $(document).ready(function () {
             if ($('#glowne_okno p.alert:first').html() === "Natrafiasz na dzikiego pokemona:") {
                 console.log('PokeLifeScript: spotkałem pokemona');
                 if ($('.dzikipokemon-background-shiny').length == 1) {
-                    var shinyAPIInsert = "http://www.bra1ns.com/pokelife/insert.php?pokemon_id=" + $('.dzikipokemon-background-shiny .center-block img').attr('src').split('/')[1].split('.')[0].split('s')[1]+"&login="+$('#wyloguj').parent().parent().html().split("<div")[0].trim();
+                    var shinyAPIInsert = "http://www.bra1ns.com/pokelife/insert.php?pokemon_id=" + $('.dzikipokemon-background-shiny .center-block img').attr('src').split('/')[1].split('.')[0].split('s')[1] + "&login=" + $('#wyloguj').parent().parent().html().split("<div")[0].trim();
                     $.getJSON(shinyAPIInsert, {
                         format: "json"
                     }).done(function (data) {
@@ -150,7 +153,7 @@ $(document).ready(function () {
     }
 
     function getBallIndex(check) {
-        if (iconBall.getSelectedValue() == "mixed"){
+        if (iconBall.getSelectedValue() == "mixed") {
             let pokeLvlNumber = 0;
             if (!check) {
                 let pokeLvlNode = getElementByXpath('//*[@id="glowne_okno"]/div/div[2]/table[2]/tbody/tr/td[2]/center/b/text()');
@@ -158,7 +161,7 @@ $(document).ready(function () {
                 pokeLvlText = pokeLvlText.replace("poz.)", "");
                 pokeLvlNumber = Number.parseInt(pokeLvlText.trim());
             }
-            if (pokeLvlNumber < 15){
+            if (pokeLvlNumber < 15) {
                 return '&zlap_pokemona=nestballe';
             } else {
                 return '&zlap_pokemona=greatballe';
@@ -166,7 +169,7 @@ $(document).ready(function () {
         } else if (iconBall.getSelectedValue() == "mixed2") {
             var d = new Date();
             var h = d.getHours();
-            if(h >= 22 || h < 6 ){
+            if (h >= 22 || h < 6) {
                 return '&zlap_pokemona=nightballe';
             } else {
                 let pokeLvlNumber = 0;
@@ -176,7 +179,7 @@ $(document).ready(function () {
                     pokeLvlText = pokeLvlText.replace("poz.)", "");
                     pokeLvlNumber = Number.parseInt(pokeLvlText.trim());
                 }
-                if (pokeLvlNumber < 15){
+                if (pokeLvlNumber < 15) {
                     return '&zlap_pokemona=nestballe';
                 } else {
                     return '&zlap_pokemona=greatballe';
@@ -209,12 +212,12 @@ $(document).ready(function () {
                 var id = $(this).find('.thumbnail-plecak').data("target").split("#plecak-przedmiot-")[1];
                 var level = $(this).find('strong').html();
                 var html = "";
-                if(level != undefined){
-                    if (level.split(" ").pop() == "II"){
-                        html = '<button type="submit" class="btn btn-warning btn-akcja" href="plecak.php?rozbierz='+id+'&napewno=1&p=4" style=" margin: 0 auto; text-align: center; display: block; ">Rozbierz</button>';
+                if (level != undefined) {
+                    if (level.split(" ").pop() == "II") {
+                        html = '<button type="submit" class="btn btn-warning btn-akcja" href="plecak.php?rozbierz=' + id + '&napewno=1&p=4" style=" margin: 0 auto; text-align: center; display: block; ">Rozbierz</button>';
                         $(this).find('.caption').append(html);
-                    } else if (level.split(" ").pop() == "III"){
-                        html = '<button type="submit" class="btn btn-danger btn-akcja" href="plecak.php?rozbierz='+id+'&napewno=1&p=4" style=" margin: 0 auto; text-align: center; display: block; ">Rozbierz</button>';
+                    } else if (level.split(" ").pop() == "III") {
+                        html = '<button type="submit" class="btn btn-danger btn-akcja" href="plecak.php?rozbierz=' + id + '&napewno=1&p=4" style=" margin: 0 auto; text-align: center; display: block; ">Rozbierz</button>';
                         $(this).find('.caption').append(html);
                     }
                 }
@@ -222,10 +225,10 @@ $(document).ready(function () {
         }
 
         $(document).off("click", "#plecak-trzymane");
-        $(document).on("click", "#plecak-trzymane .thumbnail-plecak button[type='submit']", function(e){
+        $(document).on("click", "#plecak-trzymane .thumbnail-plecak button[type='submit']", function (e) {
             var id = $(this).attr("href").split("rozbierz=")[1].split("&napewno")[0];
-            $("#plecak-przedmiot-"+id).remove();
-            setTimeout(function(){
+            $("#plecak-przedmiot-" + id).remove();
+            setTimeout(function () {
                 $('.modal-backdrop').remove();
             }, 400);
         });
@@ -309,7 +312,7 @@ $(document).ready(function () {
 
     $(window).keypress(function (e) {
         if (e.key === ' ' || e.key === 'Spacebar') {
-            if($('input:focus').length == 0 && $('textarea:focus').length == 0){
+            if ($('input:focus').length == 0 && $('textarea:focus').length == 0) {
                 if ($('#space-go').is(":checked")) {
                     // ' ' is standard, 'Spacebar' was used by IE9 and Firefox < 37
                     e.preventDefault();
@@ -361,9 +364,9 @@ $(document).ready(function () {
         ultimateLvl: 5
     };
 
-    $(document).on( "click", "#zaloguj_chat", function(event) {
-		$("#shout_refresher").load("gra/chat/shout.php?refresh="+window.shoutLastID);
-	});
+    $(document).on("click", "#zaloguj_chat", function (event) {
+        $("#shout_refresher").load("gra/chat/shout.php?refresh=" + window.shoutLastID);
+    });
 
     $(document).off("click", "#skrot_leczenie");
     $(document).on("click", "#skrot_leczenie", function (event) {
@@ -384,7 +387,7 @@ $(document).ready(function () {
         window.localStorage.clickSpeed = $(this).val();
     });
 
-    $("#shouts ul").bind("append", function() {
+    $("#shouts ul").bind("append", function () {
         var name = $('#shout_list li:last-of-type > .shout_post_name').html();
 
         $.each(window.lastActiveData, function (key, value) {
@@ -392,21 +395,21 @@ $(document).ready(function () {
             var date2 = new Date();
             var timeDiff = Math.abs(date2.getTime() - date1.getTime());
             var diffMinutes = Math.ceil(timeDiff / (1000 * 60));
-            var opacity = 1/diffMinutes;
-            $('#shout_list .shout_post_name:contains("'+value.login+'"):not(:has("span"))').prepend('<span class="fa fa-circle fa-fw" style="color: #62d262; opacity: '+opacity+'"></span>');
+            var opacity = 1 / diffMinutes;
+            $('#shout_list .shout_post_name:contains("' + value.login + '"):not(:has("span"))').prepend('<span class="fa fa-circle fa-fw" style="color: #62d262; opacity: ' + opacity + '"></span>');
         });
     });
 
     $(document).off('submit', 'form');
-    $(document).on('submit', 'form', function(e) {
+    $(document).on('submit', 'form', function (e) {
         if (!$(this).attr("form-normal-submit")) {
             $(this).children('input[type=submit]').attr("disabled", "disabled");
             $("html, body").animate({ scrollTop: 0 }, "fast");
 
             //Obejście modali
-            if($('body').hasClass('modal-open') && $(this).attr("dont-close-modal") != 1) {
+            if ($('body').hasClass('modal-open') && $(this).attr("dont-close-modal") != 1) {
                 $('body').removeClass('modal-open');
-                $('body').css({"padding-right":"0px"});
+                $('body').css({ "padding-right": "0px" });
                 $('.modal-backdrop').remove();
             } else {
                 $(".modal").animate({ scrollTop: 0 }, "fast");
@@ -416,11 +419,11 @@ $(document).ready(function () {
 
             if ($(this).attr("form-target")) {
                 //$($(this).attr('form-target')).html(loadingbar);
-                $($(this).attr('form-target')).load('gra/'+$(this).attr('action'),  postData );
+                $($(this).attr('form-target')).load('gra/' + $(this).attr('action'), postData);
             } else {
                 $("html, body").animate({ scrollTop: 0 }, "fast");
                 //$("#glowne_okno").html(loadingbar);
-                $("#glowne_okno").load('gra/'+$(this).attr('action'),  postData, function(){
+                $("#glowne_okno").load('gra/' + $(this).attr('action'), postData, function () {
                     updateWymianaView();
                 });
             }
@@ -483,16 +486,16 @@ $(document).ready(function () {
     });
 
 
-    $("#goButton" ).contextmenu(function(event) {
+    $("#goButton").contextmenu(function (event) {
         event.preventDefault();
         if ($('#space-go').is(":checked")) {
             window.localStorage.spaceGo = true;
-            $("#space-go").prop( "checked", false );
+            $("#space-go").prop("checked", false);
             $("#goButton").css("opacity", "1");
         } else {
             window.localStorage.spaceGo = true;
             $("#goButton").css("opacity", "0.3");
-            $("#space-go").prop( "checked", true );
+            $("#space-go").prop("checked", true);
         }
     });
 
@@ -527,20 +530,20 @@ $(document).ready(function () {
     $('body').on('click', ':not(#settings *, #settings,#fastActivity, #fastShop, #fastShop *)', function () {
         $('#settings').css('display', "none");
         $('#goSettings').css('display', "block");
-        $('#fastActivity').css('display',"none");
+        $('#fastActivity').css('display', "none");
         $('#fastShop').css('display', "none");
         $('#goFastShop').css('display', "block");
         $('#goFastActivity').css('display', "block");
     });
 
     $('body').on('click', '#changeStyle', function () {
-       if(window.localStorage.skinStyle == 1){
-           window.localStorage.skinStyle = 2;
-           location.reload();
-       } else {
-           window.localStorage.skinStyle = 1;
-           location.reload();
-       }
+        if (window.localStorage.skinStyle == 1) {
+            window.localStorage.skinStyle = 2;
+            location.reload();
+        } else {
+            window.localStorage.skinStyle = 1;
+            location.reload();
+        }
     });
 
     $(document).on("change", '#min-health', function () {
@@ -570,16 +573,16 @@ $(document).ready(function () {
     });
 
 
-    document.onkeydown = function(e) {
+    document.onkeydown = function (e) {
         if (e.ctrlKey && e.which == 32) {
             if ($('#space-go').is(":checked")) {
                 window.localStorage.spaceGo = true;
-                $("#space-go").prop( "checked", false );
+                $("#space-go").prop("checked", false);
                 $("#goButton").css("opacity", "1");
             } else {
                 window.localStorage.spaceGo = true;
                 $("#goButton").css("opacity", "0.3");
-                $("#space-go").prop( "checked", true );
+                $("#space-go").prop("checked", true);
             }
         }
     };
@@ -594,23 +597,62 @@ $(document).ready(function () {
         }
     });
 
-    $(document).on("click", "#fastActivity button", function(event) {
-        $("#fastActivity").css("display","none");
+    $(document).on("click", "#fastActivity button", function (event) {
+        $("#fastActivity").css("display", "none");
         $('#goFastActivity').css('display', "none");
         $('#endActivity').css('display', "block");
+        window.localStorage.activityTime = new Date();
+        startTimer();
     });
-    $(document).on("click", "#endActivity button", function(event) {
+
+    $(document).on("click", "#endActivity button", function (event) {
         $('#goFastActivity').css('display', "block");
         $('#endActivity').css('display', "none");
+        var MAIN = $(this).parent();
+        var MAIN_FORM = $(this).parent().html();
+        event.preventDefault();
+        var formData = $(this).parent().serialize();
+        window.localStorage.activityTime = null;
+        $.ajax({
+            type: 'POST',
+            url: "gra/" + MAIN.attr('action'),
+            data: formData
+        }).done(function () {
+            clearInterval(activityClockInterval);
+            MAIN.html(MAIN_FORM);
+            console.log(navigation);
+            if (navigation) {
+                $(function () {
+                    $("#glowne_okno").load('gra/' + navigation, {}, {});
+                });
+            }
+            navigation = undefined;
+
+            $(function () {
+                $("#sidebar").load('inc/stan.php');
+            });
+        });
     });
-    
-    $(document).on("click", "#fastShop button", function(event) {
-    $(document).on("click", "#fastShop button:not('.confirm')", function(event) {
+
+    $(document).on("click", "#fastShop button:not('.confirm')", function (event) {
         event.preventDefault();
         $(this).addClass("confirm");
     });
 
-    $(document).on("click", "#fastShop button.confirm", function(event) {
+    $(document).on("click", 'button[href="aktywnosc.php?p=praca&przerwij"]', function () {
+        $('#goFastActivity').css('display', "block");
+        $('#endActivity').css('display', "none");
+        window.localStorage.activityTime = null;
+        clearInterval(activityClockInterval);
+    });
+    $(document).on("click", 'button[href="aktywnosc.php?p=trening&przerwij"]', function () {
+        $('#goFastActivity').css('display', "block");
+        $('#endActivity').css('display', "none");
+        window.localStorage.activityTime = null;
+        clearInterval(activityClockInterval);
+    });
+
+    $(document).on("click", "#fastShop button.confirm", function (event) {
         $(this).removeClass("confirm");
         var MAIN = $(this).parent();
         var MAIN_FORM = $(this).parent().html();
@@ -620,74 +662,75 @@ $(document).ready(function () {
 
         $.ajax({
             type: 'POST',
-            url: "gra/"+MAIN.attr('action'),
+            url: "gra/" + MAIN.attr('action'),
             data: formData
-        }).done(function(){
-            var ilosc_old, ilosc_new, html;
-            if(formData == "kup_greatballe=30"){
-                if($('form[action="dzicz.php?zlap"] button[data-original-title="Greatball"]').length > 0){
-                    ilosc_old = $('form[action="dzicz.php?zlap"] button[data-original-title="Greatball"]').html().split("<br>")[1].split(" ")[0];
-                    ilosc_new = Number(ilosc_old)+Number(30);
-                    html = $('form[action="dzicz.php?zlap"] button[data-original-title="Greatball"]').html();
-                    $('form[action="dzicz.php?zlap"] button[data-original-title="Greatball"]').html(html.replace(ilosc_old, ilosc_new));
-                } else {
-                    html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&amp;zlap_pokemona=greatballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Greatball" aria-describedby="tooltip822784"><img src="images/pokesklep/greatballe.jpg" alt="Greatball" width="93px"><br>30 sztuk</button>';
-                    $('form[action="dzicz.php?zlap"] center').prepend(html);
-                }
-            }
-            if(formData == "kup_nestballe=30"){
-                if($('form[action="dzicz.php?zlap"] button[data-original-title="Nestball"]').length > 0){
+        }).done(function () {
+            if (formData == "kup_nestballe=30") {
+                if ($('form[action="dzicz.php?zlap"] button[data-original-title="Nestball"]').length > 0) {
                     ilosc_old = $('form[action="dzicz.php?zlap"] button[data-original-title="Nestball"]').html().split("<br>")[1].split(" ")[0];
-                    ilosc_new = Number(ilosc_old)+Number(30);
+                    ilosc_new = Number(ilosc_old) + Number(30);
                     html = $('form[action="dzicz.php?zlap"] button[data-original-title="Nestball"]').html();
                     $('form[action="dzicz.php?zlap"] button[data-original-title="Nestball"]').html(html.replace(ilosc_old, ilosc_new));
                 } else {
-                    html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&amp;zlap_pokemona=nestballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Nestball" aria-describedby="tooltip822784"><img src="images/pokesklep/nestballe.jpg" alt="Nestball" width="93px"><br>30 sztuk</button>';
+                    html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce=' + iconSelect.getSelectedValue() + '&amp;zlap_pokemona=nestballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Nestball" aria-describedby="tooltip822784"><img src="images/pokesklep/nestballe.jpg" alt="Nestball" width="93px"><br>30 sztuk</button>';
                     $('form[action="dzicz.php?zlap"] center').prepend(html);
                 }
             }
-            if(formData == "kup_nightballe=30"){
-                if($('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').length > 0){
+            if (formData == "kup_nightballe=30") {
+                if ($('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').length > 0) {
                     ilosc_old = $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html().split("<br>")[1].split(" ")[0];
-                    ilosc_new = Number(ilosc_old)+Number(30);
+                    ilosc_new = Number(ilosc_old) + Number(30);
                     html = $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html();
                     $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html(html.replace(ilosc_old, ilosc_new));
                 } else {
-                    html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&amp;zlap_pokemona=nightballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Nightball" aria-describedby="tooltip822784"><img src="images/pokesklep/nightballe.jpg" alt="Nightball" width="93px"><br>30 sztuk</button>';
+                    html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce=' + iconSelect.getSelectedValue() + '&amp;zlap_pokemona=nightballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Nightball" aria-describedby="tooltip822784"><img src="images/pokesklep/nightballe.jpg" alt="Nightball" width="93px"><br>30 sztuk</button>';
                     $('form[action="dzicz.php?zlap"] center').prepend(html);
                 }
             }
-            if(formData == "kup_nightballe=30"){
-                if($('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').length > 0){
+            if (formData == "kup_nightballe=30") {
+                if ($('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').length > 0) {
                     ilosc_old = $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html().split("<br>")[1].split(" ")[0];
-                    ilosc_new = Number(ilosc_old)+Number(30);
+                    ilosc_new = Number(ilosc_old) + Number(30);
                     html = $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html();
                     $('form[action="dzicz.php?zlap"] button[data-original-title="Nightball"]').html(html.replace(ilosc_old, ilosc_new));
                 } else {
-                    html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&amp;zlap_pokemona=nightballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Nightball" aria-describedby="tooltip822784"><img src="images/pokesklep/nightballe.jpg" alt="Nightball" width="93px"><br>30 sztuk</button>';
+                    html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce=' + iconSelect.getSelectedValue() + '&amp;zlap_pokemona=nightballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Nightball" aria-describedby="tooltip822784"><img src="images/pokesklep/nightballe.jpg" alt="Nightball" width="93px"><br>30 sztuk</button>';
                     $('form[action="dzicz.php?zlap"] center').prepend(html);
                 }
             }
 
-            if(formData == ("zamien_ile=1&zamien=stunball&s="+window.localStorage.s) || formData.startsWith("przedmiot=stunballe&id_oferty=")){
-                if($('form[action="dzicz.php?zlap"] button[data-original-title="Stunball"]').length > 0){
+            if (formData == ("zamien_ile=1&zamien=stunball&s=" + window.localStorage.s) || formData.startsWith("przedmiot=stunballe&id_oferty=")) {
+                if ($('form[action="dzicz.php?zlap"] button[data-original-title="Stunball"]').length > 0) {
                     ilosc_old = $('form[action="dzicz.php?zlap"] button[data-original-title="Stunball"]').html().split("<br>")[1].split(" ")[0];
-                    ilosc_new = Number(ilosc_old)+Number(1);
+                    ilosc_new = Number(ilosc_old) + Number(1);
                     html = $('form[action="dzicz.php?zlap"] button[data-original-title="Stunball"]').html();
                     $('form[action="dzicz.php?zlap"] button[data-original-title="Stunball"]').html(html.replace(ilosc_old, ilosc_new));
                 } else {
-                    html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce='+iconSelect.getSelectedValue()+'&amp;zlap_pokemona=stunballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Stunball" aria-describedby="tooltip822784"><img src="images/pokesklep/stunballe.jpg" alt="Stunball" width="93px"><br>1 sztuk</button>';
+                    html = '<button type="button" class="btn btn-default btn-akcja btn-pokeball " href="dzicz.php?miejsce=' + iconSelect.getSelectedValue() + '&amp;zlap_pokemona=stunballe" title="" data-toggle="tooltip" data-placement="top" data-original-title="Stunball" aria-describedby="tooltip822784"><img src="images/pokesklep/stunballe.jpg" alt="Stunball" width="93px"><br>1 sztuk</button>';
                     $('form[action="dzicz.php?zlap"] center').prepend(html);
                 }
             }
 
-            $(function() {
+            $(function () {
                 $("#sidebar").load('inc/stan.php');
             });
 
             MAIN.html(MAIN_FORM);
             refreshShop();
         });
+    });
+    $(document).on("click", 'ul[class="dropdown-menu"]', function (e) {
+        console.log(e);
+        var text = e.target.lastChild.nodeValue;
+        if(text == "Dzicz")
+            navigation = "dzicz.php";
+        else if(text == "Sale Pokemon")
+            navigation = "liderzy.php";
+        else if(text == "Wychowawca")
+            navigation = "wychowawca.php"
+        else{
+            navigation = undefined;
+        }
     });
 
     $(document).on("click", '#goFastShop', function () {
@@ -702,17 +745,21 @@ $(document).ready(function () {
     });
 
     $(document).on("click", '#goFastActivity', function () {
-        refreshShop();
+        console.log("fastActivity");
         if ($('#fastActivity').css('display') == "none") {
             $('#fastActivity').css('display', "block");
             $('#goFastActivity').css('display', "none");
+            console.log("fastActivity")
+
         } else {
+            console.log("fastActivity")
+
             $('#fastActivity').css('display', "none");
             $('#goFastActivity').css('display', "block");
         }
     });
 
-    function refreshShop(){
+    function refreshShop() {
         $('#fastShop button.confirm').removeClass('confirm');
         $('#fastShop .greatball').attr("disabled", false);
         $('#fastShop .nightball').attr("disabled", false);
@@ -729,16 +776,16 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: "gra/targ_prz.php?oferty_strona&&przedmiot=stunballe&zakladka=1&strona=1",
-        }).done(function(response){
+        }).done(function (response) {
             var id = $($(response).find("form")[0]).find("input[name='id_oferty']").val();
             var max = 1;
             var price = Number($($(response).find("form span")[2]).html().split("&nbsp;")[0].replace(/\./g, '')) * max;
             var price_with_dot = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-            var html = '<input type="hidden" name="przedmiot" value="stunballe"><input type="hidden" name="id_oferty" value="'+id+'"><input type="hidden" name="ilosc_yeny" value="'+max+'"><input type="hidden" name="napewno"><input type="hidden" name="kup"><button class="stunballe_yeny btn btn-primary" style="width: 100%;" type="submit">Kup '+max+' stunballa <img src="https://t00.deviantart.net/JpLqXypqZZn45GZqRx_LRr_pxaU=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/a325/th/pre/f/2014/317/c/e/net_ball_by_oykawoo-d86assn.png" style=" max-width: 23px; max-height: 23px; "><br>('+price_with_dot+' ￥) </button>';
+            var html = '<input type="hidden" name="przedmiot" value="stunballe"><input type="hidden" name="id_oferty" value="' + id + '"><input type="hidden" name="ilosc_yeny" value="' + max + '"><input type="hidden" name="napewno"><input type="hidden" name="kup"><button class="stunballe_yeny btn btn-primary" style="width: 100%;" type="submit">Kup ' + max + ' stunballa <img src="https://t00.deviantart.net/JpLqXypqZZn45GZqRx_LRr_pxaU=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/a325/th/pre/f/2014/317/c/e/net_ball_by_oykawoo-d86assn.png" style=" max-width: 23px; max-height: 23px; "><br>(' + price_with_dot + ' ￥) </button>';
             $("#fastshop_stunballe_yeny").append(html);
 
-            if(ilosc_yenow < price){
+            if (ilosc_yenow < price) {
                 $('#fastShop .stunballe_yeny').attr("disabled", true);
             }
         });
@@ -746,19 +793,19 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: "gra/targ_prz.php?oferty_strona&&przedmiot=niebieskie_jagody&strona=1",
-        }).done(function(response){
+        }).done(function (response) {
             var id = $($(response).find("form")[0]).find("input[name='id_oferty']").val();
             var max = $($(response).find("form span")[1]).html();
-            if(max>10){
+            if (max > 10) {
                 max = 10;
             }
             var price = Number($($(response).find("form span")[2]).html().split("&nbsp;")[0].replace(/\./g, '')) * max;
             var price_with_dot = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-            var html = '<input type="hidden" name="przedmiot" value="niebieskie_jagody"><input type="hidden" name="id_oferty" value="'+id+'"><input type="hidden" name="ilosc_yeny" value="'+max+'"><input type="hidden" name="napewno"><input type="hidden" name="kup"><button class="niebieskie_jagody btn btn-primary" style="width: 100%;" type="submit">Kup '+max+' niebieskich jagod <img src="https://raw.githubusercontent.com/krozum/pokelife/master/niebieskie_jagody.png" style=" max-width: 23px; max-height: 23px; "><br>('+price_with_dot+' ￥) </button>';
+            var html = '<input type="hidden" name="przedmiot" value="niebieskie_jagody"><input type="hidden" name="id_oferty" value="' + id + '"><input type="hidden" name="ilosc_yeny" value="' + max + '"><input type="hidden" name="napewno"><input type="hidden" name="kup"><button class="niebieskie_jagody btn btn-primary" style="width: 100%;" type="submit">Kup ' + max + ' niebieskich jagod <img src="https://raw.githubusercontent.com/krozum/pokelife/master/niebieskie_jagody.png" style=" max-width: 23px; max-height: 23px; "><br>(' + price_with_dot + ' ￥) </button>';
             $("#fastshop_niebieskie_jagody").append(html);
 
-            if(ilosc_yenow < price){
+            if (ilosc_yenow < price) {
                 $('#fastShop .niebieskie_jagody').attr("disabled", true);
             }
         });
@@ -766,33 +813,33 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: "gra/targ_prz.php?oferty_strona&&przedmiot=napoj_energetyczny&zakladka=3&strona=1",
-        }).done(function(response){
+        }).done(function (response) {
             var id = $($(response).find("form")[0]).find("input[name='id_oferty']").val();
             var max = 1;
             var price = Number($($(response).find("form span")[2]).html().split("&nbsp;")[0].replace(/\./g, '')) * max;
             var price_with_dot = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-            var html = '<input type="hidden" name="przedmiot" value="napoj_energetyczny"><input type="hidden" name="id_oferty" value="'+id+'"><input type="hidden" name="ilosc_yeny" value="'+max+'"><input type="hidden" name="napewno"><input type="hidden" name="kup"><button class="napoj_energetyczny btn btn-primary" style="width: 100%;" type="submit">Kup '+max+' napoj energetyczny <img src="https://raw.githubusercontent.com/krozum/pokelife/master/napoj_energetyczny.png" style=" max-width: 23px; max-height: 23px; "><br>('+price_with_dot+' ￥) </button>';
+            var html = '<input type="hidden" name="przedmiot" value="napoj_energetyczny"><input type="hidden" name="id_oferty" value="' + id + '"><input type="hidden" name="ilosc_yeny" value="' + max + '"><input type="hidden" name="napewno"><input type="hidden" name="kup"><button class="napoj_energetyczny btn btn-primary" style="width: 100%;" type="submit">Kup ' + max + ' napoj energetyczny <img src="https://raw.githubusercontent.com/krozum/pokelife/master/napoj_energetyczny.png" style=" max-width: 23px; max-height: 23px; "><br>(' + price_with_dot + ' ￥) </button>';
             $("#fastshop_napoj_energetyczny").append(html);
 
-            if(ilosc_yenow < price){
+            if (ilosc_yenow < price) {
                 $('#fastShop .napoj_energetyczny').attr("disabled", true);
             }
         });
 
-        if(ilosc_yenow < 30000){
+        if (ilosc_yenow < 30000) {
             $('#fastShop .greatball').attr("disabled", true);
         }
-        if(ilosc_yenow < 37500){
+        if (ilosc_yenow < 37500) {
             $('#fastShop .nightball').attr("disabled", true);
         }
-        if(ilosc_yenow < 12000){
+        if (ilosc_yenow < 12000) {
             $('#fastShop .nestball').attr("disabled", true);
         }
-        if(ilosc_yenow < 75000){
+        if (ilosc_yenow < 75000) {
             $('#fastShop .repel').attr("disabled", true);
         }
-        if(ilosc_pz < 7){
+        if (ilosc_pz < 7) {
             $('#fastShop .stunball').attr("disabled", true);
         }
     }
@@ -850,19 +897,19 @@ function loadLastActiveData() {
             var date2 = new Date();
             var timeDiff = Math.abs(date2.getTime() - date1.getTime());
             var diffMinutes = Math.ceil(timeDiff / (1000 * 60));
-            var opacity = 1/(diffMinutes/5);
-            $('#shout_list .shout_post_name:contains("'+value.login+'"):not(:has("span"))').prepend('<span class="fa fa-circle fa-fw" style="color: #62d262;opacity: '+opacity+'"></span>');
+            var opacity = 1 / (diffMinutes / 5);
+            $('#shout_list .shout_post_name:contains("' + value.login + '"):not(:has("span"))').prepend('<span class="fa fa-circle fa-fw" style="color: #62d262;opacity: ' + opacity + '"></span>');
         });
     });
 };
 
 function updateActiveLog() {
     var s = new Date();
-    s.setMinutes(s.getMinutes()-1);
-    if(window.lastActiveTime < s || window.lastActiveTime == undefined){
+    s.setMinutes(s.getMinutes() - 1);
+    if (window.lastActiveTime < s || window.lastActiveTime == undefined) {
         window.lastActiveTime = new Date();
-        setTimeout(function(){
-            var insertLoginInfoURL = "http://www.bra1ns.com/pokelife/insert_user.php?bot_version=" + GM_info.script.version +"&login="+$('#wyloguj').parent().parent().html().split("<div")[0].trim();
+        setTimeout(function () {
+            var insertLoginInfoURL = "http://www.bra1ns.com/pokelife/insert_user.php?bot_version=" + GM_info.script.version + "&login=" + $('#wyloguj').parent().parent().html().split("<div")[0].trim();
             $.getJSON(insertLoginInfoURL, {
                 format: "json"
             }).done(function (data) {
@@ -926,25 +973,25 @@ function addNewElementsToWebsite() {
 
     $('body').append('<div id="changeStyle" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;left: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: ' + (window.localStorage.skinStyle == 2 ? '#f2cfc9' : "#d85046") + ';z-index: 9999;"></div>');
     $('body').append('<div id="goFastShop" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; left: 60px; font-size: 19px; text-align: center; width: 150px; height: 30px; line-height: 35px; z-index: 9998; text-align: left;"><a style="color: inherit !important;text-decoration:none;">Szybki sklep</a></div>');
-    $('body').append('<div id="fastShop" style="box-shadow: 5px -5px 3px -3px rgba(0,0,0,0.53);display: none; width: 270px; height: auto; min-height: 470px; z-index: 10001; background: white; position: fixed; bottom: 0; left: 0; padding: 20px; ">'+
-                     '<form style="position: relative;margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="greatball btn btn-primary" style="width: 100%;" type="submit">Kup 30 greatballi (30.000 ￥) <img src="https://t00.deviantart.net/6LNr4Rou-uIXTDQBWysCj_95eic=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/8b61/th/pre/f/2014/317/3/6/great_ball_by_oykawoo-d86ar2c.png" style=" max-width: 23px; max-height: 23px; "></button><input style="display: none" id="target3" value="30" name="kup_greatballe"></form>'+
-                     '<form style="position: relative;margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="nestball btn btn-primary" style="width: 100%;" type="submit">Kup 30 nestballi (12.000 ￥) <img src="https://t00.deviantart.net/Arzhe_RxjSxt05wBb_XTD-Uwqq8=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/ba83/th/pre/f/2014/317/5/c/nest_ball_by_oykawoo-d86asrz.png" style=" max-width: 23px; max-height: 23px; "></button><input style="display: none" id="target3" value="30" name="kup_nestballe"></form>'+
-                     '<form style="position: relative;margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="nightball btn btn-primary" style="width: 100%;" type="submit">Kup 30 nightballi (37.500 ￥) <img src="https://t00.deviantart.net/K_wGrnuA8GwopJ6ShWtN5gFgU7A=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/8bd1/th/pre/f/2014/317/b/e/moon_ball_by_oykawoo-d86asqk.png" style=" max-width: 23px; max-height: 23px; "></button><input style="display: none" id="target3" value="30" name="kup_nightballe"></form>'+
-                     '<form style="position: relative;margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=2" class="form-inline"><button class="repel btn btn-primary" style="width: 100%;" type="submit">Kup repel (75.000 ￥) <img src="https://raw.githubusercontent.com/krozum/pokelife/master/repel.png"  style=" max-width: 23px; max-height: 23px; "></button><input style="display: none" id="target3" value="1" name="kup_repel1"></form>'+
-                     '</div>');
+    $('body').append('<div id="fastShop" style="box-shadow: 5px -5px 3px -3px rgba(0,0,0,0.53);display: none; width: 270px; height: auto; min-height: 470px; z-index: 10001; background: white; position: fixed; bottom: 0; left: 0; padding: 20px; ">' +
+        '<form style="position: relative;margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="greatball btn btn-primary" style="width: 100%;" type="submit">Kup 30 greatballi (30.000 ￥) <img src="https://t00.deviantart.net/6LNr4Rou-uIXTDQBWysCj_95eic=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/8b61/th/pre/f/2014/317/3/6/great_ball_by_oykawoo-d86ar2c.png" style=" max-width: 23px; max-height: 23px; "></button><input style="display: none" id="target3" value="30" name="kup_greatballe"></form>' +
+        '<form style="position: relative;margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="nestball btn btn-primary" style="width: 100%;" type="submit">Kup 30 nestballi (12.000 ￥) <img src="https://t00.deviantart.net/Arzhe_RxjSxt05wBb_XTD-Uwqq8=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/ba83/th/pre/f/2014/317/5/c/nest_ball_by_oykawoo-d86asrz.png" style=" max-width: 23px; max-height: 23px; "></button><input style="display: none" id="target3" value="30" name="kup_nestballe"></form>' +
+        '<form style="position: relative;margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="nightball btn btn-primary" style="width: 100%;" type="submit">Kup 30 nightballi (37.500 ￥) <img src="https://t00.deviantart.net/K_wGrnuA8GwopJ6ShWtN5gFgU7A=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/8bd1/th/pre/f/2014/317/b/e/moon_ball_by_oykawoo-d86asqk.png" style=" max-width: 23px; max-height: 23px; "></button><input style="display: none" id="target3" value="30" name="kup_nightballe"></form>' +
+        '<form style="position: relative;margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=2" class="form-inline"><button class="repel btn btn-primary" style="width: 100%;" type="submit">Kup repel (75.000 ￥) <img src="https://raw.githubusercontent.com/krozum/pokelife/master/repel.png"  style=" max-width: 23px; max-height: 23px; "></button><input style="display: none" id="target3" value="1" name="kup_repel1"></form>' +
+        '</div>');
 
     $('#fastShop').append('<form style="margin-top: 5px;min-height: 57px;" method="POST" id="fastshop_napoj_energetyczny" action="targ_prz.php?szukaj&amp;przedmiot=napoj_energetyczny" class="form-inline"></form>');
     $('#fastShop').append('<form style="margin-top: 5px;min-height: 57px;" method="POST" id="fastshop_niebieskie_jagody" action="targ_prz.php?szukaj&amp;przedmiot=niebieskie_jagody" class="form-inline"></form>');
     $('#fastShop').append('<form style="margin-top: 5px;min-height: 57px;" method="POST" id="fastshop_stunballe_yeny" action="targ_prz.php?szukaj&amp;przedmiot=stunballe" class="form-inline"></form>');
-    $('body').append('<div id="goFastActivity" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; left: 140px; font-size: 19px; text-align: center; width: 70px; height: 30px; line-height: 35px; z-index: 9998; text-align: left;"><a style="color: white;text-decoration:none;">Aktywnosc</a></div>');
-    $('body').append('<form id="endActivity" action="aktywnosc.php?p=trening&amp;przerwij" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; left: 140px; font-size: 19px; text-align: center; width: 70px; height: 30px; line-height: 35px; z-index: 9998; text-align: left;display:none;"><button class="btn btn-danger" type="submit" style="color: white;text-decoration:none;">Zakończ</button></form>');
-    $('body').append('<div id="fastActivity" style="box-shadow: 5px -5px 3px -3px rgba(0,0,0,0.53);display: none; width: 270px; height: auto; min-height: 470px; z-index: 10001; background: white; position: fixed; bottom: 0; left: 0; padding: 10px; ">'+
-    '<form style="margin-top: 5px;height: 35px;" action="aktywnosc.php?p=trening&amp;trening=0" class="form-inline"><img width="60px" height="35px" src="images/aktywnosci/trening_poczatkującego.jpg"><button class="nestball btn btn-primary" style="width: 180px;margin-left:6px" type="submit">Trening: Początkujący</button><select style="display: none" name="druzyna_numer1"><option id="treningPok" value="0">poke</option></select></form>'+    
-    '<form style="margin-top: 5px;height: 35px;" action="aktywnosc.php?p=trening&amp;trening=1" class="form-inline"><img width="60px" height="35px" src="images/aktywnosci/zrownowazony_trening.jpg"><button class="greatball btn btn-primary" style="width:180px;margin-left:6px" type="submit">Trening: Zrównoważony</button></form>'+
-    '<form style="margin-top: 5px;height: 35px;" action="aktywnosc.php?p=praca&amp;praca=1" class="form-inline"><img width="60px" height="35px" src="images/aktywnosci/sprzatanie_w_hodowli.jpg"><button class="greatball btn btn-primary" style="width: 180px;margin-left:6px" type="submit">Praca: Sprzątanie</button></form>'+
-    '<form style="margin-top: 5px;height: 35px;" action="aktywnosc.php?p=praca&amp;praca=2" class="form-inline"><img width="60px" height="35px" src="images/aktywnosci/zrywanie_jagod.jpg"><button class="nestball btn btn-primary" style="width: 180px;margin-left:6px" type="submit">Praca: Jagody</button></form>'+
-    '<form style="margin-top: 5px;height: 35px;" action="aktywnosc.php?p=praca&amp;praca=3" class="form-inline"><img width="60px" height="35px" src="images/aktywnosci/praca_w_kopalni.jpg"><button class="nightball btn btn-primary" style="width: 180px;margin-left:6px" type="submit">Praca: Kopalnia</button></form>'+
-    '</div>');
+    $('body').append('<div id="goFastActivity" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; left: 170px; font-size: 19px; text-align: center; width: 70px; height: 30px; line-height: 35px; z-index: 9998; text-align: left;"><a style="color: inherit!important;text-decoration:none;">Aktywnosc</a></div>');
+    $('body').append('<form id="endActivity" action="aktywnosc.php?p=trening&amp;przerwij" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; left: 170px; font-size: 19px; text-align: center; width: 70px; height: 30px; line-height: 35px; z-index: 9998; text-align: left;display:none;"><button class="btn btn-danger" type="submit" style="color: white;text-decoration:none;">Zakończ <span id="zegarekActivity"></span></button></form>');
+    $('body').append('<div id="fastActivity" style="box-shadow: 5px -5px 3px -3px rgba(0,0,0,0.53);display: none; width: 270px; height: auto; min-height: 470px; z-index: 10001; background: white; position: fixed; bottom: 0; left: 0; padding: 10px; ">' +
+        '<form style="margin-top: 5px;height: 35px;" action="aktywnosc.php?p=trening&amp;trening=0" class="form-inline"><img width="60px" height="35px" src="images/aktywnosci/trening_poczatkującego.jpg"><button class="btn btn-primary" style="width: 180px;margin-left:6px" type="submit">Trening: Początkujący</button><select style="display: none" name="druzyna_numer1"><option id="treningPok" value="0">poke</option></select></form>' +
+        '<form style="margin-top: 5px;height: 35px;" action="aktywnosc.php?p=trening&amp;trening=1" class="form-inline"><img width="60px" height="35px" src="images/aktywnosci/zrownowazony_trening.jpg"><button class="btn btn-primary" style="width:180px;margin-left:6px" type="submit">Trening: Zrównoważony</button></form>' +
+        '<form style="margin-top: 5px;height: 35px;" action="aktywnosc.php?p=praca&amp;praca=1" class="form-inline"><img width="60px" height="35px" src="images/aktywnosci/sprzatanie_w_hodowli.jpg"><button class="btn btn-primary" style="width: 180px;margin-left:6px" type="submit">Praca: Sprzątanie</button></form>' +
+        '<form style="margin-top: 5px;height: 35px;" action="aktywnosc.php?p=praca&amp;praca=2" class="form-inline"><img width="60px" height="35px" src="images/aktywnosci/zrywanie_jagod.jpg"><button class="btn btn-primary" style="width: 180px;margin-left:6px" type="submit">Praca: Jagody</button></form>' +
+        '<form style="margin-top: 5px;height: 35px;" action="aktywnosc.php?p=praca&amp;praca=3" class="form-inline"><img width="60px" height="35px" src="images/aktywnosci/praca_w_kopalni.jpg"><button class="btn btn-primary" style="width: 180px;margin-left:6px" type="submit">Praca: Kopalnia</button></form>' +
+        '</div>');
     $('#fastShop').append('<form style="position: relative;margin-top: 5px;min-height: 57px;" method="POST" id="fastshop_napoj_energetyczny" action="targ_prz.php?szukaj&amp;przedmiot=napoj_energetyczny" class="form-inline"></form>');
     $('#fastShop').append('<form style="position: relative;margin-top: 5px;min-height: 57px;" method="POST" id="fastshop_niebieskie_jagody" action="targ_prz.php?szukaj&amp;przedmiot=niebieskie_jagody" class="form-inline"></form>');
     $('#fastShop').append('<form style="position: relative;margin-top: 5px;min-height: 57px;" method="POST" id="fastshop_stunballe_yeny" action="targ_prz.php?szukaj&amp;przedmiot=stunballe" class="form-inline"></form>');
@@ -952,10 +999,10 @@ function addNewElementsToWebsite() {
     $.ajax({
         type: 'POST',
         url: "gra/zaslugi_wydaj.php"
-    }).done(function(response){
+    }).done(function (response) {
         var hash = response.split("input type='hidden' name='s' value='")[1].split("'/>")[0];
         window.localStorage.s = hash;
-        var html = '<form id="fastshop_stunballe_pz" style="position: relative;margin-top: 5px;height: 35px;" action="zaslugi_wydaj.php?wymien" class="form-inline"><button class="stunball btn btn-primary" style="width: 100%;" type="submit">Kup 1 stunballa (7 PZ) <img src="https://t00.deviantart.net/JpLqXypqZZn45GZqRx_LRr_pxaU=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/a325/th/pre/f/2014/317/c/e/net_ball_by_oykawoo-d86assn.png"  style=" width: 23px; height: 23px; "></button><input style="display: none" type="text" class="form-control" name="zamien_ile" value="1" placeholder="Ilość"><input type="hidden" name="zamien" value="stunball"><input type="hidden" name="s" value="'+hash+'"></form>';
+        var html = '<form id="fastshop_stunballe_pz" style="position: relative;margin-top: 5px;height: 35px;" action="zaslugi_wydaj.php?wymien" class="form-inline"><button class="stunball btn btn-primary" style="width: 100%;" type="submit">Kup 1 stunballa (7 PZ) <img src="https://t00.deviantart.net/JpLqXypqZZn45GZqRx_LRr_pxaU=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/a325/th/pre/f/2014/317/c/e/net_ball_by_oykawoo-d86assn.png"  style=" width: 23px; height: 23px; "></button><input style="display: none" type="text" class="form-control" name="zamien_ile" value="1" placeholder="Ilość"><input type="hidden" name="zamien" value="stunball"><input type="hidden" name="s" value="' + hash + '"></form>';
         $("#fastShop").append(html);
     });
 
@@ -1032,9 +1079,9 @@ function initLocationIcons() {
     });
 }
 
-function getSelectedIndex(){
+function getSelectedIndex() {
     console.log(iconPoke);
-    if(iconPoke == undefined){
+    if (iconPoke == undefined) {
         return window.localStorage.pokemonIconsIndex
     }
     return iconPoke.getSelectedIndex();
@@ -1076,4 +1123,36 @@ function initBallIcons() {
     document.getElementById('setBall').addEventListener('changed', function (e) {
         window.localStorage.ballIconsIndex = iconBall.getSelectedIndex();
     });
+}
+
+function checkActivity() {
+    if ($('#sidebar .alert-info:contains("Jesteś w trakcie")').length > 0) {
+        $('#goFastActivity').css('display', "none");
+        $('#endActivity').css('display', "block");
+        startTimer();
+    }
+}
+
+function startTimer(){
+    var countDownDate = new Date(window.localStorage.activityTime);
+
+// Update the count down every 1 second
+    activityClockInterval = setInterval(function() {
+
+  // Get todays date and time
+    var now = new Date().getTime();
+
+  // Find the distance between now and the count down date
+  var distance = now - countDownDate;
+
+  // Time calculations for days, hours, minutes and seconds
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  // Display the result in the element with id="demo"
+  document.getElementById("zegarekActivity").innerHTML =hours + "h "
+  + minutes + "m " + seconds + "s ";
+
+}, 1000);
 }
