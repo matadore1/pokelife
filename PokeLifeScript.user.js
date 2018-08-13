@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         PokeLifeScript
-// @version      1.8.7.1
+// @version      1.8.7.2
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Dodatki do gry Pokelife
@@ -8,8 +8,8 @@
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
 // @require      http://bug7a.github.io/iconselect.js/sample/lib/control/iconselect.js
-// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=1.8.6.3
-// @resource     customCSS_dark  https://raw.githubusercontent.com/krozum/pokelife/master/style_dark.css?v=1.8.6.3
+// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=1.8.6.4
+// @resource     customCSS_dark  https://raw.githubusercontent.com/krozum/pokelife/master/style_dark.css?v=1.8.6.4
 // @require      https://raw.githubusercontent.com/krozum/pokelife/master/careService.js?v=1.8.6.3
 // ==/UserScript==
 
