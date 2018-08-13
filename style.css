@@ -12,14 +12,37 @@ body {
 }
 
 #goFastShop {
-    color: #f0ad4e; 
+    color: white; 
 }
 
 #fastShop button {
     background-color: #159589;
     border-color: #159589
 }
-	
+
+#fastShop button.confirm {
+    visibility: hidden;
+}
+
+#fastShop button.confirm::before {
+    visibility: visible;
+    content: "Na pewno?";
+    color: rgba(0, 0, 0, 0.8);
+    background-color: #f0ad4e;
+    border-color: #f0ad4e;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+div:not(#plecak-tm) > div >.thumbnail-plecak {
+    background-color: white;	
+}
+
 .panel-primary, .panel-primary>.panel-heading, .awatar, h2, .modal-header {	
     border-color: #0a665e;	
 }	

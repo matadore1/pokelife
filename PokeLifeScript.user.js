@@ -1,17 +1,16 @@
 // ==UserScript==
 // @name         PokeLifeScript
-// @namespace    http://tampermonkey.net/
-// @version      1.8.5.1
+// @version      1.8.6.3
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
-// @description  Auto Attack Script
+// @description  Dodatki do gry Pokelife
 // @match        http://poke-life.net/*
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
 // @require      http://bug7a.github.io/iconselect.js/sample/lib/control/iconselect.js
-// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=1.8.4.1
-// @resource     customCSS_dark  https://raw.githubusercontent.com/krozum/pokelife/master/style_dark.css?v=1.8.4.1
-// @require      https://raw.githubusercontent.com/krozum/pokelife/master/careService.js?v=1.8.4.1
+// @resource     customCSS  https://raw.githubusercontent.com/krozum/pokelife/master/style.css?v=1.8.6.3
+// @resource     customCSS_dark  https://raw.githubusercontent.com/krozum/pokelife/master/style_dark.css?v=1.8.6.3
+// @require      https://raw.githubusercontent.com/krozum/pokelife/master/careService.js?v=1.8.6.3
 // ==/UserScript==
 
 var newCSS;
@@ -75,12 +74,10 @@ $(document).ready(function () {
             lastClick = 'nieleczenie';
             if ($('.dzikipokemon-background-shiny').length == 1) {
                 console.log('PokeLifeScript: spotkany Shiny, przerwanie AutoGo');
-                $('#goButton').css('background', 'green');
                 window.auto = false;
                 $('#goAutoButton').html('AutoGO');
             } else if (window.localStorage.catchMode == "true" && $('.dzikipokemon-background-normalny img[src="images/inne/pokeball_miniature2.png"]').length > 0 && $('.dzikipokemon-background-normalny img[src="images/trudnosc/trudnoscx.png"]').length < 1 && $('.dzikipokemon-background-normalny .col-xs-9 > b').html().split("Poziom: ")[1] <= 50) {
                 console.log('PokeLifeScript: spotkany niezłapany pokemona, przerwanie AutoGo');
-                $('#goButton').css('background', 'green');
                 window.auto = false;
                 $('#goAutoButton').html('AutoGO');
             } else if ($('.dzikipokemon-background-normalny').length == 1) {
@@ -608,12 +605,18 @@ $(document).ready(function () {
     });
     
     $(document).on("click", "#fastShop button", function(event) {
+    $(document).on("click", "#fastShop button:not('.confirm')", function(event) {
+        event.preventDefault();
+        $(this).addClass("confirm");
+    });
+
+    $(document).on("click", "#fastShop button.confirm", function(event) {
+        $(this).removeClass("confirm");
         var MAIN = $(this).parent();
         var MAIN_FORM = $(this).parent().html();
         event.preventDefault();
         var formData = $(this).parent().serialize();
         MAIN.html("<button class='btn btn-primary' style='width: 100%; background-color: #c72929; border-color: #c72929'>Zakupiono</button>");
-        console.log(formData);
 
         $.ajax({
             type: 'POST',
@@ -710,6 +713,7 @@ $(document).ready(function () {
     });
 
     function refreshShop(){
+        $('#fastShop button.confirm').removeClass('confirm');
         $('#fastShop .greatball').attr("disabled", false);
         $('#fastShop .nightball').attr("disabled", false);
         $('#fastShop .nestball').attr("disabled", false);
@@ -726,7 +730,6 @@ $(document).ready(function () {
             type: 'POST',
             url: "gra/targ_prz.php?oferty_strona&&przedmiot=stunballe&zakladka=1&strona=1",
         }).done(function(response){
-            console.log($($(response).find("form")[0]).html());
             var id = $($(response).find("form")[0]).find("input[name='id_oferty']").val();
             var max = 1;
             var price = Number($($(response).find("form span")[2]).html().split("&nbsp;")[0].replace(/\./g, '')) * max;
@@ -764,7 +767,6 @@ $(document).ready(function () {
             type: 'POST',
             url: "gra/targ_prz.php?oferty_strona&&przedmiot=napoj_energetyczny&zakladka=3&strona=1",
         }).done(function(response){
-            console.log($($(response).find("form")[0]).html());
             var id = $($(response).find("form")[0]).find("input[name='id_oferty']").val();
             var max = 1;
             var price = Number($($(response).find("form span")[2]).html().split("&nbsp;")[0].replace(/\./g, '')) * max;
@@ -848,7 +850,7 @@ function loadLastActiveData() {
             var date2 = new Date();
             var timeDiff = Math.abs(date2.getTime() - date1.getTime());
             var diffMinutes = Math.ceil(timeDiff / (1000 * 60));
-            var opacity = 1/diffMinutes;
+            var opacity = 1/(diffMinutes/5);
             $('#shout_list .shout_post_name:contains("'+value.login+'"):not(:has("span"))').prepend('<span class="fa fa-circle fa-fw" style="color: #62d262;opacity: '+opacity+'"></span>');
         });
     });
@@ -903,7 +905,7 @@ function addNewElementsToWebsite() {
     $('body').append('<div id="goButton" style="' + (window.localStorage.spaceGo ? (window.localStorage.spaceGo == "true" ? "opacity: 0.3;" : "opacity: 1;") : "opacity: 1;") + 'border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 10px; font-size: 36px; text-align: center; width: 100px; height: 48px; line-height: 48px; background: ' + $('.panel-heading').css('background-color') + '; z-index: 9999">GO</div>');
     $('body').append('<div id="goAutoButton" style="border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 122px; font-size: 36px; text-align: center; width: 140px; height: 48px; line-height: 48px; background: ' + $('.panel-heading').css('background-color') + '; z-index: 9999">AutoGO</div>');
 
-    $('body').append('<div id="newVersionInfo" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; right: 60px; font-size: 19px; text-align: center; width: 250px; height: 30px; line-height: 35px; z-index: 9998; text-align: right;"><a style="color: yellow;text-decoration:none;" target="_blank" href="https://github.com/krozum/pokelife#user-content-changelog">' + (GM_info.script.version == window.localStorage.lastVersion ? "" : "New Version! ") + 'v' + GM_info.script.version + '</a></div>');
+    $('body').append('<div id="newVersionInfo" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; right: 60px; font-size: 19px; text-align: center; width: 250px; height: 30px; line-height: 35px; z-index: 9998; text-align: right;"><a style="color: yellow !important;text-decoration:none;" target="_blank" href="https://github.com/krozum/pokelife#user-content-changelog">' + (GM_info.script.version == window.localStorage.lastVersion ? "" : "New Version! ") + 'v' + GM_info.script.version + '</a></div>');
     $('body').append('<div id="goSettings" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;right: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px; z-index: 9999;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></div>');
     $('body').append('<div id="settings" style="box-shadow: -5px -5px 3px -3px rgba(0,0,0,0.53);display: none; width: 430px; height: auto; min-height: 200px; z-index: 9998; background: white; position: fixed; bottom: 0; right: 0; padding: 20px; ">' +
         '<div>Lecz gdy któryś pokemon ma mniej % życia niż: <input id="min-health" type="number" min="1" max="100" style="margin-left: 10px" value="' + (window.localStorage.minHealth ? window.localStorage.minHealth : "90") + '"></div>' +
@@ -923,12 +925,12 @@ function addNewElementsToWebsite() {
         '<br><br></div>');
 
     $('body').append('<div id="changeStyle" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;left: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px;background: ' + (window.localStorage.skinStyle == 2 ? '#f2cfc9' : "#d85046") + ';z-index: 9999;"></div>');
-    $('body').append('<div id="goFastShop" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; left: 60px; font-size: 19px; text-align: center; width: 150px; height: 30px; line-height: 35px; z-index: 9998; text-align: left;"><a style="color: inherit;text-decoration:none;">Szybki sklep</a></div>');
+    $('body').append('<div id="goFastShop" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; left: 60px; font-size: 19px; text-align: center; width: 150px; height: 30px; line-height: 35px; z-index: 9998; text-align: left;"><a style="color: inherit !important;text-decoration:none;">Szybki sklep</a></div>');
     $('body').append('<div id="fastShop" style="box-shadow: 5px -5px 3px -3px rgba(0,0,0,0.53);display: none; width: 270px; height: auto; min-height: 470px; z-index: 10001; background: white; position: fixed; bottom: 0; left: 0; padding: 20px; ">'+
-                     '<form style="margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="greatball btn btn-primary" style="width: 100%;" type="submit">Kup 30 greatballi (30.000 ￥) <img src="https://t00.deviantart.net/6LNr4Rou-uIXTDQBWysCj_95eic=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/8b61/th/pre/f/2014/317/3/6/great_ball_by_oykawoo-d86ar2c.png" style=" max-width: 23px; max-height: 23px; "></button><input style="display: none" id="target3" value="30" name="kup_greatballe"></form>'+
-                     '<form style="margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="nestball btn btn-primary" style="width: 100%;" type="submit">Kup 30 nestballi (12.000 ￥) <img src="https://t00.deviantart.net/Arzhe_RxjSxt05wBb_XTD-Uwqq8=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/ba83/th/pre/f/2014/317/5/c/nest_ball_by_oykawoo-d86asrz.png" style=" max-width: 23px; max-height: 23px; "></button><input style="display: none" id="target3" value="30" name="kup_nestballe"></form>'+
-                     '<form style="margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="nightball btn btn-primary" style="width: 100%;" type="submit">Kup 30 nightballi (37.500 ￥) <img src="https://t00.deviantart.net/K_wGrnuA8GwopJ6ShWtN5gFgU7A=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/8bd1/th/pre/f/2014/317/b/e/moon_ball_by_oykawoo-d86asqk.png" style=" max-width: 23px; max-height: 23px; "></button><input style="display: none" id="target3" value="30" name="kup_nightballe"></form>'+
-                     '<form style="margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=2" class="form-inline"><button class="repel btn btn-primary" style="width: 100%;" type="submit">Kup repel (75.000 ￥) <img src="https://raw.githubusercontent.com/krozum/pokelife/master/repel.png"  style=" max-width: 23px; max-height: 23px; "></button><input style="display: none" id="target3" value="1" name="kup_repel1"></form>'+
+                     '<form style="position: relative;margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="greatball btn btn-primary" style="width: 100%;" type="submit">Kup 30 greatballi (30.000 ￥) <img src="https://t00.deviantart.net/6LNr4Rou-uIXTDQBWysCj_95eic=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/8b61/th/pre/f/2014/317/3/6/great_ball_by_oykawoo-d86ar2c.png" style=" max-width: 23px; max-height: 23px; "></button><input style="display: none" id="target3" value="30" name="kup_greatballe"></form>'+
+                     '<form style="position: relative;margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="nestball btn btn-primary" style="width: 100%;" type="submit">Kup 30 nestballi (12.000 ￥) <img src="https://t00.deviantart.net/Arzhe_RxjSxt05wBb_XTD-Uwqq8=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/ba83/th/pre/f/2014/317/5/c/nest_ball_by_oykawoo-d86asrz.png" style=" max-width: 23px; max-height: 23px; "></button><input style="display: none" id="target3" value="30" name="kup_nestballe"></form>'+
+                     '<form style="position: relative;margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=1" class="form-inline"><button class="nightball btn btn-primary" style="width: 100%;" type="submit">Kup 30 nightballi (37.500 ￥) <img src="https://t00.deviantart.net/K_wGrnuA8GwopJ6ShWtN5gFgU7A=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/8bd1/th/pre/f/2014/317/b/e/moon_ball_by_oykawoo-d86asqk.png" style=" max-width: 23px; max-height: 23px; "></button><input style="display: none" id="target3" value="30" name="kup_nightballe"></form>'+
+                     '<form style="position: relative;margin-top: 5px;height: 35px;" action="pokesklep.php?zakupy&amp;z=2" class="form-inline"><button class="repel btn btn-primary" style="width: 100%;" type="submit">Kup repel (75.000 ￥) <img src="https://raw.githubusercontent.com/krozum/pokelife/master/repel.png"  style=" max-width: 23px; max-height: 23px; "></button><input style="display: none" id="target3" value="1" name="kup_repel1"></form>'+
                      '</div>');
 
     $('#fastShop').append('<form style="margin-top: 5px;min-height: 57px;" method="POST" id="fastshop_napoj_energetyczny" action="targ_prz.php?szukaj&amp;przedmiot=napoj_energetyczny" class="form-inline"></form>');
@@ -943,6 +945,9 @@ function addNewElementsToWebsite() {
     '<form style="margin-top: 5px;height: 35px;" action="aktywnosc.php?p=praca&amp;praca=2" class="form-inline"><img width="60px" height="35px" src="images/aktywnosci/zrywanie_jagod.jpg"><button class="nestball btn btn-primary" style="width: 180px;margin-left:6px" type="submit">Praca: Jagody</button></form>'+
     '<form style="margin-top: 5px;height: 35px;" action="aktywnosc.php?p=praca&amp;praca=3" class="form-inline"><img width="60px" height="35px" src="images/aktywnosci/praca_w_kopalni.jpg"><button class="nightball btn btn-primary" style="width: 180px;margin-left:6px" type="submit">Praca: Kopalnia</button></form>'+
     '</div>');
+    $('#fastShop').append('<form style="position: relative;margin-top: 5px;min-height: 57px;" method="POST" id="fastshop_napoj_energetyczny" action="targ_prz.php?szukaj&amp;przedmiot=napoj_energetyczny" class="form-inline"></form>');
+    $('#fastShop').append('<form style="position: relative;margin-top: 5px;min-height: 57px;" method="POST" id="fastshop_niebieskie_jagody" action="targ_prz.php?szukaj&amp;przedmiot=niebieskie_jagody" class="form-inline"></form>');
+    $('#fastShop').append('<form style="position: relative;margin-top: 5px;min-height: 57px;" method="POST" id="fastshop_stunballe_yeny" action="targ_prz.php?szukaj&amp;przedmiot=stunballe" class="form-inline"></form>');
 
     $.ajax({
         type: 'POST',
@@ -950,7 +955,7 @@ function addNewElementsToWebsite() {
     }).done(function(response){
         var hash = response.split("input type='hidden' name='s' value='")[1].split("'/>")[0];
         window.localStorage.s = hash;
-        var html = '<form id="fastshop_stunballe_pz" style="margin-top: 5px;height: 35px;" action="zaslugi_wydaj.php?wymien" class="form-inline"><button class="stunball btn btn-primary" style="width: 100%;" type="submit">Kup 1 stunballa (7 PZ) <img src="https://t00.deviantart.net/JpLqXypqZZn45GZqRx_LRr_pxaU=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/a325/th/pre/f/2014/317/c/e/net_ball_by_oykawoo-d86assn.png"  style=" width: 23px; height: 23px; "></button><input style="display: none" type="text" class="form-control" name="zamien_ile" value="1" placeholder="Ilość"><input type="hidden" name="zamien" value="stunball"><input type="hidden" name="s" value="'+hash+'"></form>';
+        var html = '<form id="fastshop_stunballe_pz" style="position: relative;margin-top: 5px;height: 35px;" action="zaslugi_wydaj.php?wymien" class="form-inline"><button class="stunball btn btn-primary" style="width: 100%;" type="submit">Kup 1 stunballa (7 PZ) <img src="https://t00.deviantart.net/JpLqXypqZZn45GZqRx_LRr_pxaU=/fit-in/500x250/filters:fixed_height(100,100):origin()/pre00/a325/th/pre/f/2014/317/c/e/net_ball_by_oykawoo-d86assn.png"  style=" width: 23px; height: 23px; "></button><input style="display: none" type="text" class="form-control" name="zamien_ile" value="1" placeholder="Ilość"><input type="hidden" name="zamien" value="stunball"><input type="hidden" name="s" value="'+hash+'"></form>';
         $("#fastShop").append(html);
     });
 

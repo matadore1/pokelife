@@ -12,13 +12,145 @@ body {
 }
 
 #goFastShop {
-    color: #f2cfc9;
+    color: #ffffff;
 }
 
 #fastShop button {
     background-color: #f2cfc9;
     border-color: #f2cfc9;
     color: #333;
+}
+
+
+#fastShop button.confirm {
+    visibility: hidden;
+}
+
+#fastShop button.confirm::before {
+    visibility: visible;
+    content: "Na pewno?";
+    color: rgba(0, 0, 0, 0.8);
+    background-color: #f0ad4e;
+    border-color: #f0ad4e;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.btn-primary {
+    background-color: #adadad;
+    border-color: #adadad;
+}
+
+button.btn.btn-primary:hover {
+    color: #fff;
+    background-color: #383838 !important;
+    border-color: #383838 !important;
+}
+
+button.btn.btn-primary:active {
+    color: #fff;
+    background-color: #383838 !important;
+    border-color: #383838 !important;
+}
+
+button.btn.btn-primary:active:focus {
+    color: #fff;
+    background-color: #383838 !important;
+    border-color: #383838 !important;
+}
+
+button.btn.btn-primary:focus {
+    color: #fff;
+    background-color: #383838 !important;
+    border-color: #383838 !important;
+}
+
+.btn-primary[disabled] {
+    color: #fff;
+    background-color: #232323;
+    border-color: #232323;
+}
+
+.btn-primary.active, .btn-primary:active, .open>.dropdown-toggle.btn-primary {
+    color: #fff;
+    background-color: #6f6563;
+    border-color: #6f6563;
+}
+
+.btn-druzyna {
+    width: 22px;
+    padding: 0px;
+    margin: 2px;
+}
+
+.list-group-item-info {
+    color: #3c3c3c;
+    background-color: #eaeaea;
+}
+
+.movecategory_physical {
+	background-color: #C92112;
+	border-color:#d96358;
+}
+.movecategory_physical:disabled {
+	background-color: #E94132;
+}
+
+.movecategory_special {
+	background-color: #4F5870;
+	border-color: #333948;
+}
+.movecategory_special:disabled {
+	background-color: #6F7890;
+}
+
+
+.movecategory_status {
+	background-color: #8C888C;
+	border-color: #5b585b;
+}
+.movecategory_status:disabled {
+	background-color: #ACA8AC;
+}
+
+.sortable-btn-up, .sortable-btn-down {
+    margin-top: -4px;
+    margin-left: 5px;
+}
+
+div:not(#plecak-tm) > div >.thumbnail-plecak {
+    background-color: white;	
+}
+
+a {
+    color: #4c4c4c !important;	
+}	
+
+.nav a {
+    color: white !important;
+}
+
+.nav-tabs a {
+    color: #4c4c4c !important;	
+}
+
+#shoutbox-panel {
+    background-color: #d4cbca;
+}
+
+#shouts ul li, #shouts {
+    background-color: rgb(234, 234, 234);
+}
+
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    color: #555;
+    background-color: #eaeaea;
 }
 	
 .panel-primary, .panel-primary>.panel-heading, .awatar, h2, .modal-header {	
@@ -134,4 +266,37 @@ body {
   margin-bottom: 6px;
   height: auto;
   transition-duration: 0.3s;
+}
+
+#menu, #pasek_skrotow {
+    background-color: #272727;
+    color: #f0f0f0;
+}
+
+#menu li, #menu ul {
+    background-color: #272727;
+}
+
+#menu a {
+    background-color: #272727;
+}
+
+#fastShop button:hover {
+    background: #F2CFC8 !important;
+    border-color: #F2CFC8 !important;
+}
+
+.alert-info {
+    color: #3c3c3c;
+    background-color: #f2cfc9;
+    border-color: #f2cfc9;
+}
+
+.shout-foryou {
+    background-color: #f2cfc9 !important;
+    border-color: #f2cfc9 !important;
+}
+
+.progress-bar-info {
+    background-color: #f2cfc9;
 }
