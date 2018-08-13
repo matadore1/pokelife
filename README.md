@@ -24,6 +24,7 @@ Changelog
 1.8.7 (2018-08-13)
 * Dodanie szybkiej aktywności
 * Przy treningu początkującego brany jest wybrany pokemon
+* Dodanie przycisku cofnij, przeniesienie wyboru dziczy na lewą stronę menu
 
 1.8.6 (2018-08-12)
 * Dodanie potwierdzenia przy zakupach w Szybkim Sklepie
