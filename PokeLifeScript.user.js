@@ -21,6 +21,7 @@ if (window.localStorage.skinStyle == 2) {
     newCSS = GM_getResourceText("customCSS");
     GM_addStyle(newCSS);
 }
+var nowa = "zmiana";
 
 var iconSelect;
 var iconPoke;
