@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         PokeLifeScript
-// @version      1.8.6.3
+// @version      1.8.7
 // @downloadURL  https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @updateURL    https://github.com/krozum/pokelife/raw/master/PokeLifeScript.user.js
 // @description  Dodatki do gry Pokelife
@@ -26,6 +26,7 @@ var iconSelect;
 var iconPoke;
 var iconBall;
 var lastClick;
+var globalMenu = [];
 window.jsonData = [];
 window.shinyData = [];
 window.lastActiveData = [];
@@ -319,10 +320,34 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on("click", "#goBack", function (event) {
+        var url;
+        globalMenu.pop();
+        if(globalMenu.length < 1){
+            url = "gra/statystyki.php";
+        } else {
+            url = globalMenu[globalMenu.length-1];
+        }
+
+        $("#glowne_okno").load(url, function () {
+            updateActiveLog();
+            updatePlecakView();
+            updateKlikanieView();
+            updateWymianaView();
+            updateInfoLog();
+            if (window.auto) {
+                setTimeout(function () { click(); }, window.localStorage.clickSpeed);
+            }
+        });
+    });
+
     $(document).off("click", "nav a");
     $(document).on("click", "nav a", function (event) {
         if ($(this).attr('href').charAt(0) != '#' && !$(this).hasClass("link")) {
             event.preventDefault();
+
+            globalMenu.push($(this).attr('href'));
+            console.log(globalMenu);
 
             //back_button
             //Ucinanie " gra/ "
@@ -877,9 +902,10 @@ function addNewElementsToWebsite() {
     $('body').append('<div id="setPok" style="position: fixed; cursor: pointer; top: 0; left: 10px; z-index: 9999"></div>');
     $('body').append('<div id="setBall" style="position: fixed; cursor: pointer; top: 0; left: 60px; z-index: 9999"></div>');
 
-    $('body').append('<div id="goDzicz" style="position: fixed; cursor: pointer; top: 0; right: 328px; z-index: 9999"></div>');
+    $('body').append('<div id="goDzicz" style="position: fixed; cursor: pointer; top: 0; left: 117px; z-index: 9999"></div>');
     $('body').append('<div id="goButton" style="' + (window.localStorage.spaceGo ? (window.localStorage.spaceGo == "true" ? "opacity: 0.3;" : "opacity: 1;") : "opacity: 1;") + 'border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 10px; font-size: 36px; text-align: center; width: 100px; height: 48px; line-height: 48px; background: ' + $('.panel-heading').css('background-color') + '; z-index: 9999">GO</div>');
     $('body').append('<div id="goAutoButton" style="border-radius: 4px;position: fixed; cursor: pointer; top: 5px; right: 122px; font-size: 36px; text-align: center; width: 140px; height: 48px; line-height: 48px; background: ' + $('.panel-heading').css('background-color') + '; z-index: 9999">AutoGO</div>');
+    $('body').append('<div id="goBack" style="border-radius: 4px;position: fixed;cursor: pointer;top: 5px;right: 275px;font-size: 36px;text-align: center;width: 48px;height: 48px;line-height: 48px;background: rgb(125, 125, 125);z-index: 9999;">←</div>');
 
     $('body').append('<div id="newVersionInfo" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; right: 60px; font-size: 19px; text-align: center; width: 250px; height: 30px; line-height: 35px; z-index: 9998; text-align: right;"><a style="color: yellow !important;text-decoration:none;" target="_blank" href="https://github.com/krozum/pokelife#user-content-changelog">' + (GM_info.script.version == window.localStorage.lastVersion ? "" : "New Version! ") + 'v' + GM_info.script.version + '</a></div>');
     $('body').append('<div id="goSettings" style="border-radius: 4px;position: fixed;cursor: pointer;bottom: 10px;right: 10px;font-size: 19px;text-align: center;width: 30px;height: 30px;line-height: 35px; z-index: 9999;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></div>');
@@ -912,6 +938,7 @@ function addNewElementsToWebsite() {
     $('#fastShop').append('<form style="position: relative;margin-top: 5px;min-height: 57px;" method="POST" id="fastshop_napoj_energetyczny" action="targ_prz.php?szukaj&amp;przedmiot=napoj_energetyczny" class="form-inline"></form>');
     $('#fastShop').append('<form style="position: relative;margin-top: 5px;min-height: 57px;" method="POST" id="fastshop_niebieskie_jagody" action="targ_prz.php?szukaj&amp;przedmiot=niebieskie_jagody" class="form-inline"></form>');
     $('#fastShop').append('<form style="position: relative;margin-top: 5px;min-height: 57px;" method="POST" id="fastshop_stunballe_yeny" action="targ_prz.php?szukaj&amp;przedmiot=stunballe" class="form-inline"></form>');
+
 
     $.ajax({
         type: 'POST',
