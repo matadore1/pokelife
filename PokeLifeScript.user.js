@@ -527,11 +527,13 @@ $(document).ready(function () {
         }
     });
 
-    $('body').on('click', ':not(#settings *, #settings, #fastShop, #fastShop *)', function () {
+    $('body').on('click', ':not(#settings *, #settings,#fastActivity, #fastShop, #fastShop *)', function () {
         $('#settings').css('display', "none");
         $('#goSettings').css('display', "block");
+        $('#fastActivity').css('display',"none");
         $('#fastShop').css('display', "none");
         $('#goFastShop').css('display', "block");
+        $('#goFastActivity').css('display', "block");
     });
 
     $('body').on('click', '#changeStyle', function () {
@@ -595,6 +597,16 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on("click", "#fastActivity button", function(event) {
+        $("#fastActivity").css("display","none");
+        $('#goFastActivity').css('display', "none");
+        $('#endActivity').css('display', "block");
+    });
+    $(document).on("click", "#endActivity button", function(event) {
+        $('#goFastActivity').css('display', "block");
+        $('#endActivity').css('display', "none");
+    });
+    
     $(document).on("click", "#fastShop button", function(event) {
         var MAIN = $(this).parent();
         var MAIN_FORM = $(this).parent().html();
@@ -683,6 +695,17 @@ $(document).ready(function () {
         } else {
             $('#fastShop').css('display', "none");
             $('#goFastShop').css('display', "block");
+        }
+    });
+
+    $(document).on("click", '#goFastActivity', function () {
+        refreshShop();
+        if ($('#fastActivity').css('display') == "none") {
+            $('#fastActivity').css('display', "block");
+            $('#goFastActivity').css('display', "none");
+        } else {
+            $('#fastActivity').css('display', "none");
+            $('#goFastActivity').css('display', "block");
         }
     });
 
@@ -911,6 +934,15 @@ function addNewElementsToWebsite() {
     $('#fastShop').append('<form style="margin-top: 5px;min-height: 57px;" method="POST" id="fastshop_napoj_energetyczny" action="targ_prz.php?szukaj&amp;przedmiot=napoj_energetyczny" class="form-inline"></form>');
     $('#fastShop').append('<form style="margin-top: 5px;min-height: 57px;" method="POST" id="fastshop_niebieskie_jagody" action="targ_prz.php?szukaj&amp;przedmiot=niebieskie_jagody" class="form-inline"></form>');
     $('#fastShop').append('<form style="margin-top: 5px;min-height: 57px;" method="POST" id="fastshop_stunballe_yeny" action="targ_prz.php?szukaj&amp;przedmiot=stunballe" class="form-inline"></form>');
+    $('body').append('<div id="goFastActivity" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; left: 140px; font-size: 19px; text-align: center; width: 70px; height: 30px; line-height: 35px; z-index: 9998; text-align: left;"><a style="color: white;text-decoration:none;">Aktywnosc</a></div>');
+    $('body').append('<form id="endActivity" action="aktywnosc.php?p=trening&amp;przerwij" style="border-radius: 4px; position: fixed; cursor: pointer; bottom: 10px; left: 140px; font-size: 19px; text-align: center; width: 70px; height: 30px; line-height: 35px; z-index: 9998; text-align: left;display:none;"><button class="btn btn-danger" type="submit" style="color: white;text-decoration:none;">Zakończ</button></form>');
+    $('body').append('<div id="fastActivity" style="box-shadow: 5px -5px 3px -3px rgba(0,0,0,0.53);display: none; width: 270px; height: auto; min-height: 470px; z-index: 10001; background: white; position: fixed; bottom: 0; left: 0; padding: 10px; ">'+
+    '<form style="margin-top: 5px;height: 35px;" action="aktywnosc.php?p=trening&amp;trening=0" class="form-inline"><img width="60px" height="35px" src="images/aktywnosci/trening_poczatkującego.jpg"><button class="nestball btn btn-primary" style="width: 180px;margin-left:6px" type="submit">Trening: Początkujący</button><select style="display: none" name="druzyna_numer1"><option id="treningPok" value="0">poke</option></select></form>'+    
+    '<form style="margin-top: 5px;height: 35px;" action="aktywnosc.php?p=trening&amp;trening=1" class="form-inline"><img width="60px" height="35px" src="images/aktywnosci/zrownowazony_trening.jpg"><button class="greatball btn btn-primary" style="width:180px;margin-left:6px" type="submit">Trening: Zrównoważony</button></form>'+
+    '<form style="margin-top: 5px;height: 35px;" action="aktywnosc.php?p=praca&amp;praca=1" class="form-inline"><img width="60px" height="35px" src="images/aktywnosci/sprzatanie_w_hodowli.jpg"><button class="greatball btn btn-primary" style="width: 180px;margin-left:6px" type="submit">Praca: Sprzątanie</button></form>'+
+    '<form style="margin-top: 5px;height: 35px;" action="aktywnosc.php?p=praca&amp;praca=2" class="form-inline"><img width="60px" height="35px" src="images/aktywnosci/zrywanie_jagod.jpg"><button class="nestball btn btn-primary" style="width: 180px;margin-left:6px" type="submit">Praca: Jagody</button></form>'+
+    '<form style="margin-top: 5px;height: 35px;" action="aktywnosc.php?p=praca&amp;praca=3" class="form-inline"><img width="60px" height="35px" src="images/aktywnosci/praca_w_kopalni.jpg"><button class="nightball btn btn-primary" style="width: 180px;margin-left:6px" type="submit">Praca: Kopalnia</button></form>'+
+    '</div>');
 
     $.ajax({
         type: 'POST',
@@ -959,6 +991,7 @@ function initPokemonIcons() {
 
     document.getElementById('setPok').addEventListener('changed', function (e) {
         window.localStorage.pokemonIconsIndex = iconPoke.getSelectedIndex();
+        $("#treningPok").attr("value", iconPoke.getSelectedIndex());
     });
 }
 
@@ -992,6 +1025,14 @@ function initLocationIcons() {
     document.getElementById('goDzicz').addEventListener('changed', function (e) {
         window.localStorage.locationIconsIndex = iconSelect.getSelectedIndex();
     });
+}
+
+function getSelectedIndex(){
+    console.log(iconPoke);
+    if(iconPoke == undefined){
+        return window.localStorage.pokemonIconsIndex
+    }
+    return iconPoke.getSelectedIndex();
 }
 
 function initBallIcons() {
